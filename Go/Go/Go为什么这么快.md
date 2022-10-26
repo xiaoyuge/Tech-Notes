@@ -85,7 +85,7 @@ Go 程序提供了网络轮询器（NetPoller）来处理网络请求和 IO 操�
 这种调用方式看起来很复杂，值得庆幸的是，Go 语言将该“复杂性”隐藏在 Runtime 中：Go 开发者无需关注 socket 是否是  non-block 的，也无需亲自注册文件描述符的回调，只需在每个连接对应的 Goroutine 中以“block I/O”的方式对待 socket 处理即可，实现了 goroutine-per-connection 简单的网络编程模式（但是大量的 Goroutine 也会带来额外的问题，比如栈内存增加和调度器负担加重）。
 用户层眼中看到的 Goroutine 中的“block socket”，实际上是通过 Go runtime 中的 netpoller 通过 Non-block socket + I/O 多路复用机制“模拟”出来的。Go 中的 net 库正是按照这方式实现的。
 场景 3：当调用一些系统方法的时候，如果系统方法调用的时候发生阻塞，这种情况下，网络轮询器（NetPoller）无法使用，而进行系统调用的  Goroutine  将阻塞当前 M。
-让我们来看看同步系统调用（如文件 I/O）会导致 M 阻塞的情况：G1 将进行同步系统调用以阻塞 M1。
+让我们来看看同步系统调用（如文件 I/O）会导致 M 阻塞的情况：G1 将进行同步系统调用以阻塞 M1。\
 ![gpm-model5](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model5.png)
 
 
@@ -102,20 +102,20 @@ Go 程序后台有一个监控线程 sysmon，它监控那些长时间运行的 
 小结
 本文主要从 Go 调度器架构层面上介绍了 G-P-M 模型，通过该模型怎样实现少量内核线程支撑大量 Goroutine 的并发运行。以及通过 NetPoller、sysmon 等帮助 Go 程序减少线程阻塞，充分利用已有的计算资源，从而最大限度提高 Go 程序的运行效率。
 参考文档：
-https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part1.html
-https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html
-https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html
-https://segmentfault.com/a/1190000016038785
-https://segmentfault.com/a/1190000016611742
-https://segmentfault.com/a/1190000017333717
-https://segmentfault.com/a/1190000015352983
-https://segmentfault.com/a/1190000015464889
-https://www.cnblogs.com/lxmhhy/p/6041001.html
-https://www.cnblogs.com/mokafamily/p/9975980.html
-https://studyGolang.com/articles/9211
-https://www.zhihu.com/question/20862617
-https://codeburst.io/why-Goroutines-are-not-lightweight-threads-7c460c1f155f
-https://blog.csdn.net/tiandyoin/article/details/76556702
-https://www.jianshu.com/p/cc3c0fefee43
-https://www.jianshu.com/p/a315224886d2
+- https://www.ardanlabs.com/blog/2018/08/-scheduling-in-go-part1.html
+- https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html
+- https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html
+- https://segmentfault.com/a/1190000016038785
+- https://segmentfault.com/a/1190000016611742
+- https://segmentfault.com/a/1190000017333717
+- https://segmentfault.com/a/1190000015352983
+- https://segmentfault.com/a/1190000015464889
+- https://www.cnblogs.com/lxmhhy/p/6041001.html
+- https://www.cnblogs.com/mokafamily/p/9975980.html
+- https://studyGolang.com/articles/9211
+- https://www.zhihu.com/question/20862617
+- https://codeburst.io/why-Goroutines-are-not-lightweight-threads-7c460c1f155f
+- https://blog.csdn.net/tiandyoin/article/details/76556702
+- https://www.jianshu.com/p/cc3c0fefee43
+- https://www.jianshu.com/p/a315224886d2
 
