@@ -10,7 +10,7 @@
 ## **互联网网络架构**
 - **[OSI网络模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/OSI%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.md)**
 - **[HTTP协议](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/HTTP%E5%8D%8F%E8%AE%AE.md)**
-- **[DNS]()**
+- **[DNS](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/DNS.md)**
 - **[CDN]()**
 - **[负载均衡]()**
 - **[网关]()**
