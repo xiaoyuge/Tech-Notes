@@ -92,24 +92,24 @@ NIO由原来的阻塞读写（占用线程）变成了单线程轮询事件，�
 Reactor 线程模型以及 tomcat BIO、NIO 的实现
 
 1. 单线程 Reactor 线程模型
-最开始 NIO 是基于单线程实现的，所有的 I/O 操作都是在一个 NIO 线程上完成。由于 NIO 是非阻塞 I/O，理论上一个线程可以完成所有的 I/O 操作。但 NIO 其实还不算真正地实现了非阻塞 I/O 操作，因为读写 I/O 操作时用户进程还是处于阻塞状态，这种方式在高负载、高并发的场景下会存在性能瓶颈，一个 NIO 线程如果同时处理上万连接的 I/O 操作，系统是无法支撑这种量级的请求的。
-
+最开始 NIO 是基于单线程实现的，所有的 I/O 操作都是在一个 NIO 线程上完成。由于 NIO 是非阻塞 I/O，理论上一个线程可以完成所有的 I/O 操作。但 NIO 其实还不算真正地实现了非阻塞 I/O 操作，因为读写 I/O 操作时用户进程还是处于阻塞状态，这种方式在高负载、高并发的场景下会存在性能瓶颈，一个 NIO 线程如果同时处理上万连接的 I/O 操作，系统是无法支撑这种量级的请求的。\
+![单线程 Reactor 线程模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/single-thread-reactor.png)
 
 2. 多线程 Reactor 线程模型
-为了解决这种单线程的 NIO 在高负载、高并发场景下的性能瓶颈，后来使用了线程池。在 Tomcat 和 Netty 中都使用了一个 Acceptor 线程来监听连接请求事件，当连接成功之后，会将建立的连接注册到多路复用器中，一旦监听到事件，将交给 Worker 线程池来负责处理。大多数情况下，这种线程模型可以满足性能要求，但如果连接的客户端再上一个量级，一个 Acceptor 线程可能会存在性能瓶颈。
-
+为了解决这种单线程的 NIO 在高负载、高并发场景下的性能瓶颈，后来使用了线程池。在 Tomcat 和 Netty 中都使用了一个 Acceptor 线程来监听连接请求事件，当连接成功之后，会将建立的连接注册到多路复用器中，一旦监听到事件，将交给 Worker 线程池来负责处理。大多数情况下，这种线程模型可以满足性能要求，但如果连接的客户端再上一个量级，一个 Acceptor 线程可能会存在性能瓶颈。\
+![多线程 Reactor 线程模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/multi-thread-reactor.png)
 
 3. 主从 Reactor 线程模型
 现在主流通信框架中的 NIO 通信框架都是基于主从 Reactor 线程模型来实现的。在这个模型中，Acceptor 不再是一个单独的 NIO 线程，而是一个线程池。Acceptor 接收到客户端的 TCP 连接请求，建立连接之后，后续的 I/O 操作将交给 Worker I/O 线程。
-
+![主从 Reactor 线程模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/master-slave-reactor.png)
 
 
 基于线程模型的 Tomcat 参数调优
 Tomcat 中，BIO、NIO 是基于主从 Reactor 线程模型实现的。
 在 BIO 中，Tomcat 中的 Acceptor 只负责监听新的连接，一旦连接建立监听到 I/O 操作，将会交给 Worker 线程中，Worker 线程专门负责 I/O 读写操作。
 
-在 NIO 中，Tomcat 新增了一个 Poller 线程池，Acceptor 监听到连接后，不是直接使用 Worker 中的线程处理请求，而是先将请求发送给了 Poller 缓冲队列。在 Poller 中，维护了一个 Selector 对象，当 Poller 从队列中取出连接后，注册到该 Selector 中；然后通过遍历 Selector，找出其中就绪的 I/O 操作，并使用 Worker 中的线程处理相应的请求。
-
+在 NIO 中，Tomcat 新增了一个 Poller 线程池，Acceptor 监听到连接后，不是直接使用 Worker 中的线程处理请求，而是先将请求发送给了 Poller 缓冲队列。在 Poller 中，维护了一个 Selector 对象，当 Poller 从队列中取出连接后，注册到该 Selector 中；然后通过遍历 Selector，找出其中就绪的 I/O 操作，并使用 Worker 中的线程处理相应的请求。\
+![tomcat nio](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/tomcat-nio.png)
 
 你可以通过以下几个参数来设置 Acceptor 线程池和 Worker 线程池的配置项：
 acceptorThreadCount：该参数代表 Acceptor 的线程数量，在请求客户端的数据量非常巨大的情况下，可以适当地调大该线程数量来提高处理请求连接的能力，默认值为 1。
@@ -146,8 +146,10 @@ linux系统中与文件描述符相关的参数有以下几个：
 3.nr_open（/proc/sys/fs/nr_open）
 这三个参数的作用都是限制一个进程可以打开的最大文件数
 文件的打开主要分两步，即申请fd和创建文件结构两个过程，nofile和nr_open在第一个过程起作用，file-max在第二个过程起作用。nofile直接限制fd的申请，nr_open限制文件描述符表的扩展，间接限制了fd的申请，file-max限制文件的实际创建过程
-nofile，nr_open，file-max这三个参数的区别如下:
 
+nofile，nr_open，file-max这三个参数的区别如下:\
+![fd-limit](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/fd-limit.png
+)
 
 linux系统单机支持的tcp连接数主要受三个方面的限制：
 1.文件描述符的限制
