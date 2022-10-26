@@ -1,193 +1,4 @@
-## **Http服务器**
-### **Nginx**
-#### **Nginx优点（高性能、高可靠、可扩展）**：
-- **高并发高性能**：基于IO多路复用机制（epoll）实现的IO模型，非阻塞，并发性能好（多进程单线程），一台nginx可支持千万并发连接、静态资源请求下百万rps；
-- **可扩展性好**：模块化设计，第三方模块生态圈非常丰富、甚至有Tengine和Openresty这样的第三方插件在nginx之上又生成了一套新的生态圈
-- **高可靠性**：指服务器可以持续不间断的长时间运行，因为其通常运行在企业内网的边缘节点上，这种场景需要4个9、5个9甚至更高的可用性，nginx采用多进程而非多线程的架构来保障高可靠，work进程之间互相隔离，master进程负责worker进程的监督管理，比如worker进程故障时候的新worker进程创建和failover；
-- **热部署（不停机升级nginx）**：指可以在不停止服务的情况下升级master，这个特性非常重要，因为在nginx上可能跑了数百万的并发请求，不能随意kill掉进程重启；
-- **reload（不停机升级配置）**：指可以在不停止服务的情况下，使用新的nginx.conf配置文件启动worker；    
-- **BSD许可证**：指nginx不仅是开源免费的，而且可以在有定制需求的场景下修改nginx源代码后用于商业场景是合法的；
-
-#### **Nginx的不足**：
-- **缺乏动态性**：动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL证书、限流限速阈值，而不用重启服务，就属于实现了动态。开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新；
-- **二次开发成本较高**：Nginx 采用 C 语言开发，二次开发门槛较高。市场应用广泛，更多是基于 nginx.conf 预留配置参数，如：反向代理、负载均衡、静态 web 服务器等，如果想让 Nginx 访问 MySQL ，定制化开发一些业务逻辑，难度很高
-
-#### **Nginx vs  Apache**
-相比Apache，Nginx 是个“轻量级”的 Web 服务器。“轻量级”是相对于“重量级”而言的。“重量级”就是指服务器进程很“重”，占用很多资源，当处理 HTTP 请求时会消耗大量的 CPU 和内存，受到这些资源的限制很难提高性能。而 Nginx 作为“轻量级”的服务器，它的 CPU、内存占用都非常少，同样的资源配置下就能够为更多的用户提供服务。
-
-在 Nginx 之前，Web 服务器（如Apache）的工作模式大多是“Per-Process”或者“Per-Thread”，**对每一个请求使用单独的进程或者线程处理**。这就存在创建进程或线程的成本，还会有进程、线程“上下文切换”的额外开销。如果请求数量很多，CPU 就会在多个进程、线程之间切换时“疲于奔命”，平白地浪费了计算时间。
-
-Nginx 则完全不同，“一反惯例”地没有使用多线程，而是使用了“多进程 + 单线程”的工作模式。Nginx 在启动的时候会预先创建好固定数量的 worker 进程（通常与CPU核数一样），在之后的运行过程中不会再 fork 出新进程，这就是多进程，而且可以自动把进程“绑定”到独立的 CPU 上，这样就完全消除了进程创建和切换的成本，能够充分利用多核 CPU 的计算能力。
-
-Apache目前一共有三种稳定的MPM（Multi-Processing Module，多进程处理模块）模式。它们分别是prefork，worker、event，它们同时也代表这Apache的演变和发展
-1) **Prefork MPM**  \
-Prefork MPM实现了一个非线程的、预派生的web服务器。它在Apache启动之初，就先预派生一些子进程，然后等待连接；可以减少频繁创建和销毁进程的开销，每个子进程只有一个线程，在一个时间点内，只能处理一个请求。这是一个成熟稳定，可以兼容新老模块，也不需要担心线程安全问题，但是一个进程相对占用资源，消耗大量内存，不擅长处理高并发的场景
-
-
-2) **Worker MPM** \
-和prefork模式相比，worker使用了多进程和多线程的混合模式，worker模式也同样会先预派生一些子进程，然后每个子进程创建一些线程，同时包括一个监听线程，每个请求过来会被分配到一个线程来服务。线程比起进程会更轻量，因为线程是通过共享父进程的内存空间，因此，内存的占用会减少一些，在高并发的场景下会比prefork有更多可用的线程，表现会更优秀一些；另外，如果一个线程出现了问题也会导致同一进程下的线程出现问题，如果是多个线程出现问题，也只是影响Apache的一部分，而不是全部。由于用到多进程多线程，需要考虑到线程的安全了，在使用keep-alive长连接的时候，某个线程会一直被占用，即使中间没有请求，需要等待到超时才会被释放（该问题在prefork模式下也存在）
-
-
-
-3) **Event MPM** \  
-这是Apache最新的工作模式，它和worker模式很像，不同的是在于它解决了keep-alive长连接的时候占用线程资源被浪费的问题，在event工作模式中，会有一些专门的线程用来管理这些keep-alive类型的线程，当有真实请求过来的时候，将请求传递给服务器的线程，执行完毕后，又允许它释放。这增强了在高并发场景下的请求处理
-
-
-
-#### **nginx组成**：
-1) 二进制可执行文件:由各个模块的源代码编译出的一个文件；
-2) nginx.conf配置文件：控制nginx的行为；
-3) accless.log访问日志：记录每一条http请求；
-4) error.log错误日志：定位问题；
-
-#### **ngnix每次版本发布包括**
-1) feature：新增了哪些功能
-2) bugfix：修复了哪些Bug
-3) change：进行了哪些重构
-
-#### **nginx进程结构**
-nginx采取的是多进程结构而不是多线程结构，目的是为了更健壮，可靠性更好
-进程间的通讯，是使用共享内存和信号
-
-所有的请求都是通过worker进程来处理，master进程只是为了管理和监控worker进程，且worker进程的数量需要保持和cpu核数一致
-
-
-
-
-
-通常我们通过向Master进程发送信号，来管理worker进程
-
-
- Master 进程，一如其名，扮演“管理者”的角色，并不负责处理终端的请求。它是用来管理 Worker 进程的，包括接受管理员发送的信号量、监控 Worker 的运行状态。当 Worker 进程异常退出时，Master 进程会重新启动一个新的 Worker 进程
-
-Worker 进程则是“一线员工”，用来处理终端用户的请求。它是从 Master 进程 fork 出来的，彼此之间相互独立，互不影响。多进程的模式比 Apache 多线程的模式要先进很多，没有线程间加锁，也方便调试。即使某个进程崩溃退出了，也不会影响其他 Worker 进程正常工作。同时每个worker进程中只有一个线程，这就省去了并发情况下的加锁以及线程的切换带来的性能损耗
-
-Worker一个线程如何支持高并发的业务场景？
-以 Linux 为例，其采用的是 epoll 模型（即事件驱动模型），该模型是 IO 多路复用思想的一种实现方式，是非阻塞的，什么意思呢？就是一个请求进来后，会由一个 worker 进程去处理，当程序代码执行到 IO 时，比如调用外部服务或是通过 upstream 分发请求到后端 Web 服务时，IO 是阻塞的，但是 worker 进程不会一直在这等着，而是等 IO 有结果了再处理，在这期间它会去处理别的请求，这样就可以充分利用 CPU 资源去处理多个请求了。
-
-Web 服务器从根本上来说是“I/O 密集型”而不是“CPU 密集型”，处理能力的关键在于网络数据收发而不是 CPU 计算（这里暂时不考虑 HTTPS 的加解密），而网络 I/O 会因为各式各样的原因不得不等待，比如数据还没到达、对端没有响应、缓冲区满发不出去等等。
-
-Nginx 里使用的 epoll，就好像是 HTTP/2 里的“多路复用”技术，它把多个 HTTP 请求处理打散成碎片，都“复用”到一个单线程里，不按照先来后到的顺序处理，而是只当连接上真正可读、可写的时候才处理，如果可能发生阻塞就立刻切换出去，处理其他的请求。通过这种方式，Nginx 就完全消除了 I/O 阻塞，把 CPU 利用得“满满当当”，又因为网络收发并不会消耗太多 CPU 计算能力，也不需要切换进程、线程，所以整体的 CPU 负载是相当低的
-
-Linux 支持的以 IO 多路复用思想来实现的模型还有 select 和 poll，为什么选择了 epoll 呢？因为 epoll 的效率更高
-假设一个 work process 处理了 1000 个连接，但其中只有 10 个 IO 完成了，并可以继续往下执行，select/poll 的做法是遍历这 1000 个 FD（File Description，可以理解成每个建立了连接的一个标识），找到那 10 个就绪状态的，并把没做完的事情继续做完，这样检索的效率明显很低。所以 epoll 的做法是当这 10 个 IO 准备就绪时，通过系统的回调函数将就绪的 FD 放到一个专门的就绪列表中，这样系统只需要去找这个就绪列表就可以了，这大大提高了系统的响应效率
-
-reload流程（指使用新的nginx.conf配置文件启动新的worker进程）
-
-
-
-
-
-        ，上面步骤中master进程打开新的监听端口的场景是配置文件中可能新增一个监听端口
-
-
-二进制热升级流程（指用新的nginx binary文件启动新的master进程）
-
-
-
-
-一个报文
-
-
-
-nginx中http请求处理时的11个阶段
-
-
-
-
-
-RealIP模块
-
-
-
-RealIp模块拿到X-Forward-For和X-Real-IP这两个字段的值后，会替换binary_remote_addr和remote_addr这两个变量的值，并提供Realip_remote_addr和realip_remote_port两个变量来维护原来的src_ip和src_port
-
-
-rewrite模块
-
-
-
-
-
-Limit_conn模块
-
-
-Limit_req模块
-
-
-
-location + proxy_pass + upstream 实现基于url路由并基于某种负载均衡策略访问后端服务
-Nginx.conf参考配置
-server{
-    server_name:域名
-    Location url匹配 {
-        proxy_pass：上游服务名
-    }
-}
-upstream 上游服务名{
-     负载均衡策略比如IP_HASH、随机、轮询、加权轮询等；
-     Server x.x.x.x:port;
-     Server x.x.x.x:port;
-}
-
-
-（2）Openresty
-OpenResty 是一个兼具开发效率和性能的web服务开发平台，它的核心是基于 NGINX 的一个 C 模块（lua-nginx-module），该模块将 LuaJIT 嵌入到 NGINX 服务器中，并对外提供一套完整的 Lua API，透明地支持非阻塞 I/O，提供了轻量级线程、定时器等高级抽象。同时，围绕这个模块，OpenResty 构建了一套完备的测试框架、调试技术以及由 Lua 实现的周边功能库。你可以用 Lua 语言来进行字符串和数值运算、查询数据库、发送 HTTP 请求、执行定时任务、调用外部命令等，还可以用 FFI 的方式调用外部 C 函数。这基本上可以满足服务端开发需要的所有功能。
-
-Openresty将 Nginx 扩展成了一个动态web服务器，Nginx是模块化设计的反向代理软件和HTTP Server，C语言开发。OpenResty是以Nginx为核心的Web开发平台，可以解析执行Lua脚本（OpenResty与Lua的关系，类似于Jvm与Java，不过Java可以做的事情太多了，OpenResty主要用来做Web、API等）
-
-OpenResty 为什么要基于 Nginx?
-利用Nginx的如下优势：
-1.高并发高性能：基于IO多路复用机制（epoll）实现的IO模型，非阻塞，并发性能好（多进程单线程），一台nginx可支持千万并发连接、静态资源请求下百万rps；
-3.高可靠性：指服务器可以持续不间断的长时间运行，因为其通常运行在企业内网的边缘节点上，这种场景需要4个9、5个9甚至更高的可用性，nginx采用多进程而非多线程的架构来保障高可靠，work进程之间互相隔离，master进程负责worker进程的监督管理，比如worker进程故障时候的新worker进程创建和failover；
-
-解决了Nginx的什么问题
-1.缺乏动态性：动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新；
-2.二次开发成本较高：Nginx 采用 C 语言开发，二次开发门槛较高。市场应用广泛，更多是基于 nginx.conf 预留配置参数，如：反向代理、负载均衡、静态 web 服务器等，如果想让 Nginx 访问 MySQL ，定制化开发一些业务逻辑，难度很高
-
-OpenResty 通过嫁接方式，将 Nginx 和 Lua 脚本相结合，既保留 Nginx 高并发优势，也拥有脚本语言的开发效率（不需要编译，随时开发随时解释执行，避免了c语言模块漫长的开发编译周期），也大大降低了开发门槛。
-Lua 是最快的、动态脚本语言，接近 C 语言运行速度。LuaJIT 将一些常用的 lua 函数和工具库预编译并缓存，下次调用时直接使用缓存的字节码，速度很快。另外，Lua 支持协程，这个很重要。协程是用户态的操作，上下文切换不用涉及内核态，系统资源开销小；另外协程占用内存很小，初始 2KB
-
-Openresty 相比Nginx的lua-nginx-module模块的区别
- lua-nginx-module这个 NGINX 的 C 模块确实是 OpenResty 的核心，但它并不等价于 OpenResty，除此之外，OpenResty还包括如下这些：
-* NGINX C 模块：OpenResty 的项目命名都是有规范的，以 *-nginx-module命名的就是 NGINX 的 C 模块。OpenResty 中一共包含了 20 多个 C 模块，其中，最核心的就是 lua-nginx-module 和 stream-lua-nginx-module，前者用来处理七层流量，后者用来处理四层流量。这些 C 模块中，有些是需要特别注意的，虽然默认编译进入了 OpenResty，但并不推荐使用。 比如 redis2-nginx-module、redis-nginx-module 和 memc-nginx-module，它们是用来和 redis 以及 memcached 交互使用的。这些 C 库是 OpenResty 早期推荐使用的，但在 cosocket 功能加入之后，它们都已经被 lua-resty-redis 和 lua-resty-memcached 替代，处于疏于维护的状态。OpenResty 后面也不会开发更多的 NGINX C 库，而是专注在基于 cosocket 的 Lua 库上，后者才是未来；
-* lua-resty- 周边库：OpenResty 官方仓库中包含 18 个 lua-resty-* 库，涵盖 Redis、MySQL、memcached、websocket、dns、流量控制、字符串处理、进程内缓存等常用库。除了官方自带的之外，还有更多的第三方库；
-* 自己维护的 LuaJIT 分支：相对于 Lua，LuaJIT 增加了不少独有的函数；
-* 测试框架：OpenResty 的测试框架是test-nginx，同样也是用 Perl 语言来开发的，从名字上就能看出来，它是专门用来测试 NGINX 相关的项目。OpenResty 官方的所有 C 模块和 lua-resty 库的测试案例，都是由 test-nginx 驱动的；
-* 调试工具链：OpenResty 项目在如何科学和动态地调试代码上，花费了大量的精力，可以说是达到了极致，openresty-systemtap-toolkit 和 stapxx 这两个 OpenResty 的项目，都基于 systemtap 这个动态调试和追踪工具。使用 systemtap 最大的优势，便是实现活体分析，同时对目标程序完全无侵入；
-* 打包工具：OpenResty 在不同发行操作系统（比如 CentOS、Ubuntu、MacOS 等）版本中的打包脚本，出于更细可控力度的目的，都是手工编写的；
-* 工程化工具：比如lj-releng 是一个简单有效的 LuaJIT 代码检测工具，类似 luacheck，可以找出全局变量等潜在的问题。reindex 从名字来看是重建索引的意思，它其实是格式化 test-nginx 测试案例的工具，可以重新排列测试案例的编号，以及去除多余的空白符。reindex 可以说是 OpenResty 开发者每天都会用到的工具之一。opsboy 也是一个深藏不露的项目，主要用于自动化部署。OpenResty 每次发布版本前，都会在 AWS EC2 集群上做完整的回归测试，而这个回归测试正是由 opsboy 来部署和驱动的；
-
-
-核心优势：动态性
-动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。至于动态和性能之间的关系，很显然，如果这几类操作不能动态地完成，那么频繁的 reload Nginx 服务，自然就会带来性能的损耗。
-不过，我们知道，开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新，但这最多算是一个不够彻底的改良。
-但是，在 OpenResty 中，这些桎梏都是不存在的，动态可以说就是 OpenResty 的杀手锏。你可能纳闷儿，为什么基于 Nginx 的 OpenResty 却可以支持动态呢？原因也很简单，Nginx 的逻辑是通过 C 模块来完成的，而 OpenResty 是通过脚本语言 Lua 来完成的——脚本语言的一大优势，便是运行时可以去做动态地改变
-
-OpenResty应用场景
-OpenResty 是一个被广泛使用的技术，但它并不能算得上是热门技术。说它应用广，是因为 OpenResty 现在是全球排名第五的 Web 服务器。我们经常用到的 12306 的余票查询功能，或者是京东的商品详情页，这些高流量的背后，其实都是 OpenResty 在默默地提供服务。说它并不热门，那是因为使用 OpenResty 来构建业务系统的比例并不高，使用者大都用 OpenResty 来处理入口流量，并没有深入到业务里面去，自然，对于 OpenResty 的使用也是浅尝辄止，满足当前的需求就可以了。这当然也与 OpenResty 没有像 Java、Python 那样有成熟的 Web 框架和生态有关。接近一半的 OpenResty 使用者，都把 OpenResty 用在 API 网关的开发上，Kong 和 orange 则是 OpenResty 领域中最流行的两个开源网关项目
-
-其他应用场景还包括Faas（利用其动态特性）、边缘计算（利用 Nginx 和 LuaJIT 良好的多平台支持特性）等
-
-
-OpenResty 整体架构（以及LuaJIT在架构中的位置）
-
-
-
-OpenResty 的 worker 进程都是 fork master 进程而得到的， 其实， master 进程中的 LuaJIT 虚拟机也会一起 fork 过来。在同一个 worker 内的所有协程，都会共享这个 LuaJIT 虚拟机，Lua 代码的执行也是在这个虚拟机中完成的
-
-标准 Lua 和 LuaJIT 的关系
-标准 Lua 和 LuaJIT 是两回事儿，LuaJIT 只是兼容了 Lua 5.1 的语法。标准 Lua 现在的最新版本是 5.3，LuaJIT 的最新版本则是 2.1.0-beta3。在 OpenResty 几年前的老版本中，编译的时候，你可以选择使用标准 Lua VM ，或者 LuaJIT VM 来作为执行环境，不过，现在已经去掉了对标准 Lua 的支持，只支持 LuaJIT
-
-为什么选择 LuaJIT？
-最主要的原因，还是 LuaJIT 的性能优势。
-标准 Lua 出于性能考虑，也内置了虚拟机，所以 Lua 代码并不是直接被解释执行的，而是先由 Lua 编译器编译为字节码（Byte Code），然后再由 Lua 虚拟机执行。
-而 LuaJIT 的运行时环境，除了一个汇编实现的 Lua 解释器外，还有一个可以直接生成机器代码的 JIT 编译器。开始的时候，LuaJIT 和标准 Lua 一样，Lua 代码被编译为字节码，字节码被 LuaJIT 的解释器解释执行。但不同的是，LuaJIT 的解释器会在执行字节码的同时，记录一些运行时的统计信息，比如每个 Lua 函数调用入口的实际运行次数，还有每个 Lua 循环的实际执行次数。当这些次数超过某个随机的阈值时，便认为对应的 Lua 函数入口或者对应的 Lua 循环足够热，这时便会触发 JIT 编译器开始工作。
-JIT 编译器会从热函数的入口或者热循环的某个位置开始，尝试编译对应的 Lua 代码路径。编译的过程，是把 LuaJIT 字节码先转换成 LuaJIT 自己定义的中间码（IR），然后再生成针对目标体系结构的机器码。所以，所谓 LuaJIT 的性能优化，本质上就是让尽可能多的 Lua 代码可以被 JIT 编译器生成机器码，而不是回退到 Lua 解释器的解释执行模式
-
-Web服务器
-
-（1）Tomcat
+## **（1）Tomcat**
 
 Tomcat类加载
 Tomcat 是通过 Context 组件来加载管理 Web 应用的，我们先看一下JVM 的类加载机制，接着再谈谈 Tomcat 的类加载器如何打破 Java 的双亲委托机制
@@ -322,3 +133,61 @@ Servlet
 这样做的好处，可能对提高系统的吞吐量有一定帮助，但从 JVM 层面来说，并没有减少工作量。业务线程在执行任务遇到 IO 时，依然会阻塞，现在只是由业务线程池代替了 Tomcat 线程池做了最耗时的那部分工作，这样也许可以将原来的 200 个 Tomcat 线程，拆分成 20 个 Tomcat 线程、180 个业务线程来配合工作
 
 接着我们再聊一下 Servlet3.1 的非阻塞，这块简单来说，就是针对请求消息体的读取，这是个 IO 过程，以前是阻塞式读取，现在支持非阻塞读取了。实现的大致原理就是在读取数据时，新增一个监听事件，在读取完成后由 Tomcat 线程执行回调
+
+
+## **（2）Openresty**
+OpenResty 是一个兼具开发效率和性能的web服务开发平台，它的核心是基于 NGINX 的一个 C 模块（lua-nginx-module），该模块将 LuaJIT 嵌入到 NGINX 服务器中，并对外提供一套完整的 Lua API，透明地支持非阻塞 I/O，提供了轻量级线程、定时器等高级抽象。同时，围绕这个模块，OpenResty 构建了一套完备的测试框架、调试技术以及由 Lua 实现的周边功能库。你可以用 Lua 语言来进行字符串和数值运算、查询数据库、发送 HTTP 请求、执行定时任务、调用外部命令等，还可以用 FFI 的方式调用外部 C 函数。这基本上可以满足服务端开发需要的所有功能。
+
+Openresty将 Nginx 扩展成了一个动态web服务器，Nginx是模块化设计的反向代理软件和HTTP Server，C语言开发。OpenResty是以Nginx为核心的Web开发平台，可以解析执行Lua脚本（OpenResty与Lua的关系，类似于Jvm与Java，不过Java可以做的事情太多了，OpenResty主要用来做Web、API等）
+
+OpenResty 为什么要基于 Nginx?
+利用Nginx的如下优势：
+1.高并发高性能：基于IO多路复用机制（epoll）实现的IO模型，非阻塞，并发性能好（多进程单线程），一台nginx可支持千万并发连接、静态资源请求下百万rps；
+3.高可靠性：指服务器可以持续不间断的长时间运行，因为其通常运行在企业内网的边缘节点上，这种场景需要4个9、5个9甚至更高的可用性，nginx采用多进程而非多线程的架构来保障高可靠，work进程之间互相隔离，master进程负责worker进程的监督管理，比如worker进程故障时候的新worker进程创建和failover；
+
+解决了Nginx的什么问题
+1.缺乏动态性：动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新；
+2.二次开发成本较高：Nginx 采用 C 语言开发，二次开发门槛较高。市场应用广泛，更多是基于 nginx.conf 预留配置参数，如：反向代理、负载均衡、静态 web 服务器等，如果想让 Nginx 访问 MySQL ，定制化开发一些业务逻辑，难度很高
+
+OpenResty 通过嫁接方式，将 Nginx 和 Lua 脚本相结合，既保留 Nginx 高并发优势，也拥有脚本语言的开发效率（不需要编译，随时开发随时解释执行，避免了c语言模块漫长的开发编译周期），也大大降低了开发门槛。
+Lua 是最快的、动态脚本语言，接近 C 语言运行速度。LuaJIT 将一些常用的 lua 函数和工具库预编译并缓存，下次调用时直接使用缓存的字节码，速度很快。另外，Lua 支持协程，这个很重要。协程是用户态的操作，上下文切换不用涉及内核态，系统资源开销小；另外协程占用内存很小，初始 2KB
+
+Openresty 相比Nginx的lua-nginx-module模块的区别
+ lua-nginx-module这个 NGINX 的 C 模块确实是 OpenResty 的核心，但它并不等价于 OpenResty，除此之外，OpenResty还包括如下这些：
+* NGINX C 模块：OpenResty 的项目命名都是有规范的，以 *-nginx-module命名的就是 NGINX 的 C 模块。OpenResty 中一共包含了 20 多个 C 模块，其中，最核心的就是 lua-nginx-module 和 stream-lua-nginx-module，前者用来处理七层流量，后者用来处理四层流量。这些 C 模块中，有些是需要特别注意的，虽然默认编译进入了 OpenResty，但并不推荐使用。 比如 redis2-nginx-module、redis-nginx-module 和 memc-nginx-module，它们是用来和 redis 以及 memcached 交互使用的。这些 C 库是 OpenResty 早期推荐使用的，但在 cosocket 功能加入之后，它们都已经被 lua-resty-redis 和 lua-resty-memcached 替代，处于疏于维护的状态。OpenResty 后面也不会开发更多的 NGINX C 库，而是专注在基于 cosocket 的 Lua 库上，后者才是未来；
+* lua-resty- 周边库：OpenResty 官方仓库中包含 18 个 lua-resty-* 库，涵盖 Redis、MySQL、memcached、websocket、dns、流量控制、字符串处理、进程内缓存等常用库。除了官方自带的之外，还有更多的第三方库；
+* 自己维护的 LuaJIT 分支：相对于 Lua，LuaJIT 增加了不少独有的函数；
+* 测试框架：OpenResty 的测试框架是test-nginx，同样也是用 Perl 语言来开发的，从名字上就能看出来，它是专门用来测试 NGINX 相关的项目。OpenResty 官方的所有 C 模块和 lua-resty 库的测试案例，都是由 test-nginx 驱动的；
+* 调试工具链：OpenResty 项目在如何科学和动态地调试代码上，花费了大量的精力，可以说是达到了极致，openresty-systemtap-toolkit 和 stapxx 这两个 OpenResty 的项目，都基于 systemtap 这个动态调试和追踪工具。使用 systemtap 最大的优势，便是实现活体分析，同时对目标程序完全无侵入；
+* 打包工具：OpenResty 在不同发行操作系统（比如 CentOS、Ubuntu、MacOS 等）版本中的打包脚本，出于更细可控力度的目的，都是手工编写的；
+* 工程化工具：比如lj-releng 是一个简单有效的 LuaJIT 代码检测工具，类似 luacheck，可以找出全局变量等潜在的问题。reindex 从名字来看是重建索引的意思，它其实是格式化 test-nginx 测试案例的工具，可以重新排列测试案例的编号，以及去除多余的空白符。reindex 可以说是 OpenResty 开发者每天都会用到的工具之一。opsboy 也是一个深藏不露的项目，主要用于自动化部署。OpenResty 每次发布版本前，都会在 AWS EC2 集群上做完整的回归测试，而这个回归测试正是由 opsboy 来部署和驱动的；
+
+
+核心优势：动态性
+动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。至于动态和性能之间的关系，很显然，如果这几类操作不能动态地完成，那么频繁的 reload Nginx 服务，自然就会带来性能的损耗。
+不过，我们知道，开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新，但这最多算是一个不够彻底的改良。
+但是，在 OpenResty 中，这些桎梏都是不存在的，动态可以说就是 OpenResty 的杀手锏。你可能纳闷儿，为什么基于 Nginx 的 OpenResty 却可以支持动态呢？原因也很简单，Nginx 的逻辑是通过 C 模块来完成的，而 OpenResty 是通过脚本语言 Lua 来完成的——脚本语言的一大优势，便是运行时可以去做动态地改变
+
+OpenResty应用场景
+OpenResty 是一个被广泛使用的技术，但它并不能算得上是热门技术。说它应用广，是因为 OpenResty 现在是全球排名第五的 Web 服务器。我们经常用到的 12306 的余票查询功能，或者是京东的商品详情页，这些高流量的背后，其实都是 OpenResty 在默默地提供服务。说它并不热门，那是因为使用 OpenResty 来构建业务系统的比例并不高，使用者大都用 OpenResty 来处理入口流量，并没有深入到业务里面去，自然，对于 OpenResty 的使用也是浅尝辄止，满足当前的需求就可以了。这当然也与 OpenResty 没有像 Java、Python 那样有成熟的 Web 框架和生态有关。接近一半的 OpenResty 使用者，都把 OpenResty 用在 API 网关的开发上，Kong 和 orange 则是 OpenResty 领域中最流行的两个开源网关项目
+
+其他应用场景还包括Faas（利用其动态特性）、边缘计算（利用 Nginx 和 LuaJIT 良好的多平台支持特性）等
+
+
+OpenResty 整体架构（以及LuaJIT在架构中的位置）
+
+
+
+OpenResty 的 worker 进程都是 fork master 进程而得到的， 其实， master 进程中的 LuaJIT 虚拟机也会一起 fork 过来。在同一个 worker 内的所有协程，都会共享这个 LuaJIT 虚拟机，Lua 代码的执行也是在这个虚拟机中完成的
+
+标准 Lua 和 LuaJIT 的关系
+标准 Lua 和 LuaJIT 是两回事儿，LuaJIT 只是兼容了 Lua 5.1 的语法。标准 Lua 现在的最新版本是 5.3，LuaJIT 的最新版本则是 2.1.0-beta3。在 OpenResty 几年前的老版本中，编译的时候，你可以选择使用标准 Lua VM ，或者 LuaJIT VM 来作为执行环境，不过，现在已经去掉了对标准 Lua 的支持，只支持 LuaJIT
+
+为什么选择 LuaJIT？
+最主要的原因，还是 LuaJIT 的性能优势。
+标准 Lua 出于性能考虑，也内置了虚拟机，所以 Lua 代码并不是直接被解释执行的，而是先由 Lua 编译器编译为字节码（Byte Code），然后再由 Lua 虚拟机执行。
+而 LuaJIT 的运行时环境，除了一个汇编实现的 Lua 解释器外，还有一个可以直接生成机器代码的 JIT 编译器。开始的时候，LuaJIT 和标准 Lua 一样，Lua 代码被编译为字节码，字节码被 LuaJIT 的解释器解释执行。但不同的是，LuaJIT 的解释器会在执行字节码的同时，记录一些运行时的统计信息，比如每个 Lua 函数调用入口的实际运行次数，还有每个 Lua 循环的实际执行次数。当这些次数超过某个随机的阈值时，便认为对应的 Lua 函数入口或者对应的 Lua 循环足够热，这时便会触发 JIT 编译器开始工作。
+JIT 编译器会从热函数的入口或者热循环的某个位置开始，尝试编译对应的 Lua 代码路径。编译的过程，是把 LuaJIT 字节码先转换成 LuaJIT 自己定义的中间码（IR），然后再生成针对目标体系结构的机器码。所以，所谓 LuaJIT 的性能优化，本质上就是让尽可能多的 Lua 代码可以被 JIT 编译器生成机器码，而不是回退到 Lua 解释器的解释执行模式
+
+Web服务器
+
