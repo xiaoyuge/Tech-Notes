@@ -3,7 +3,7 @@
 
 ### **工作机制**：
 通过在需要访问的静态资源的域名注册服务商 DNS上建立 cname（该cname是通过cdn服务商的权威域名服务申请获得），cname的域名解析的ip 地址，会对应CDN服务的一个全局负载均衡服务地址，然后该负载均衡服务返回离请求用户最近的一个CDN节点的IP地址，详细如下图所示:\
-![CDN]()
+![CDN](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/CDN.png)
 
 
 ### **CDN路由解析的具体工作流程如下（以访问icyfenix.cn为例）**
