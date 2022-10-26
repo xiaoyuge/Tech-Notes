@@ -9,6 +9,7 @@
 - **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
 ## **互联网网络架构**
 - **[OSI网络模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/OSI%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.md)**
+- **[HTTP协议]()**
 - **[DNS]()**
 - **[CDN]()**
 - **[负载均衡]()**
@@ -52,7 +53,6 @@
 - **[如何在不停机的情况下安全更换数据库]()**
 - **[跨库分页的几种常见方案]()**
 ## **前端**
-- **[HTTP协议]()**
 - **[微前端]()**
 - **[CSR和SSR]()**
 ## **区块链**
