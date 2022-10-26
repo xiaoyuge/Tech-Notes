@@ -6,7 +6,7 @@
 - **[IO](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/IO.md)**
 ## **Go**
 - **[Go](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go.md)**
-- **[Go为什么这么快]()**
+- **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
 ## **互联网网络架构**
 - **[OSI网络模型]()**
 - **[DNS]()**
