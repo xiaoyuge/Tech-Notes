@@ -18,8 +18,8 @@
 
 社区活跃度和生态成熟度：java诞生年头多，且是目前企业应用领域的第一语言，其社区自然更好一些。生态成熟度也是如此，现在很难找到一个领域没有java的开源实现。实话说，go在这方面规模还不及java，但是增长速度要更快
 
-面向并发而生
-
+**面向并发而生**\
+![gartner-go](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/Gartner-Go.png)
 
 
 从 Go 本身的发展来看，和多数编程语言一样，Go 语言在诞生后，度过了一个较长的“技术萌芽期”。然后，实现了自举，而且对 GC 延迟进行了大幅优化的 Go 1.5 版本，成为了 Go 语言演化过程中的第一个“引爆点”，推动 Go 语言进入“技术膨胀期”，也正是在这段时间内，Go 语言以迅雷不及掩耳盗铃之势推出了以 Docker、Kubernetes 为典型代表的“杀手级应用”
@@ -89,8 +89,8 @@ Go 调度器模型通常被称为 G-P-M 模型，它包括 4 个重要结构，�
 * G（Goroutine）：每个 Goroutine 对应一个 G 结构体，G 存储 Goroutine 的运行堆栈、状态以及任务函数，可重用。G 并非执行体，每个 G 需要绑定到 P 才能被调度执行；
 * P（Processor）：表示逻辑处理器。P 的数量决定了系统内最大可并行的 G 的数量，前提是物理 CPU 核数≥P 的数量；
 * M（Machine）： OS 内核线程抽象，代表真正执行计算的资源，在绑定有效的 P 后，进入 schedule 循环。而 schedule 循环的机制大致是从 Global 队列、P 的本地队列以及 wait 队列中获取。M 的数量是不定的，由 Go Runtime 调整，M 并不保留 G 状态，这是 G 可以跨 M 调度的基础；
-* Sched： Go 调度器。它维护存储 M 和 G 的队列以及调度器的一些状态信息。调度器循环的机制大致是从各种队列、P 的本地队列中获取 G，切换到 G 的执行栈上并执行 G 的函数，调用 Goexit 做清理工作并回到 M，如此反复；
-
+* Sched： Go 调度器。它维护存储 M 和 G 的队列以及调度器的一些状态信息。调度器循环的机制大致是从各种队列、P 的本地队列中获取 G，切换到 G 的执行栈上并执行 G 的函数，调用 Goexit 做清理工作并回到 M，如此反复；\
+![gpm-model](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/GPM-Model.jpg)
 
 
 
@@ -246,6 +246,7 @@ Go 语言设计者在设计 Go Module 构建模式，来解决“包依赖管理
 
 （1）语义导入版本 (Semantic Import Versioning)
 go.mod 的 require 段中依赖的版本号，都符合 vX.Y.Z 的格式。在 Go Module 构建模式下，一个符合 Go Module 要求的版本号，由前缀 v 和一个满足语义版本规范的版本号组成，语义版本号分成 3 部分：主版本号 (major)、次版本号 (minor) 和补丁版本号 (patch)。
+![go-version](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/go-version.png)
 
 按照语义版本规范，主版本号不同的两个版本是相互不兼容的。而且，在主版本号相同的情况下，次版本号大都是向后兼容次版本号小的版本。补丁版本号也不影响兼容性
 
@@ -268,6 +269,8 @@ import "github.com/sirupsen/logrus/v2”
 Go 语义导入版本机制是 Go Module 机制的基础规则，同样它也是 Go Module 其他规则的基础
 
 （2）最小版本选择 (Minimal Version Selection) 
+![go-minimum-version](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/go-mininum-version.jpg)
+
 在这张图中，myproject 有两个直接依赖 A 和 B，A 和 B 有一个共同的依赖包 C，但 A 依赖 C 的 v1.1.0 版本，而 B 依赖的是 C 的 v1.3.0 版本，并且此时 C 包的最新发布版为 C v1.7.0。这个时候，Go 命令是如何为 myproject 选出间接依赖包 C 的版本呢？选出的究竟是 v1.7.0、v1.1.0 还是 v1.3.0 呢？
 
 当前存在的主流编程语言，以及 Go Module 出现之前的很多 Go 包依赖管理工具都会选择依赖项的“最新最大 (Latest Greatest) 版本”，对应到图中的例子，这个版本就是 v1.7.0
@@ -299,7 +302,7 @@ Go 语言要求：可执行程序的 main 包必须定义 main 函数，否则 G
 在初始化 Go 包时，Go 会按照一定的次序，逐一、顺序地调用这个包的 init 函数。一般来说，先传递给 Go 编译器的源文件中的 init 函数，会先被执行；而同一个源文件中的多个 init 函数，会按声明顺序依次执行
 
  Go 包的初始化次序
-
+![go-package-init-order](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/go-package-init-order.jpg)
 
 首先，main 包依赖 pkg1 和 pkg4 两个包，所以第一步，Go 会根据包导入的顺序，先去初始化 main 包的第一个依赖包 pkg1。
 第二步，Go 在进行包初始化的过程中，会采用“深度优先”的原则，递归初始化各个包的依赖包。在上图里，pkg1 包依赖 pkg2 包，pkg2 包依赖 pkg3 包，pkg3 没有依赖包，于是 Go 在 pkg3 包中按照“常量 -> 变量 -> init 函数”的顺序先对 pkg3 包进行初始化；
@@ -340,7 +343,7 @@ goroutine间的通信
 这种情况下，开发人员承受着巨大的心智负担，并且基于这类传统并发模型的程序难于编写、阅读、理解和维护。一旦程序发生问题，查找 Bug 的过程更是漫长和艰辛
 
 Go 语言从设计伊始，就将解决上面这个传统并发模型的问题作为 Go 的一个目标，并在新并发模型设计中借鉴了著名计算机科学家Tony Hoare提出的 CSP（Communicating Sequential Processes，通信顺序进程）并发模型
-
+![go-csp](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/go-csp.jpg)
 
 Tony Hoare 的 CSP 理论中的 P，也就是“Process（进程）”，是一个抽象概念，它代表任何顺序处理逻辑的封装，它获取输入数据（或从其他 P 的输出获取），并生产出可以被其他 P 消费的输出数据
 
