@@ -43,7 +43,7 @@ M 并不保留 G 状态，这是 G 可以跨 M 调度的基础。
 Sched：Go 调度器，它维护有存储 M 和 G 的队列以及调度器的一些状态信息等。
 调度器循环的机制大致是从各种队列、P 的本地队列中获取 G，切换到 G 的执行栈上并执行 G 的函数，调用 Goexit 做清理工作并回到 M，如此反复。
 理解 M、P、G 三者的关系，可以通过经典的地鼠推车搬砖的模型来说明其三者关系：
-![gopher]()
+![gopher](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gopher.png)
 
 地鼠(Gopher)的工作任务是：工地上有若干砖头，地鼠借助小车把砖头运送到火种上去烧制。M 就可以看作图中的地鼠，P 就是小车，G 就是小车里装的砖。
 弄清楚了它们三者的关系，下面我们就开始重点聊地鼠是如何在搬运砖块的。
@@ -56,6 +56,7 @@ Machine (M)：
 这里有一个地鼠(M)不够用，从别处借地鼠(M)的过程，这个过程就是创建一个内核线程(M)。
 需要注意的是：地鼠(M)  如果没有小车(P)是没办法运砖的，小车(P)的数量决定了能够干活的地鼠(M)数量，在 Go 程序里面对应的是活动线程数；
 在 Go 程序里我们通过下面的图示来展示 G-P-M 模型：
+![gpm-model](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/GPM-Model.jpg)
 
 P 代表可以“并行”运行的逻辑处理器，每个 P 都被分配到一个系统线程 M，G 代表 Go 协程。
 Go 调度器中有两个不同的运行队列：全局运行队列(GRQ)和本地运行队列(LRQ)。
@@ -73,19 +74,26 @@ Go 调度器中有两个不同的运行队列：全局运行队列(GRQ)和本地
 Go 程序提供了网络轮询器（NetPoller）来处理网络请求和 IO 操作的问题，其后台通过 kqueue（MacOS），epoll（Linux）或  iocp（Windows）来实现 IO 多路复用。
 通过使用 NetPoller 进行网络系统调用，调度器可以防止  Goroutine  在进行这些系统调用时阻塞 M。这可以让 M 执行 P 的  LRQ  中其他的  Goroutines，而不需要创建新的 M。有助于减少操作系统上的调度负载。
 下图展示它的工作原理：G1 正在 M 上执行，还有 3 个 Goroutine 在 LRQ 上等待执行。网络轮询器空闲着，什么都没干。
+![gpm-model2](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model2.png)
 
 接下来，G1 想要进行网络系统调用，因此它被移动到网络轮询器并且处理异步网络系统调用。然后，M 可以从 LRQ 执行另外的 Goroutine。此时，G2 就被上下文切换到 M 上了。
+![gpm-model3](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model3.png)
 
 最后，异步网络系统调用由网络轮询器完成，G1 被移回到 P 的 LRQ 中。一旦 G1 可以在 M 上进行上下文切换，它负责的 Go 相关代码就可以再次执行。这里的最大优势是，执行网络系统调用不需要额外的 M。网络轮询器使用系统线程，它时刻处理一个有效的事件循环。
+![gpm-model4](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model4.png)
 
 这种调用方式看起来很复杂，值得庆幸的是，Go 语言将该“复杂性”隐藏在 Runtime 中：Go 开发者无需关注 socket 是否是  non-block 的，也无需亲自注册文件描述符的回调，只需在每个连接对应的 Goroutine 中以“block I/O”的方式对待 socket 处理即可，实现了 goroutine-per-connection 简单的网络编程模式（但是大量的 Goroutine 也会带来额外的问题，比如栈内存增加和调度器负担加重）。
 用户层眼中看到的 Goroutine 中的“block socket”，实际上是通过 Go runtime 中的 netpoller 通过 Non-block socket + I/O 多路复用机制“模拟”出来的。Go 中的 net 库正是按照这方式实现的。
 场景 3：当调用一些系统方法的时候，如果系统方法调用的时候发生阻塞，这种情况下，网络轮询器（NetPoller）无法使用，而进行系统调用的  Goroutine  将阻塞当前 M。
 让我们来看看同步系统调用（如文件 I/O）会导致 M 阻塞的情况：G1 将进行同步系统调用以阻塞 M1。
+![gpm-model5](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model5.png)
+
 
 调度器介入后：识别出 G1 已导致 M1 阻塞，此时，调度器将 M1 与 P 分离，同时也将 G1 带走。然后调度器引入新的 M2 来服务 P。此时，可以从 LRQ 中选择 G2 并在 M2 上进行上下文切换。
+![gpm-model6](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model6.png)
 
 阻塞的系统调用完成后：G1 可以移回 LRQ 并再次由 P 执行。如果这种情况再次发生，M1 将被放在旁边以备将来重复使用。
+![gpm-model7](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model7.png)
 
 场景 4：如果在 Goroutine 去执行一个 sleep 操作，导致 M 被阻塞了。
 Go 程序后台有一个监控线程 sysmon，它监控那些长时间运行的 G 任务然后设置可以强占的标识符，别的 Goroutine 就可以抢先进来执行。
