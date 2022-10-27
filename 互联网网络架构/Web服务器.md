@@ -195,18 +195,21 @@ OpenResty 是一个被广泛使用的技术，但它并不能算得上是热门�
 其他应用场景还包括Faas（利用其动态特性）、边缘计算（利用 Nginx 和 LuaJIT 良好的多平台支持特性）等
 
 
-OpenResty 整体架构（以及LuaJIT在架构中的位置）
+### **OpenResty 整体架构（以及LuaJIT在架构中的位置）**
 
-![]()
+![openresty-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/openresty-arch.png)
 
 OpenResty 的 worker 进程都是 fork master 进程而得到的， 其实， master 进程中的 LuaJIT 虚拟机也会一起 fork 过来。在同一个 worker 内的所有协程，都会共享这个 LuaJIT 虚拟机，Lua 代码的执行也是在这个虚拟机中完成的
 
-标准 Lua 和 LuaJIT 的关系
+### **标准 Lua 和 LuaJIT 的关系**
 标准 Lua 和 LuaJIT 是两回事儿，LuaJIT 只是兼容了 Lua 5.1 的语法。标准 Lua 现在的最新版本是 5.3，LuaJIT 的最新版本则是 2.1.0-beta3。在 OpenResty 几年前的老版本中，编译的时候，你可以选择使用标准 Lua VM ，或者 LuaJIT VM 来作为执行环境，不过，现在已经去掉了对标准 Lua 的支持，只支持 LuaJIT
 
-为什么选择 LuaJIT？
+### **为什么选择 LuaJIT？**
 最主要的原因，还是 LuaJIT 的性能优势。
+
 标准 Lua 出于性能考虑，也内置了虚拟机，所以 Lua 代码并不是直接被解释执行的，而是先由 Lua 编译器编译为字节码（Byte Code），然后再由 Lua 虚拟机执行。
+
 而 LuaJIT 的运行时环境，除了一个汇编实现的 Lua 解释器外，还有一个可以直接生成机器代码的 JIT 编译器。开始的时候，LuaJIT 和标准 Lua 一样，Lua 代码被编译为字节码，字节码被 LuaJIT 的解释器解释执行。但不同的是，LuaJIT 的解释器会在执行字节码的同时，记录一些运行时的统计信息，比如每个 Lua 函数调用入口的实际运行次数，还有每个 Lua 循环的实际执行次数。当这些次数超过某个随机的阈值时，便认为对应的 Lua 函数入口或者对应的 Lua 循环足够热，这时便会触发 JIT 编译器开始工作。
+
 JIT 编译器会从热函数的入口或者热循环的某个位置开始，尝试编译对应的 Lua 代码路径。编译的过程，是把 LuaJIT 字节码先转换成 LuaJIT 自己定义的中间码（IR），然后再生成针对目标体系结构的机器码。所以，所谓 LuaJIT 的性能优化，本质上就是让尽可能多的 Lua 代码可以被 JIT 编译器生成机器码，而不是回退到 Lua 解释器的解释执行模式
 
