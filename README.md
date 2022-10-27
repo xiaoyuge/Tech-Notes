@@ -25,10 +25,10 @@
 - **[分布式锁](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81.md)**
 - **[分布式可观测性](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7.md)**
 ## **云原生**
-- **[云计算技术趋势]()**
-- **[容器&k8s]()**
-- **[k8s实现分布式服务基础设施]()**
-- **[DevOps]()**
+- **[云计算技术趋势](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/%E4%BA%91%E8%AE%A1%E7%AE%97%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF.md)**
+- **[容器&k8s](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/%E5%AE%B9%E5%99%A8%E5%92%8Ck8s.md)**
+- **[k8s实现分布式服务基础设施](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/k8s%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD.md)**
+- **[DevOps](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/DevOps.md)**
 ## **架构设计**
 - **[高并发架构&性能优化]()**
 - **[架构设计原则、方法论和风格]()**
