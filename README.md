@@ -30,13 +30,13 @@
 - **[k8s实现分布式服务基础设施](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/k8s%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD.md)**
 - **[DevOps](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/DevOps.md)**
 ## **架构设计**
-- **[高并发架构&性能优化]()**
-- **[架构设计原则、方法论和风格]()**
-- **[DDD领域驱动设计]()**
-- **[微服务架构设计模式]()**
-- **[中台]()**
-- **[#技术案例#业务代码架构——COLA]()**
-- **[#技术案例# 元数据驱动的SaaS架构与背后的技术思考]()**
+- **[高并发架构&性能优化](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%9E%B6%E6%9E%84%E5%92%8C%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)**
+- **[架构设计原则、方法论和风格](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E3%80%81%E6%96%B9%E6%B3%95%E8%AE%BA%E5%92%8C%E9%A3%8E%E6%A0%BC.md)**
+- **[DDD领域驱动设计](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/DDD%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1.md)**
+- **[微服务架构设计模式](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)**
+- **[中台](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E4%B8%AD%E5%8F%B0.md)**
+- **[#技术案例#业务代码架构——COLA](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E2%80%94%E2%80%94COLA.md)**
+- **[#技术案例# 元数据驱动的SaaS架构与背后的技术思考](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%85%83%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E7%9A%84SaaS%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83.md)**
 ## **大数据**
 - **[Mysql]()**
   - **[MySQL基础]()**
