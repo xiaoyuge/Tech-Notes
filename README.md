@@ -39,19 +39,19 @@
 - **[#技术案例# 元数据驱动的SaaS架构与背后的技术思考](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%85%83%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E7%9A%84SaaS%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83.md)**
 ## **大数据**
 - **[Mysql]()**
-  - **[MySQL基础]()**
-  - **[MySQL隔离等级和事务]()**
-  - **[MySQL索引]()**
-  - **[为什么 MongoDB 索引选择B树，而 Mysql 索引选择B+树？]()**
-  - **[聚簇索引和非聚簇索引：Mysql为什么建议使用自增id做主键]()**
-- **[Hbase]()**
-- **[MongoDB]()**
-- **[ElasticSearch]()**
-- **[流式计算框架]()**
-- **[数据治理]()**
-- **[亿级数据DB秒级平滑扩容]()**
-- **[如何在不停机的情况下安全更换数据库]()**
-- **[跨库分页的几种常见方案]()**
+  - **[MySQL基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/Mysql%E5%9F%BA%E7%A1%80.md)**
+  - **[MySQL隔离等级和事务](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E9%9A%94%E7%A6%BB%E7%AD%89%E7%BA%A7%E5%92%8C%E4%BA%8B%E5%8A%A1.md)**
+  - **[MySQL索引](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E7%B4%A2%E5%BC%95.md)**
+  - **[为什么MongoDB索引选择B树，而Mysql索引选择B+树？](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/%E4%B8%BA%E4%BB%80%E4%B9%88MongoDB%E7%B4%A2%E5%BC%95%E9%80%89%E6%8B%A9B%E6%A0%91%E8%80%8CMysql%E7%B4%A2%E5%BC%95%E9%80%89%E6%8B%A9B%2B%E6%A0%91.md)**
+  - **[聚簇索引和非聚簇索引：Mysql为什么建议使用自增id做主键](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/Mysql%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%E8%87%AA%E5%A2%9Eid%E5%81%9A%E4%B8%BB%E9%94%AE.md)**
+- **[Hbase](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Hbase.md)**
+- **[MongoDB](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/MongoDB.md)**
+- **[ElasticSearch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/ElasticSearch.md)**
+- **[流式计算框架](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6.md)**
+- **[数据治理](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86.md)**
+- **[亿级数据DB秒级平滑扩容](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AEDB%E7%A7%92%E7%BA%A7%E5%B9%B3%E6%BB%91%E6%89%A9%E5%AE%B9.md)**
+- **[如何在不停机的情况下安全更换数据库](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%8D%E5%81%9C%E6%9C%BA%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%AE%89%E5%85%A8%E6%9B%B4%E6%8D%A2%E6%95%B0%E6%8D%AE%E5%BA%93.md)**
+- **[跨库分页的几种常见方案](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%B7%A8%E5%BA%93%E5%88%86%E9%A1%B5%E7%9A%84%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E6%96%B9%E6%A1%88.md)**
 ## **前端**
 - **[微前端]()**
 - **[CSR和SSR]()**
