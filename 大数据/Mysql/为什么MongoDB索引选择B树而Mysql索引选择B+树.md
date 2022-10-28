@@ -5,7 +5,7 @@
 ### **1、B树**
 B树是一种自平衡的搜索树，形式很简单：
 
-![B-tree]()
+![B-tree](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/B-tree.png)
 
 这就是一颗B-树。针对我们这个问题的最核心的特点如下：
 1. 多路，非二叉树
@@ -16,7 +16,7 @@ B树是一种自平衡的搜索树，形式很简单：
 ### **2、B+树**
 B+树是B树的变种
 
-![B-plus-tree]()
+![B-plus-tree](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/B-plus-tree.jpg)
 
 最核心的特点如下：
 1. 多路非二叉
@@ -49,7 +49,7 @@ B+树是B树的变种
 ### **1、MongoDB**
 MongoDB 是文档型的数据库，是一种 nosql，它使用类 Json 格式保存数据。比如之前我们的表可能有用户表、订单表、购物篮表等等，还要建立他们之间的外键关联关系。但是类Json就不一样了。
 
-![MongoDB-json]()
+![MongoDB-json](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/MongoDB-json.jpg)
 
 我们可以看到这种形式更简单，通俗易懂。那为什么 MongoDB 使用B-树呢？
 

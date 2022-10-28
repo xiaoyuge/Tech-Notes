@@ -29,7 +29,7 @@ B树和平衡二叉树稍有不同的是**B树属于多叉树又名多路平衡�
 
 最后我们用一个图和一个实际的例子来理解B树
 
-![B-tree]()
+![B-tree](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/B-tree.png)
 
 因为索引数据存储在磁盘上，数据读取的时候需要从磁盘读取到内存，但内存读取的效率远高于磁盘读取，因此内存与外存（比如磁盘）交换数据越频繁，会导致效率越低。
 
@@ -51,7 +51,7 @@ B+树是B树的一个升级版，相对于B树来说B+树更充分的利用了�
 
 B+树的结构示意图如下：
 
-![B-plus-tree]()
+![B-plus-tree](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/B-plus-tree.jpg)
 
 一棵m阶的B+树和m阶的B树的差异在于（节点最大的子节点数目称为B树的阶order）：
 * B+树中有n棵子树的节点中包含有n个关键字，而B树中有n棵子树的节点包含n-1个关键字；
