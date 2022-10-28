@@ -38,7 +38,7 @@
 - **[#技术案例#业务代码架构——COLA](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E2%80%94%E2%80%94COLA.md)**
 - **[#技术案例# 元数据驱动的SaaS架构与背后的技术思考](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%85%83%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E7%9A%84SaaS%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83.md)**
 ## **大数据**
-- **[Mysql]()**
+- **Mysql**
   - **[MySQL基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/Mysql%E5%9F%BA%E7%A1%80.md)**
   - **[MySQL隔离等级和事务](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E9%9A%94%E7%A6%BB%E7%AD%89%E7%BA%A7%E5%92%8C%E4%BA%8B%E5%8A%A1.md)**
   - **[MySQL索引](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E7%B4%A2%E5%BC%95.md)**
