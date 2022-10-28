@@ -42,6 +42,7 @@
   - **[MySQL基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/Mysql%E5%9F%BA%E7%A1%80.md)**
   - **[MySQL隔离等级和事务](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E9%9A%94%E7%A6%BB%E7%AD%89%E7%BA%A7%E5%92%8C%E4%BA%8B%E5%8A%A1.md)**
   - **[MySQL索引](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E7%B4%A2%E5%BC%95.md)**
+  - **[MySQL索引背后的数据结构及算法原理](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/MySQL%E7%B4%A2%E5%BC%95%E8%83%8C%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86.md)**
   - **[为什么MongoDB索引选择B树，而Mysql索引选择B+树？](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/%E4%B8%BA%E4%BB%80%E4%B9%88MongoDB%E7%B4%A2%E5%BC%95%E9%80%89%E6%8B%A9B%E6%A0%91%E8%80%8CMysql%E7%B4%A2%E5%BC%95%E9%80%89%E6%8B%A9B%2B%E6%A0%91.md)**
   - **[聚簇索引和非聚簇索引：Mysql为什么建议使用自增id做主键](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Mysql/Mysql%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%E8%87%AA%E5%A2%9Eid%E5%81%9A%E4%B8%BB%E9%94%AE.md)**
 - **[Hbase](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/Hbase.md)**
