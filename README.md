@@ -59,21 +59,21 @@
 - **[如何在不停机的情况下安全更换数据库](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%8D%E5%81%9C%E6%9C%BA%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%AE%89%E5%85%A8%E6%9B%B4%E6%8D%A2%E6%95%B0%E6%8D%AE%E5%BA%93.md)**
 - **[跨库分页的几种常见方案](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%B7%A8%E5%BA%93%E5%88%86%E9%A1%B5%E7%9A%84%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E6%96%B9%E6%A1%88.md)**
 ## **前端**
-- **[微前端]()**
-- **[CSR和SSR]()**
+- **[微前端](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/%E5%BE%AE%E5%89%8D%E7%AB%AF.md)**
+- **[CSR和SSR](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/CSR%E5%92%8CSSR.md)**
 ## **区块链**
-- **[区块链技术]()**
-- **[Web3.0和元宇宙]()**
+- **[区块链技术](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%8C%BA%E5%9D%97%E9%93%BE/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF.md)**
+- **[Web3.0和元宇宙](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%8C%BA%E5%9D%97%E9%93%BE/Web3.0%E5%92%8C%E5%85%83%E5%AE%87%E5%AE%99.md)**
 ## **技术案例**
-- **[通过 Consul+OpenResty 实现无reload动态负载均衡]()**
-- **[一个牛逼的多级缓存实现方案]()**
-- **[挑战大型系统的缓存设计——应对一致性问题]()**
-- **[京东毫秒级热key探测框架设计与实践]()**
-- **[Kong在好大夫的落地实践]()**
-- **[GraphQL及元数据驱动架构在后端BFF中的实践]()**
-- **[泡泡后台Couchbase缓存使用经验分享]()**
-- **[使用Atomikos实现JTA分布式事务]()**
-- **[深度剖析服务发现组件Netflix Eureka]()**
-- **[延时任务的几种实现方式]()**
+- **[通过 Consul+OpenResty 实现无reload动态负载均衡](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E9%80%9A%E8%BF%87Consul%2BOpenResty%E5%AE%9E%E7%8E%B0%E6%97%A0reload%E5%8A%A8%E6%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.md)**
+- **[一个牛逼的多级缓存实现方案](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E4%B8%80%E4%B8%AA%E7%89%9B%E9%80%BC%E7%9A%84%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88.md)**
+- **[挑战大型系统的缓存设计——应对一致性问题](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E6%8C%91%E6%88%98%E5%A4%A7%E5%9E%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%BA%94%E5%AF%B9%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98.md)**
+- **[京东毫秒级热key探测框架设计与实践](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E4%BA%AC%E4%B8%9C%E6%AF%AB%E7%A7%92%E7%BA%A7%E7%83%ADkey%E6%8E%A2%E6%B5%8B%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E8%B7%B5.md)**
+- **[Kong在好大夫的落地实践](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/Kong%E5%9C%A8%E5%A5%BD%E5%A4%A7%E5%A4%AB%E7%9A%84%E8%90%BD%E5%9C%B0%E5%AE%9E%E8%B7%B5.md)**
+- **[GraphQL及元数据驱动架构在后端BFF中的实践](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/GraphQL%E5%8F%8A%E5%85%83%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E6%9E%B6%E6%9E%84%E5%9C%A8%E5%90%8E%E7%AB%AFBFF%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5.md)**
+- **[泡泡后台Couchbase缓存使用经验分享](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E6%B3%A1%E6%B3%A1%E5%90%8E%E5%8F%B0Couchbase%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB.md)**
+- **[使用Atomikos实现JTA分布式事务](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E4%BD%BF%E7%94%A8Atomikos%E5%AE%9E%E7%8E%B0JTA%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.md)**
+- **[深度剖析服务发现组件Netflix Eureka](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E7%BB%84%E4%BB%B6NetflixEureka.md)**
+- **[延时任务的几种实现方式](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%8A%80%E6%9C%AF%E6%A1%88%E4%BE%8B/%E5%BB%B6%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F.md)**
 
 
