@@ -2,11 +2,11 @@
 一般说前后端不分离，指的是早期的开发模式，即前端代码写完后嵌入到后端的JSP/PHP中。由后端服务渲染完数据后直接返回一个完整的HTML页面，里面的数据都已经渲染好了。
 例如，如下是一个JSP文件，它的内容是：
 
-![]()
+![JSP](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/JSP.png)
 
 当客户端尝试向服务端请求这个页面的时候，服务端会对这个模版先进行计算处理，返回给客户端的页面可能是这样的：
 
-![]()
+![JSP-HTML](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/JSP-HTML.png)
 
 可以直接从这个HTML页面中提取它的关键内容。如果这个客户端指的是爬虫之类的脚本，那么这个爬虫可以分析HTML的结构，然后提取出关键内容。
 
@@ -18,13 +18,13 @@
 我们先来看看早期的SSR有什么问题。
 乘坐时光机，回到十多年前，我们看看腾讯的官方网站是什么样子：
 
-![]()
+![tencent-page](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/tencent-page.png)
 
 上面的页面十分的简单，几乎都是静态内容，即不用编写太多的JavaScript，仅用HTML+CSS编写页面，然后扔给后端开发人员就可以。
 
 而现在的腾讯官网是这样的：
 
-![]()
+![tencent-page-now](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/tencent-page-now.png)
 
 上面的网页有着大量的交互效果，它们都需要编写JavaScript来完成，而且整个前端项目也比以前要复杂的多，文件量和代码量都远远超过了早期。
 
@@ -38,7 +38,7 @@ CSR典型的代表是SPA，即单页应用Single Page Application。如今Vue/Re
 
 客户端通过访问域名，向前端服务器请求静态资源（HTML/CSS/JS），向后端服务器请求数据
 
-![]()
+![SPA](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/SPA.png)
 
 可以看到，CSR模式下，因为前后端的分离，多了一个数据交互的步骤，前端需要通过Ajax/fetch向后端发送请求才能得到数据，然后再将数据渲染到页面上。
 
@@ -46,11 +46,11 @@ CSR典型的代表是SPA，即单页应用Single Page Application。如今Vue/Re
 
 例如，可能在步骤3得到这样的HTML页面：
 
-![]()
+![SPA-first-page](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/SPA-first-page.png)
 
 经过步骤5之后，才可能得到完整的渲染好的页面，例如：
 
-![]()
+![SPA-first-page-rendered](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/SPA-first-page-rendered.png)
 
 可以看到，CSR模式下，浏览器请求某个域名后得到的HTML页面，里面可能没有有效的内容。必须执行JS代码，才能得到完整的HTML。
 
@@ -76,7 +76,7 @@ CSR典型的代表是SPA，即单页应用Single Page Application。如今Vue/Re
 
 原理示意图如下：
 
-![]()
+![SSR](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/SSR.png)
 
 可以看到，Front End Server接管了浏览器的初始渲染工作，所以浏览器可以直接得到渲染好的HTML。
 
@@ -98,7 +98,7 @@ CSR典型的代表是SPA，即单页应用Single Page Application。如今Vue/Re
 是的，SSG（Static Site Generation）就这么诞生了，根据已有的SPA，在本地打包的时候，计算生成HTML页面，然后可以直接部署。使用方式可以参考某个大佬写的vite-ssg
 原理如下：
 
-![]()
+![SSG](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/SSG.png)
 
 总结
 越来越多的名词出现在前端领域，像SSR, SPA, CSR, SSG，不管是哪一门技术，都给前端开发者带来了很多帮助。或许日后，我们将会看到前端的更多可能。
