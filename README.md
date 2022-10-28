@@ -17,15 +17,15 @@
 - **[Web服务器](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8.md)**
 ##  **分布式系统**
 - **[分布式系统原理](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md)**
-- **[CAP理论]()**
+- **[CAP理论](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/CAP%E7%90%86%E8%AE%BA.md)**
 - **[微服务](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%BE%AE%E6%9C%8D%E5%8A%A1.md)**
 - **[分布式服务注册与发现](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0.md)**
 - **[分布式消息](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF.md)**
 - **[分布式缓存](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98.md)**
 - **[Redis LFU 实现]()**
 - **[Redis LRU 实现]()**
-- **[memcached并发模型]()**
-- **[缓存知识总结]()**
+- **[memcached并发模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/memcached%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.md)**
+- **[缓存知识总结](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E7%BC%93%E5%AD%98%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93.md)**
 - **[分布式全局ID](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%A8%E5%B1%80ID.md)**
 - **[分布式锁](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81.md)**
 - **[分布式可观测性](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7.md)**
