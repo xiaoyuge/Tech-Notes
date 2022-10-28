@@ -1,6 +1,6 @@
 ## **mysql的逻辑架构**
 
-![mysql-logic-arch]()
+![mysql-logic-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/mysql-logic-arch.png)
 
 大致上，mysql可以分为server层和存储引擎层两层
 - **Server层**：包括连接器、查询缓存、分析器、优化器、执行器等，涵盖了mysql的大多数核心服务功能，以及所有的内置函数，所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等；
@@ -8,7 +8,7 @@
 
 ## **一条SQL语句的执行过程**
 
-![mysql-sql-exec-proc]()
+![mysql-sql-exec-proc](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/mysql-sql-exec-proc.png)
 
 - **处理连接**：第一步，要首先连接上数据库，这个时候使用的就是连接器。连接器负责跟客户端建立连接、获取权限、维持和管理连接；
 
