@@ -51,7 +51,7 @@ mysql的主从同步是基于Binlog的，Binlog用于记录数据库执行的写
 1）**异步复制（Asynchronous replication）**
 **MySQL默认的复制即是异步的**，主库在执行完客户端提交的事务后会立即将结果返给给客户端，并不关心从库是否已经接收binlog并完成处理，这样就会有一个问题，主库如果crash掉了，此时主库上已经提交的事务可能并没有同步到从库上，如果此时，强行将从提升为主，可能导致新主库上的数据不完整，出现数据不一致的问题，但这种方式性能最好
 
-![Mysql-Asynchronous-replication]()
+![Mysql-Asynchronous-replication](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/Mysql-Asynchronous-replication.jpg)
 
 2）**全同步复制（Fully synchronous replication）**
 指当主库执行完一个事务，**所有的从库都执行了该事务才返回给客户端**。因为需要等待所有从库执行完该事务才能返回，所以全同步复制的**性能很差**，另外**可用性也很差**，主库和所有从库任何一个数据库出问题，都会影响业务。所以这个方案基本没法使用。
@@ -61,7 +61,7 @@ mysql的主从同步是基于Binlog的，Binlog用于记录数据库执行的写
 
 存储系统中的数据称为状态（也就是 MySQL 中的数据），状态的全量备份称为快照（Snapshot），就像给数据拍个照片一样。我们按照顺序记录更新存储系统的每条操作命令，就是操作日志（Commit Log，也就是 MySQL 中的 Binlog）
 
-![Mysql-snapshot-commitlog]()
+![Mysql-snapshot-commitlog](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/Mysql-snapshot-commitlog.jpg)
 
 复制数据的时候，只要基于一个快照，按照顺序执行快照之后的所有操作日志，就可以得到一个完全一样的状态。在从节点持续地从主节点上复制操作日志并执行，就可以让从节点上的状态数据和主节点保持同步。
 
@@ -74,7 +74,7 @@ mysql的主从同步是基于Binlog的，Binlog用于记录数据库执行的写
 2. **I/O线程**：负责从主服务器上读取二进制日志，并写入从服务器的重放日志（relay log）中；
 3. **sql线程**：负责读取重放日志并重放其中的语句；
 
-![Mysql-replication-thread]()
+![Mysql-replication-thread](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/Mysql-replication-thread.jpg)
 
 ### **主从同步延迟问题的解决**
 Mysql的主从同步是单线程的，即使一个数据库实例有多个逻辑数据库，也是单个线程写 binlog ，每个从库单个线程拉取写 relay log 并处理
