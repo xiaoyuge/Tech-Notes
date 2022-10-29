@@ -47,7 +47,7 @@
 - **[DDD领域驱动设计](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/DDD%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1.md)**
 - **[微服务架构设计模式](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)**
 - **[中台](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E4%B8%AD%E5%8F%B0.md)**
-- **[如何设计一个可持续维护的系统]()**
+- **[如何设计一个可持续维护的系统](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%8C%81%E7%BB%AD%E7%BB%B4%E6%8A%A4%E7%9A%84%E7%B3%BB%E7%BB%9F.md)**
 - **[#技术案例#业务代码架构——COLA](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E2%80%94%E2%80%94COLA.md)**
 - **[#技术案例# 元数据驱动的SaaS架构与背后的技术思考](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/%E5%85%83%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E7%9A%84SaaS%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83.md)**
 ## **大数据**
