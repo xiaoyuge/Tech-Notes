@@ -7,7 +7,7 @@
 
 # **目录**
 ## **编程语言**
-- **[编程语言类型]()**
+- **[编程语言类型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%B1%BB%E5%9E%8B.md)**
 - ### **Java**
   - **[JVM](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/JVM.md)**
   - **[多线程](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B.md)**
