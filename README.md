@@ -6,14 +6,16 @@
 记录仅仅是为了避免遗忘，但更有价值的是思考技术背后的本质和底层逻辑，这样就能具备不同技术之间的迁移能力，希望能和大家一起，一直记录、一直思考！
 
 # **目录**
-## **Java**
-- **[JVM](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/JVM.md)**
-- **[多线程](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B.md)**
-- **[并发容器](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8.md)**
-- **[IO](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/IO.md)**
-## **Go**
-- **[Go](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go.md)**
-- **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
+## **编程语言**
+- **[编程语言类型]()**
+- ### **Java**
+  - **[JVM](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/JVM.md)**
+  - **[多线程](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B.md)**
+  - **[并发容器](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8.md)**
+  - **[IO](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/IO.md)**
+- ### **Go**
+  - **[Go](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go.md)**
+  - **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
 ## **互联网网络架构**
 - **[OSI网络模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/OSI%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.md)**
 - **[HTTP协议](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/HTTP%E5%8D%8F%E8%AE%AE.md)**
