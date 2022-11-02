@@ -12,7 +12,7 @@ Google SRE 就是目前稳定性领域的最佳实践。也可以说，SRE 已�
 
 其实，**SRE 是一套体系化的方法**，我们也只有用全局视角才能更透彻地理解它。从职能分工上，SRE 体系的建设绝不是单个岗位或单个部门就能独立完成的，必然要求有高效的跨团队组织协作才可以。不要想着设定一个 SRE 岗位，就能把稳定性的事情全部解决掉，这明显不现实。你应该从体系的角度出发，设置不同的职能岗位，同时还要有让不同角色有效协作的机制。SRE 是一个体系化工程，它需要协同多个部门、多项技术。
 
-![SRE保障性规划图]()
+![SRE保障性规划图](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/SRE%E4%BF%9D%E9%9A%9C%E6%80%A7%E8%A7%84%E5%88%92%E5%9B%BE.png)
 
 ### **SRE的目的**
 
@@ -30,7 +30,7 @@ Google SRE 就是目前稳定性领域的最佳实践。也可以说，SRE 已�
 
 从 SRE 稳定性保障规划图中，可以看出 MTTR 可以细分为 4 个指标：MTTI、MTTK、MTTF 和 MTTV
 
-![MTTR四个细分指标]()
+![MTTR四个细分指标](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/MTTR%E5%9B%9B%E4%B8%AA%E7%BB%86%E5%88%86%E6%8C%87%E6%A0%87.png)
 
 我们做的任何一件事情、开发的任何一套系统、引入的任何一个理念和方法论，有且只有一个目标，那就是“提升 MTBF，降低 MTTR”，也就是把故障发生时间的间隔变长，将故障影响的时间减少：
 - 比如，在 Pre-MTBF 阶段（无故障阶段），我们要做好架构设计，提供限流、降级、熔断这些 Design-for-Failure 的服务治理手段，以具备故障快速隔离的条件；还可以考虑引入混沌工程这样的故障模拟机制，在线上模拟故障，提前发现问题；
@@ -64,7 +64,7 @@ Google SRE 就是目前稳定性领域的最佳实践。也可以说，SRE 已�
 
    下面是我们常见的按时长维度统计的可用性对照表
 
-   ![availability-downtime]()
+   ![availability-downtime](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/availability-downtime.png)
 
    用时间维度统计可用性，最显著的问题就是，稳定性只与故障发生挂钩
 
@@ -108,6 +108,7 @@ Google SRE 就是目前稳定性领域的最佳实践。也可以说，SRE 已�
 总结一下
 
 关于系统可用性，业界有两种计算方式，一种是时长维度，另一种是请求维度，这两种方式各有优劣。在 SRE 的实践中，会更多采用请求维度的统计方式，因为 SRE 关注的稳定性是系统的整体运行状态，而不仅仅只关注故障状态下的稳定性，在系统运行过程中的任何异常，都会被纳入稳定性的评估范畴中
+
 
 
 
