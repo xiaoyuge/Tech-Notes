@@ -53,7 +53,7 @@ DevOps三步工作法：流动、反馈、持续学习和试验
 
 **DevOps追求的是价值流动效率最大化**，所以需要看到全貌，因为就算单点能力再强，单点之间的割裂和浪费对于价值交付效率的影响也是超乎想象的
 
-![Devops-VSM]()
+![Devops-VSM](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/DevOps-VSM.jpg)
 
 怎么才能将 DevOps 的价值和业务价值关联起来，以表明 DevOps 对业务价值的拉动和贡献？
 
@@ -124,7 +124,7 @@ DevOps三步工作法：流动、反馈、持续学习和试验
 
    - 2.1 **主干开发，分支发布**
 
-    ![]()
+    ![mainDev-branchDeliver](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/mainDev-branchDiliver.png)
 
      在这种分支策略下，开发团队共享一条主干分支，所有的代码都直接提交到主干分支上，主干分支就相当于是一个代码的全量合集。在软件版本发布之前，会基于主干拉出一条**以发布为目的的短分支**
 
@@ -149,7 +149,7 @@ DevOps三步工作法：流动、反馈、持续学习和试验
 
 （2）分支开发，主干发布
 
-![]()
+![branchDev-mainDeliver](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/branchDev-mainDeliver.png)
 
 当开发接到一个任务后，会基于主干拉出一条特性开发分支，在特性分支上完成功能开发验证之后，通过 Merge request 或者 Pull request 的方式发起合并请求，在评审通过后合入主干，并在主干完成功能的回归测试。开源社区流行的 GitHub 模式其实就是属于这种
 
@@ -172,7 +172,7 @@ DevOps三步工作法：流动、反馈、持续学习和试验
 
 （3）主干开发，主干发布
 
-![]()
+![mainDev-mainDeliver](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/mainDev-mainDeliver.png)
 
 这种分支策略可以简单理解为没有策略。团队只有一条分支，开发人员的代码改动都直接集成到这条主干分支上，同时，软件的发布也基于这条主干分支进行。
 
@@ -183,13 +183,13 @@ DevOps三步工作法：流动、反馈、持续学习和试验
 Facebook的主干开发、主干发布策略
 为了保证主干分支的质量，自动化验收手段是必不可少的，因此，每一次代码提交都会触发完整的编译构建、单元测试（应该还有code reivew）、代码扫描、自动化测试等过程。在代码合入主干后，会进行按需发布，先是发布到内部环境（预发环境），也就是只有 Facebook 的员工才能看到这个版本，如果发现问题就立刻修复，如果没有问题，再进一步开放发布给 2% 的线上生产用户（灰度），同时自动化检测线上的反馈数据。直到确认一切正常，才会对所有用户开放
 
-![]()
+![Facebook-mainDev-mainDeliver](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/Facebook-mainDev-mainDeliver.jpg)
 
 
 推荐的分支策略：
 主干开发结合特性分支的模式，也就是团队共享一条开发主干，特性开发基于主干拉出特性分支，快速开发验收并回归主干，同时，在特性分支和主干分别建立不同的质量门禁和自动化验收能力
 
-![]()
+![recommend-branch-strategy](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/recommend-branch-strategy.jpg)
 
 ### **持续集成**
 瀑布开发模式时代的问题：在很长一段时间里，软件是根本无法运行的
@@ -229,7 +229,7 @@ CI核心要做到三点：
 - **UI测试**：UI 层是唯一能够模拟用户真实操作场景的端到端测试，页面上的一个按钮可能触发内部几十个函数调用，和单元测试每次只检查一个函数的逻辑不同，**UI 测试更加关注模块集成后的联动逻辑，是集成测试最有效的手段**。但缺点也是比较明显的：随着敏捷迭代的速度越来越快，UI 控件的频繁变更会导致控件定位不稳定，提高了用例脚本的维护成本；
 
 
-![]()
+![automaiton-test-level](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/automaiton-test-level.png)
 
 
 ### **内建质量**
