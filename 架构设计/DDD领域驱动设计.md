@@ -175,7 +175,7 @@ DDD 领域建模通常采用事件风暴，它通常采用用例分析、场景�
 - 消息中间件
 - 事件接收和处理
 
-![eda-arch]()
+![eda-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/EDA-Arch)
 
 个人觉得：方案1更合适，业务表和事件表在一个数据库，可以使用数据库本地事务保证业务操作和事件发送的强一致性
 
