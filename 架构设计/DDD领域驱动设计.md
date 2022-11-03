@@ -225,7 +225,7 @@ DDD 领域建模通常采用事件风暴，它通常采用用例分析、场景�
 
 领域事件是 DDD 的一个重要概念，在设计时我们要重点关注领域事件，**用领域事件来驱动业务的流转，尽量采用基于事件的最终一致**，降低微服务之间直接访问的压力，实现微服务之间的解耦，维护领域模型的独立性和数据一致性。
 
-### **DDD分层架构
+### **DDD分层架构**
 
 ![DDD-4-level-arc](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/DDD-4-level-arch.png)
 
