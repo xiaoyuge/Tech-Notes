@@ -50,7 +50,7 @@ DDD 战略设计会建立领域模型，领域模型可以用于指导微服务�
 - **发散**：它通常采用**用例分析、场景分析和用户旅程分析**，尽可能全面不遗漏地分解业务领域，并梳理领域对象之间的关系，这是一个发散的过程；
 - **收敛**：事件风暴过程会产生很多的实体、命令、事件等领域对象，我们将这些领域对象从不同的维度进行聚类，形成如聚合、限界上下文等边界，建立领域模型，这就是一个收敛的过程；
 
-![domain-model](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/domain-model)
+![domain-model](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/domain-model.png)
 
 ### **DDD的设计过程**
 我们可以用三步来划定领域模型和微服务的边界：
@@ -175,7 +175,7 @@ DDD 领域建模通常采用事件风暴，它通常采用用例分析、场景�
 - 消息中间件
 - 事件接收和处理
 
-![eda-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/EDA-Arch)
+![eda-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/EDA-Arch.png)
 
 个人觉得：方案2更合适，业务表和事件表在一个数据库，可以使用数据库本地事务保证业务操作和事件发送的强一致性
 
@@ -189,16 +189,17 @@ DDD 领域建模通常采用事件风暴，它通常采用用例分析、场景�
 
    为了保证事件结构的统一，我们还会创建事件基类 DomainEvent（参考下图），子类可以扩充属性和方法。由于事件没有太多的业务行为，实现方法一般比较简单
 
-   ![DomainEvent]()
+   ![DomainEvent](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/DomainEvent.png)
 
    事件发布之前需要先构建事件实体并持久化。事件发布的方式有很多种，你可以通过应用服务或者领域服务发布到事件总线或者消息中间件，也可以从事件表中利用定时程序或数据库日志捕获技术获取增量事件数据，发布到消息中间件
 
-2. 事件数据持久化
+2. **事件数据持久化**
 
    事件数据持久化可用于系统之间的数据对账，或者实现发布方和订阅方事件数据的审计。当遇到消息中间件、订阅方系统宕机或者网络中断，在问题解决后仍可继续后续业务流转，保证数据的一致性。
 
    事件数据持久化有两种方案，在实施过程中你可以根据自己的业务场景进行选择：
    1. 持久化到本地业务数据库的事件表中，利用本地事务保证业务和事件数据的一致性；
+
    2. 持久化到共享的事件数据库中。这里需要注意的是：业务数据库和事件数据库不在一个数据库中，它们的数据持久化操作会跨数据库，因此需要分布式事务机制来保证业务和事件数据的强一致性，结果就是会对系统性能造成一定的影响；
 
    个人觉得：方案1更合适
@@ -220,13 +221,13 @@ DDD 领域建模通常采用事件风暴，它通常采用用例分析、场景�
 
 领域事件运行机制相关案例
 
-![]()
+![domain-event-runtime-case](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/domain-event-runtime-case.png)
 
 领域事件是 DDD 的一个重要概念，在设计时我们要重点关注领域事件，**用领域事件来驱动业务的流转，尽量采用基于事件的最终一致**，降低微服务之间直接访问的压力，实现微服务之间的解耦，维护领域模型的独立性和数据一致性。
 
 ### **DDD分层架构
 
-![]()
+![DDD-4-level-arc](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/DDD-4-level-arch.png)
 
 #### **DDD四层架构包括**
 
