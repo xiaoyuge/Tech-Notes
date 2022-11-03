@@ -120,7 +120,7 @@ Google SRE 就是目前稳定性领域的最佳实践。也可以说，SRE 已�
 
 系统中常见的监控指标有如下这些：
 
-![]()
+![system-monitor-indicator](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/system-monitor-indicator.png)
 
 以衡量系统的稳定性为例，我们可以通过问自己两个问题来选择指标：
 - 第一个问题：我要衡量谁的稳定性？ 也就是先找到稳定性的主体；
@@ -186,7 +186,7 @@ SLO 目标定好了，很具体，但实施起来不直观，所以我们可以�
 
 错误预算的计算方式一点都不复杂，简单讲就是通过 SLO 反向推导出来的，如下图所示：
 
-![error-budget]()
+![error-budget](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/error-budget.png)
 
 错误预算的计算很简单，起到的警示效果又更强烈，所以在 SLO 落地实践时，我们通常就把 SLO 转化为错误预算，以此来推进稳定性目标达成
 
@@ -201,7 +201,7 @@ SLO 目标定好了，很具体，但实施起来不直观，所以我们可以�
 
    第二种是把错误预算应用在故障定级中。我们判定一个问题是不是故障，或者评估问题影响程度到底有多大，除了看影响时长外，还有一个更具操作性的方法，那就是按照该问题消耗的错误预算比例来评判
 
-   ![]()
+   ![error-budget-for-failure-level](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/error-budget-for-failure-level.png)
 
    可以看到，通过错误预算来定义故障等级就可以做到量化，而一旦可以被量化，就意味着可以标准化，有了标准，我们就可以进而推进达成共识
 
