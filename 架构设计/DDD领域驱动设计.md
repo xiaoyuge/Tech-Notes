@@ -433,7 +433,7 @@ DDD 方法设计的微服务，不仅可以通过限界上下文和聚合实现�
 
 ### **微服务各层数据对象的职责和转换过程**
 
-![]()
+![微服务各层数据对象的职责和转换过程](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/DDD%E4%B8%A5%E6%A0%BC%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E4%B8%8B%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%B0%81%E8%A3%85%E4%B8%8E%E8%B0%83%E7%94%A8.png)
 
 - **基础层**
 
