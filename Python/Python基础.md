@@ -16,7 +16,6 @@ pyc 文件是由 Python 解释器将模块的源码转换为字节码
 
 备注：pyc文件是一种二进制文件，是一种跨平台的字节码，由python的虚拟机来执行的
 
-
 ### **应用场景**：
 数据处理和分析、服务端（如web开发）开发、人工智能（如机器学习）
 
@@ -41,6 +40,9 @@ Tensorflow
 在IO密集型应用场景中，Python多线程虽然不能利用多核，但IO的时候会阻塞从而释放CPU资源，实现CPU和IO的并行，因此多线程用于IO密集场景，还是可以大幅提升速度的。具体可见这个代码示例：[单线程vs多线程爬虫性能对比](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/multi_thread_craw.py)
 
 而在CPU密集的场景，多线程确实不能提供更好的性能，但Python提供了multiprocessing，可以利用多核的优势加速计算，具体可见这个代码示例：[对于CPU密集型业务，对比单线程、多线程和多进程的性能](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/thread_process_cpu_bound.py)
+
+#### **Python多线程和多进程使用方法对比**
+![multi-process-vs-multi-thread]()
 
 更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
 
