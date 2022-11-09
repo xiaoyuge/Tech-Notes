@@ -128,7 +128,7 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 - 我们可以把函数赋予变量：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_to_var.py)
 - 我们可以把函数当作参数，传入另一个函数中：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_to_param.py)
 - 我们可以在函数里定义函数，也就是函数的嵌套：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_inline_func.py)
-- ，函数的返回值也可以是函数对象（闭包）：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_closure.py)
+- 函数的返回值也可以是函数对象（闭包）：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_closure.py)
 
 ### **装饰器**
 先看一个装饰器的代码示例：[装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_impl.py)
