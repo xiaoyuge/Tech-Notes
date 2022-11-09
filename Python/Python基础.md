@@ -46,6 +46,41 @@ Tensorflow
 
 更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
 
+#### **协程：asyncio**
+
+多线程有诸多优点且应用广泛，但也存在一定的局限性：
+- 比如，多线程运行过程容易被打断，因此有可能出现 race condition 的情况；
+- 再如，线程切换本身存在一定的损耗，线程数不能无限增加，因此，如果你的 I/O 操作非常 heavy，多线程很有可能满足不了高效率、高质量的需求;
+
+首先区分一下Sync（同步）和 Async（异步）的概念：
+- 所谓 Sync，是指操作一个接一个地执行，下一个操作必须等上一个操作完成后才能执行；
+- 而 Async 是指**不同操作间可以相互交替执行**，如果其中的某个操作被 block 了，程序并不会等待，而是会找出可执行的操作继续执行；
+
+不同于多线程，Asyncio 是单线程的，但其内部 event loop 的机制，可以让它并发地运行多个不同的任务，并且比多线程享有更大的自主控制权
+
+Asyncio 中的任务，在运行过程中不会被打断，因此不会出现 race condition 的情况。尤其是在 I/O 操作 heavy 的场景下，Asyncio 比多线程的运行效率更高。因为 Asyncio 内部任务切换的损耗，远比线程切换的损耗要小；并且 Asyncio 可以开启的任务数量，也比多线程中的线程数量多得多
+
+但需要注意的是，很多情况下，使用 Asyncio 需要特定第三方库的支持，比如aiohttp。而如果 I/O 操作很快，并不 heavy，那么运用多线程，也能很有效地解决问题
+
+多线程、多进程和asyncio分别在什么场景下使用：
+```
+if io_bound:
+    if io_slow:
+        print('Use Asyncio')
+    else:
+        print('Use multi-threading')
+else if cpu_bound:
+    print('Use multi-processing')
+```
+换成白话就是：
+- 如果是 I/O bound，并且 I/O 操作很慢，需要很多任务 / 线程协同实现，那么使用 Asyncio 更合适；
+- 如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了；
+- 如果是 CPU bound，则需要使用多进程来提高程序运行效率；
+
+这里有一两例子演示如何使用协程来爬取网站：
+- [示例1](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_blog.py)
+- [示例2](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_wiki.py)
+
 #### **GIL是什么**
 GIL（Global Interpreter Lock，即全局解释器锁）,GIL，是最流行的 Python 解释器 CPython 中的一个技术术语。它的意思是全局解释器锁，本质上是类似操作系统的 Mutex。每一个 Python 线程，在 CPython 解释器中执行时，都会先锁住自己的线程，阻止别的线程执行
 
