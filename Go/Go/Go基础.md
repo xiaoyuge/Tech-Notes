@@ -240,6 +240,7 @@ single-pkg-lib-layout
 ├── go.mod
 └── internal/
 ```
+这里展示了一些Go Project的标准代码结构布局：[go-project-layout](https://github.com/xiaoyuge/go-project-layout)
 
 ### **Go构建模式**
 Go 程序由 Go 包组合而成的，Go 程序的构建过程就是确定包版本、编译包以及将编译后得到的目标文件链接在一起的过程
