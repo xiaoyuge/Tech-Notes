@@ -16,7 +16,7 @@
   - **[并发容器](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8.md)**
   - **[IO](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/IO.md)**
 - ### **Python**
-  - **[Python基础]()**
+  - **[Python基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/Python%E5%9F%BA%E7%A1%80.md)**
   - **[Python实例代码](https://github.com/xiaoyuge/kingfish-python)**
 - ### **Go**
   - **[Go基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E5%9F%BA%E7%A1%80.md)**
