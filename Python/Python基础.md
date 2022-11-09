@@ -42,7 +42,7 @@ Tensorflow
 而在CPU密集的场景，多线程确实不能提供更好的性能，但Python提供了multiprocessing，可以利用多核的优势加速计算，具体可见这个代码示例：[对于CPU密集型业务，对比单线程、多线程和多进程的性能](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/thread_process_cpu_bound.py)
 
 #### **Python多线程和多进程使用方法对比**
-![multi-process-vs-multi-thread]()
+![multi-process-vs-multi-thread](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/multi-process-vs-multi-thread.png)
 
 更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
 
