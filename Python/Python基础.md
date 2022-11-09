@@ -31,8 +31,16 @@ Tensorflow
 
 ### **并发编程**：
 1. 使用threading库进行多线程编程时，因为GIL（全局解释器锁）的存在，同一时间只会有一个获得了 GIL 的线程在跑，其它的线程都处于等待状态等着 GIL 的释放，导致不能利用CPU物理多核的性能加速运算；
+
 2. Python 在 2.6 里引入了 multiprocessing这个多进程标准库，让多进程的 python 程序编写简化到类似多线程的程度，大大减轻了 GIL 带来的不能利用多核的尴尬；
+
 3. 但多进程的方案太重，还有个方案是把关键部分用 C/C++ 写成 Python 扩展，其它部分还是用 Python 来写，让 Python 的归 Python，C 的归 C。一般计算密集性的程序都会用 C 代码编写并通过扩展的方式集成到 Python 脚本里（如 NumPy 模块）。在扩展里就完全可以用 C 创建原生线程，而且不用锁 GIL，充分利用 CPU 的计算资源了；
+
+虽然Python的多线程并并不能利用CPU多核加速计算，但并不是一无是处，我们得区分一下我们的应用是CPU密集型，还是IO密集型。
+
+在IO密集型应用场景中，Python多线程虽然不能利用多核，但IO的时候会阻塞从而释放CPU资源，实现CPU和IO的并行，因此多线程用于IO密集场景，还是可以大幅提升速度的。具体可见这个代码示例：[单线程vs多线程爬虫性能对比](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/multi_thread_craw.py)
+
+而在CPU密集的场景，多线程确实不能提供更好的性能，但Python提供了multiprocessing，可以利用多核的优势加速计算，具体可见这个代码示例：[对于CPU密集型业务，对比单线程、多线程和多进程的性能](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/thread_process_cpu_bound.py)
 
 #### **GIL是什么**
 GIL（Global Interpreter Lock，即全局解释器锁）,GIL，是最流行的 Python 解释器 CPython 中的一个技术术语。它的意思是全局解释器锁，本质上是类似操作系统的 Mutex。每一个 Python 线程，在 CPython 解释器中执行时，都会先锁住自己的线程，阻止别的线程执行
