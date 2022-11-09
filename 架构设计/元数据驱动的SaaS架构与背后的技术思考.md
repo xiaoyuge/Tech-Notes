@@ -36,7 +36,6 @@
 
 弹性计算和 Serverless 解决了算力的问题，领域驱动服务化设计解决了功能的拆分和按需搭配组合的问题，那么剩下的核心问题就是数据了：如何以一套统一的数据架构，既能支撑多租户的数据安全性需求以及通用的数据存储，也能支撑用户扩展的自定义数据对象定义和模型变更，同时也要保证数据定义层面的扩展和变更不会影响自身和其他租户业务功能的可用性。我们来分析下可能的方案（暂不考虑按服务边界进行数据库拆分）：
 
-
 （1）统一的数据库，标准数据模型和扩展数据模型直接映射到物理表和索引：很显然，对于不同租户自定义的数据对象和数据模型要求是无法支撑的，物理数据模型会相互干扰、相互冲突直到无以为继。即使是对于所有租户完全标准的功能和数据存储，平台自身的标准模型升级的 DDL 也会对用户的可用性造成较大影响，所以显然是行不通的；
 
 （2）如果为每个租户创建各自的数据库呢？各自租户拥有各自的数据库，可以满足用户数据安全隔离的需求，也可以满足各租户自定义的数据需求，看上去像是一种合理的 SaaS 数据方案。但是仔细分析，会发现有两个明显的问题：
@@ -56,9 +55,9 @@
 
 - 将元数据逻辑模型映射到元数据物理模型，对应实际存储结构；
 
-通过对业务模型的变更，形成对元数据层的数据变更，而不是物理结构的变更，从而实现业务逻辑模型同物理模型的解耦。
+通过对业务模型的变更，形成对元数据层的数据变更，而不是物理结构的变更，从而实现业务逻辑模型同物理模型的解耦
 
-![]()
+![metamodel-logicmodel-phisicalmodel](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/metamodel-logicmodel-phisicalmodel.jpg)
 
 很多事情说起来好像挺简单，实际上是一个非常巨大的系统工程，将其付诸实践是挑战非常大的事情，而取得踏踏实实的成功则更难。上述问题的解题思路是 Salesforce 的解题思路，而且 Salesforce 不仅取得了成功，也接近将其做到了极致，下面我们站在巨人的肩膀上来看看 Salesforce 如何通过元数据驱动的架构（核心是基础数据架构）来支撑多租户的 SaaS 业务平台。
 
@@ -107,7 +106,7 @@ Salesforce 将 Force.com 定义为 PaaS 平台，Force.com 的基础就是元数
 
    - 租户虚拟应用层，用户可以在标准应用层或者平台服务层之上定义自己特有的业务应用功能，满足自己特定的业务场景需要
 
-![]()
+![saas-data-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/saas-data-arch.jpg)
 
 其中，底层数据架构是最为关键的平台基石(The Corner Stone)，其核心运行引擎也是基于强大的底层数据架构基础上构建的。本文则以元数据驱动的多租户数据架构为核心来一一展开。
              
@@ -133,6 +132,8 @@ Salesforce 将 Force.com 定义为 PaaS 平台，Force.com 的基础就是元数
 
       功能透视表包含了非常关键的关系表、索引表以及其他特定用途表。例如关系表定义了对象间的关系，索引表解决虚拟结构索引的问题，这部分后续将进行详尽的介绍
 
+      ![saas-table-type](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/saas-table-type.jpg)
+
 - 4.2 **元数据驱动的多租户数据架构详解**
 
    上一节粗略地描述了元数据驱动的多租户模型三大部分模型实体和基本作用，大家可能会比较疑惑，这么简单一个实体模型，怎么就起了这么个牛逼的名字，而且支撑了“一个云平台，无数个客户”。我们下面就对此模型的核心逻辑进行详细展开和推理说明，同时详细阐述以此模型为中心的服务来说明整个元数据层或者说 UDD(Universal Data Dictionary) 层的设计
@@ -146,26 +147,26 @@ Salesforce 将 Force.com 定义为 PaaS 平台，Force.com 的基础就是元数
 
    * 域模型样例采用大家都熟悉的最小集的订单模型实现，包含商品、用户、订单和订单详情表。注意：此简化模型仅用做示意说明，和意图无关的大多数字段均省略，非严谨定义
 
-      ![]()
+      ![example-table-relation](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/example-table-relation.jpg)
 
 
 * 示例模型数据
 
    * 数据库物理表数据：Customer
 
-      ![]()
+      ![example-table-customer](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/example-table-customer.jpg)
 
    * 数据库物理表数据：Product
 
-      ![]()
+      ![example-table-product](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/example-table-produce.jpg)
 
   * 数据库物理表数据：Order
 
-      ![]()
+      ![example-table-order](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/example-table-order.jpg)
 
   * 数据库物理表数据：OrderItem
 
-      ![]()
+      ![example-table-orderitem](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/resources/example-table-orderitem.jpg)
 
 
 * 实体表关系
