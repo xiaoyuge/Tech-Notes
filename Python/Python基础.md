@@ -34,20 +34,50 @@ Tensorflow
 2. Python 在 2.6 里引入了 multiprocessing这个多进程标准库，让多进程的 python 程序编写简化到类似多线程的程度，大大减轻了 GIL 带来的不能利用多核的尴尬；
 3. 但多进程的方案太重，还有个方案是把关键部分用 C/C++ 写成 Python 扩展，其它部分还是用 Python 来写，让 Python 的归 Python，C 的归 C。一般计算密集性的程序都会用 C 代码编写并通过扩展的方式集成到 Python 脚本里（如 NumPy 模块）。在扩展里就完全可以用 C 创建原生线程，而且不用锁 GIL，充分利用 CPU 的计算资源了；
 
+#### **GIL是什么**
+GIL（Global Interpreter Lock，即全局解释器锁）,GIL，是最流行的 Python 解释器 CPython 中的一个技术术语。它的意思是全局解释器锁，本质上是类似操作系统的 Mutex。每一个 Python 线程，在 CPython 解释器中执行时，都会先锁住自己的线程，阻止别的线程执行
+
+当然，CPython 会做一些小把戏，轮流执行 Python 线程。这样一来，用户看到的就是“伪并行”——Python 线程在交错执行，来模拟真正并行的线程
+
+CPython引进 GIL 其实主要是这么两个原因：
+- 一是设计者为了规避类似于内存管理这样的复杂的竞争风险问题（race condition）；
+- 二是因为 CPython 大量使用 C 语言库，但大部分 C 语言库都不是原生线程安全的（线程安全会降低性能和增加复杂度）
+
+下面这张图，就是一个 GIL 在 Python 程序的工作示例。其中，Thread 1、2、3 轮流执行，每一个线程在开始执行时，都会锁住 GIL，以阻止别的线程执行；同样的，每一个线程执行完一段后，会释放 GIL，以允许别的线程开始利用资源
+
+![GIL-work]()
+
+从图上会发现一个现象：为什么 Python 线程会去主动释放 GIL 呢？毕竟，如果仅仅是要求 Python 线程在开始执行时锁住 GIL，而永远不去释放 GIL，那别的线程就都没有了运行的机会。
+
+CPython 中还有另一个机制，叫做 **check_interval**，意思是 CPython 解释器会去轮询检查线程 GIL 的锁住情况。每隔一段时间，Python 解释器就会强制当前线程去释放 GIL，这样别的线程才能有执行的机会
+
+不同版本的 Python 中，check interval 的实现方式并不一样。早期的 Python 是 100 个 ticks，大致对应了 1000 个 bytecodes；而 Python 3 以后，interval 是 15 毫秒。当然，我们不必细究具体多久会强制释放 GIL，这不应该成为我们程序设计的依赖条件，我们只需明白，CPython 解释器会在一个“合理”的时间范围内释放 GIL 就可以了
+
+![check-interval]()
 
 
+有了 GIL，并不意味着我们 Python 编程者就不用去考虑线程安全了。即使我们知道，GIL 仅允许一个 Python 线程执行，但前面我也讲到了，Python 还有 check interval 这样的抢占机制，可以看一下这个代码示例：[非线程安全代码示例](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/non_thread_safe.py)
+
+#### **如何绕过GIL**
+1. 绕过 CPython，使用 JPython（Java 实现的 Python 解释器）等别的实现；
+2. 把关键性能代码，放到别的语言（一般是 C++）中实现，然后再提供 Python的调用接口；
+
+PS：如果你的应用真的对性能有超级严格的要求，比如 100us 就对你的应用有很大影响，那Python 可能不是你的最优选择
+
+### **垃圾回收**：
+Python是带GC的
 
 
+### **库和框架**：
+- 数据处理：Pandas
+- 科学计算：Numpy
+- web开发：flask/Django
+- 爬虫开发相关：requests（http请求）、BeautifulSoup（html/xml解析）
+- 数据可视化：pyecharts
+- Excel处理：xlwings
+- 
 
-
-
-垃圾回收：python是带GC的
-
-库和框架：
-
-可移植性强
-
-基础语法：
+### **基础语法**：
 变量赋值
 数据类型
 数据结构
