@@ -42,6 +42,8 @@ Tensorflow
 
 而在CPU密集的场景，多线程确实不能提供更好的性能，但Python提供了multiprocessing，可以利用多核的优势加速计算，具体可见这个代码示例：[对于CPU密集型业务，对比单线程、多线程和多进程的性能](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/thread_process_cpu_bound.py)
 
+更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
+
 #### **GIL是什么**
 GIL（Global Interpreter Lock，即全局解释器锁）,GIL，是最流行的 Python 解释器 CPython 中的一个技术术语。它的意思是全局解释器锁，本质上是类似操作系统的 Mutex。每一个 Python 线程，在 CPython 解释器中执行时，都会先锁住自己的线程，阻止别的线程执行
 
@@ -62,7 +64,6 @@ CPython 中还有另一个机制，叫做 **check_interval**，意思是 CPython
 不同版本的 Python 中，check interval 的实现方式并不一样。早期的 Python 是 100 个 ticks，大致对应了 1000 个 bytecodes；而 Python 3 以后，interval 是 15 毫秒。当然，我们不必细究具体多久会强制释放 GIL，这不应该成为我们程序设计的依赖条件，我们只需明白，CPython 解释器会在一个“合理”的时间范围内释放 GIL 就可以了
 
 ![check-interval](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/check-interval.jpg)
-
 
 有了 GIL，并不意味着我们 Python 编程者就不用去考虑线程安全了。即使我们知道，GIL 仅允许一个 Python 线程执行，但前面我也讲到了，Python 还有 check interval 这样的抢占机制，可以看一下这个代码示例：[非线程安全代码示例](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/non_thread_safe.py)
 
@@ -92,7 +93,6 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 - 爬虫开发相关：requests（http请求）、BeautifulSoup（html/xml解析）
 - 数据可视化：pyecharts
 - Excel处理：xlwings
-- 
 
 ### **基础语法**：
 - 变量赋值
