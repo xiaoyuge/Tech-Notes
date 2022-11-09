@@ -135,6 +135,8 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 
 装饰器的简洁优雅实现：[装饰器语法糖](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_sugar.py)
 
+装饰器传递参数：[装饰器传参](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_pass_param.py)
+
 ### **迭代器**
 #### **容器、可迭代对象和迭代器**
 在 Python 中一切皆对象，对象的抽象就是类，而对象的集合就是容器，所有的容器都是可迭代的（iterable）
@@ -142,7 +144,6 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 可迭代对象，通过 iter() 函数返回一个迭代器，再通过 next() 函数就可以实现遍历，for in 语句将这个过程隐式化
 
 如何判断一个对象是否可迭代？这里有段代码用来演示如何判断：[判断是否可迭代](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/iterable.py)
-
 
 ### **Python常用的库**：
 - 爬虫开发：requests（http请求）、BeautifulSoup（html/xml解析） （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/crawler)）
