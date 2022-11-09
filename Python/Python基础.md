@@ -151,6 +151,20 @@ Python的装饰器的应用场景有点像AOP的应用场景，把一些常用�
 
 类也可以作为装饰器：[类装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/class_decorator.py)
 
+Python也支持多个装饰器，比如写成下面这个样子：
+```
+@decorator1
+@decorator2
+@decorator3
+def func():
+    ...
+```
+它的执行顺序从里到外，所以上面的语句也等效于下面这行代码
+```
+decorator1(decorator2(decorator3(func)))
+```
+[多个装饰器示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/multi_decorator.py)
+
 ### **迭代器**
 #### **容器、可迭代对象和迭代器**
 在 Python 中一切皆对象，对象的抽象就是类，而对象的集合就是容器，所有的容器都是可迭代的（iterable）
