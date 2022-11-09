@@ -135,8 +135,6 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 
 Decorators is to modify the behavior of the function through a wrapper so we don’t have to actually modify the function
 
-Python的装饰器的应用场景有点像AOP的应用场景，把一些常用的业务逻辑分离，提高程序可重用性，降低耦合度，提高开发效率
-
 一个装饰器的代码示例：[装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_impl.py)
 
 装饰器的简洁优雅实现：[装饰器语法糖](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_sugar.py)
@@ -164,6 +162,79 @@ def func():
 decorator1(decorator2(decorator3(func)))
 ```
 [多个装饰器示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/multi_decorator.py)
+
+#### **装饰器的应用场景**
+Python的装饰器的应用场景有点像AOP的应用场景，把一些常用的业务逻辑分离，提高程序可重用性，降低耦合度，提高开发效率
+
+1. 身份验证
+如果认证通过，你就可以顺利登录；如果不通过，就抛出异常并提示你登录失败。
+```
+
+import functools
+
+def authenticate(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        request = args[0]
+        if check_user_logged_in(request): # 如果用户处于登录状态
+            return func(*args, **kwargs) # 执行函数post_comment() 
+        else:
+            raise Exception('Authentication failed')
+    return wrapper
+    
+@authenticate
+def post_comment(request, ...)
+    ...
+ 
+```
+2. 日志记录
+日志记录同样是很常见的一个案例。在实际工作中，如果你怀疑某些函数的耗时过长，导致整个系统的 latency（延迟）增加，所以想在线上测试某些函数的执行时间，那么，装饰器就是一种很常用的手段
+```
+
+import time
+import functools
+
+def log_execution_time(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        res = func(*args, **kwargs)
+        end = time.perf_counter()
+        print('{} took {} ms'.format(func.__name__, (end - start) * 1000))
+        return res
+    return wrapper
+    
+@log_execution_time
+def calculate_similarity(items):
+    ...
+```
+3. 输入合理性检查
+在大型公司的机器学习框架中，我们调用机器集群进行模型训练前，往往会用装饰器对其输入（往往是很长的 JSON 文件）进行合理性检查。这样就可以大大避免，输入不正确对机器造成的巨大开销
+```
+
+import functools
+
+def validation_check(input):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs): 
+        ... # 检查输入是否合法
+    
+@validation_check
+def neural_network_training(param1, param2, ...):
+    ...
+```
+
+4. 缓存
+以 Python 内置的 LRU cache 为例，LRU cache在 Python 中的表示形式是@lru_cache。@lru_cache会缓存进程中的函数参数和结果，当缓存满了以后，会删除 least recenly used 的数据，正确使用缓存装饰器，往往能极大地提高程序运行效率
+
+大型公司服务器端的代码中往往存在很多关于设备的检查，比如你使用的设备是安卓还是 iPhone，版本号是多少。这其中的一个原因，就是一些新的 feature，往往只在某些特定的手机系统或版本上才有（比如 Android v200+）
+
+这样一来，我们通常使用缓存装饰器，来包裹这些检查函数，避免其被反复调用，进而提高程序运行效率，比如写成下面这样
+```
+@lru_cache
+def check(param1, param2, ...) # 检查用户设备类型，版本号等等
+    ...
+```
 
 ### **迭代器**
 #### **容器、可迭代对象和迭代器**
