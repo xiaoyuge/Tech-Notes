@@ -133,6 +133,8 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 ### **装饰器**
 先看一个装饰器的代码示例：[装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_impl.py)
 
+装饰器的简洁优雅实现：[装饰器语法糖](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_sugar.py)
+
 ### **迭代器**
 #### **容器、可迭代对象和迭代器**
 在 Python 中一切皆对象，对象的抽象就是类，而对象的集合就是容器，所有的容器都是可迭代的（iterable）
