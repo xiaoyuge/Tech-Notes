@@ -45,7 +45,7 @@ CPython引进 GIL 其实主要是这么两个原因：
 
 下面这张图，就是一个 GIL 在 Python 程序的工作示例。其中，Thread 1、2、3 轮流执行，每一个线程在开始执行时，都会锁住 GIL，以阻止别的线程执行；同样的，每一个线程执行完一段后，会释放 GIL，以允许别的线程开始利用资源
 
-![GIL-work]()
+![GIL-work](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/GIL-work.jpg)
 
 从图上会发现一个现象：为什么 Python 线程会去主动释放 GIL 呢？毕竟，如果仅仅是要求 Python 线程在开始执行时锁住 GIL，而永远不去释放 GIL，那别的线程就都没有了运行的机会。
 
@@ -53,7 +53,7 @@ CPython 中还有另一个机制，叫做 **check_interval**，意思是 CPython
 
 不同版本的 Python 中，check interval 的实现方式并不一样。早期的 Python 是 100 个 ticks，大致对应了 1000 个 bytecodes；而 Python 3 以后，interval 是 15 毫秒。当然，我们不必细究具体多久会强制释放 GIL，这不应该成为我们程序设计的依赖条件，我们只需明白，CPython 解释器会在一个“合理”的时间范围内释放 GIL 就可以了
 
-![check-interval]()
+![check-interval](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/check-interval.jpg)
 
 
 有了 GIL，并不意味着我们 Python 编程者就不用去考虑线程安全了。即使我们知道，GIL 仅允许一个 Python 线程执行，但前面我也讲到了，Python 还有 check interval 这样的抢占机制，可以看一下这个代码示例：[非线程安全代码示例](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/non_thread_safe.py)
