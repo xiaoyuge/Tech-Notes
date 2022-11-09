@@ -19,7 +19,7 @@
   - **[Python基础]()**
   - **[Python实例代码](https://github.com/xiaoyuge/kingfish-python)**
 - ### **Go**
-  - **[Go](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go.md)**
+  - **[Go基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E5%9F%BA%E7%A1%80.md)**
   - **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
 
 ## **互联网网络架构**
