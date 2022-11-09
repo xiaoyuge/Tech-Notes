@@ -256,13 +256,3 @@ def check(param1, param2, ...) # 检查用户设备类型，版本号等等
 - 数据可视化：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/data_visual)）
 
 
-### **基础语法**：
-- 变量赋值
-- 数据类型和数据结构
-- 流程控制（条件循环）
-- 函数（方法）定义
-- 错误和异常处理
-- 模块
-- 代码目录结构
-
-
