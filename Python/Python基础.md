@@ -77,7 +77,7 @@ else if cpu_bound:
 - 如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了；
 - 如果是 CPU bound，则需要使用多进程来提高程序运行效率；
 
-这里有一两例子演示如何使用协程来爬取网站：
+这里有两个例子演示如何使用协程来爬取网站：
 - [示例1](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_blog.py)
 - [示例2](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_wiki.py)
 
