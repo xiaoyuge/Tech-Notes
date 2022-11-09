@@ -87,12 +87,13 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 4. 调试内存泄漏方面， objgraph 是很好的可视化分析工具;
 
 ### **库和框架**：
-- 数据处理：Pandas
-- 科学计算：Numpy
-- web开发：flask/Django
-- 爬虫开发相关：requests（http请求）、BeautifulSoup（html/xml解析）
-- 数据可视化：pyecharts
-- Excel处理：xlwings
+- 爬虫开发：requests（http请求）、BeautifulSoup（html/xml解析） （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/crawler)）
+- WEB开发：flask/Django （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/flask_app)）
+- 数据处理：Pandas（[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/pandas_case)）
+- Excel办公：xlwings （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/excel)）
+- 科学计算：Numpy （[代码示例]()）
+- 数据可视化：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/dataVisualization)）
+
 
 ### **基础语法**：
 - 变量赋值
