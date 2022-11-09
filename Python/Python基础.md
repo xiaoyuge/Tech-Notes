@@ -92,7 +92,7 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 - 数据处理：Pandas（[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/pandas_case)）
 - Excel办公：xlwings （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/excel)）
 - 科学计算：Numpy （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/numpy_case)）
-- 数据可视化：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/dataVisualization)）
+- 数据可视化：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/data_visual)）
 
 
 ### **基础语法**：
