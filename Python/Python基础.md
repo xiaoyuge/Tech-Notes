@@ -123,7 +123,26 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 3. Python 的自动回收算法包括标记清除和分代收集，主要针对的是循环引用的垃圾收集；
 4. 调试内存泄漏方面， objgraph 是很好的可视化分析工具;
 
-### **库和框架**：
+### **函数**
+在 Python 中，函数是一等公民（first-class citizen），函数也是对象。函数的几个核心概念：
+- 我们可以把函数赋予变量：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_to_var.py)
+- 我们可以把函数当作参数，传入另一个函数中：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_to_param.py)
+- 我们可以在函数里定义函数，也就是函数的嵌套：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_inline_func.py)
+- ，函数的返回值也可以是函数对象（闭包）：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_closure.py)
+
+### **装饰器**
+
+
+### **迭代器**
+#### **容器、可迭代对象和迭代器**
+在 Python 中一切皆对象，对象的抽象就是类，而对象的集合就是容器，所有的容器都是可迭代的（iterable）
+
+可迭代对象，通过 iter() 函数返回一个迭代器，再通过 next() 函数就可以实现遍历，for in 语句将这个过程隐式化
+
+如何判断一个对象是否可迭代？这里有段代码用来演示如何判断：[判断是否可迭代](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/iterable.py)
+
+
+### **Python常用的库**：
 - 爬虫开发：requests（http请求）、BeautifulSoup（html/xml解析） （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/crawler)）
 - WEB开发：flask/Django （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/flask_app)）
 - 数据处理：Pandas（[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/pandas_case)）
