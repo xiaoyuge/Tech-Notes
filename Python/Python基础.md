@@ -44,8 +44,6 @@ Tensorflow
 #### **Python多线程和多进程使用方法对比**
 ![multi-process-vs-multi-thread](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/multi-process-vs-multi-thread.png)
 
-更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
-
 #### **协程：asyncio**
 
 多线程有诸多优点且应用广泛，但也存在一定的局限性：
@@ -80,6 +78,8 @@ else if cpu_bound:
 这里有两个例子演示如何使用协程来爬取网站：
 - [示例1](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_blog.py)
 - [示例2](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_wiki.py)
+
+更多关于并发编程的代码示例见：[Python并发编程](https://github.com/xiaoyuge/kingfish-python/tree/master/concurrent)
 
 #### **GIL是什么**
 GIL（Global Interpreter Lock，即全局解释器锁）,GIL，是最流行的 Python 解释器 CPython 中的一个技术术语。它的意思是全局解释器锁，本质上是类似操作系统的 Mutex。每一个 Python 线程，在 CPython 解释器中执行时，都会先锁住自己的线程，阻止别的线程执行
