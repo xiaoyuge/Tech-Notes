@@ -131,11 +131,25 @@ Python是带GC的，关于Python的GC，可以看一下这里的代码示例：[
 - 函数的返回值也可以是函数对象（闭包）：[示例](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/func_closure.py)
 
 ### **装饰器**
-先看一个装饰器的代码示例：[装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_impl.py)
+所谓的装饰器，其实就是通过装饰器函数，来修改原函数的一些功能，使得原函数不需要修改
+
+Decorators is to modify the behavior of the function through a wrapper so we don’t have to actually modify the function
+
+Python的装饰器的应用场景有点像AOP的应用场景，把一些常用的业务逻辑分离，提高程序可重用性，降低耦合度，提高开发效率
+
+一个装饰器的代码示例：[装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_impl.py)
 
 装饰器的简洁优雅实现：[装饰器语法糖](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_sugar.py)
 
 装饰器传递参数：[装饰器传参](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_pass_param.py)
+
+装饰器还有更大程度的灵活性，装饰器可以接受原函数任意类型和数量的参数，除此之外，它还可以接受自己定义的参数：[装饰器传自定义参数](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_self_param.py)
+
+函数被装饰以后，它的元信息变了。元信息告诉我们“它不再是以前的那个函数，而是被 wrapper() 函数取代了”
+
+为了解决这个问题，我们通常使用内置的装饰器@functools.wrap，它会帮助保留原函数的元信息（也就是将原函数的元信息，拷贝到对应的装饰器函数里）:[装饰器保留元信息](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/decorator_hold_meta.py)
+
+类也可以作为装饰器：[类装饰器](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/class_decorator.py)
 
 ### **迭代器**
 #### **容器、可迭代对象和迭代器**
