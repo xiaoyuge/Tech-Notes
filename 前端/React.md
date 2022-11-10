@@ -32,7 +32,7 @@ React 是一套声明式的、组件化的前端框架，声明（动词）组�
 
 #### **声明式 vs 命令式**
 
-![]()
+![declarative_vs_Imperative.png](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/declarative_vs_Imperative.png)
 
 React是声明式的前端技术，这一点首先就体现在创建组件的视图上，无论是使用 JSX 语法还是直接利用React.createElement() 函数，都是在描述开发者期待的视图状态。开发者只需关心渲染结果，而 React 框架内部会实现具体的渲染过程，最终调用浏览器 DOM API
 

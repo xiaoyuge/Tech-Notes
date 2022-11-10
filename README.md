@@ -26,7 +26,6 @@
   - **[前端脚手架](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/%E5%89%8D%E7%AB%AF%E8%84%9A%E6%89%8B%E6%9E%B6.md)**
   - **[微前端](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/%E5%BE%AE%E5%89%8D%E7%AB%AF.md)**
   - **[CSR和SSR](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/CSR%E5%92%8CSSR.md)**
-## **区块链**
 ## **互联网网络架构**
 - **[OSI网络模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/OSI%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.md)**
 - **[HTTP协议](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/HTTP%E5%8D%8F%E8%AE%AE.md)**
@@ -81,6 +80,7 @@
 - **[亿级数据DB秒级平滑扩容](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AEDB%E7%A7%92%E7%BA%A7%E5%B9%B3%E6%BB%91%E6%89%A9%E5%AE%B9.md)**
 - **[如何在不停机的情况下安全更换数据库](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%8D%E5%81%9C%E6%9C%BA%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%AE%89%E5%85%A8%E6%9B%B4%E6%8D%A2%E6%95%B0%E6%8D%AE%E5%BA%93.md)**
 - **[跨库分页的几种常见方案](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%B7%A8%E5%BA%93%E5%88%86%E9%A1%B5%E7%9A%84%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E6%96%B9%E6%A1%88.md)**
+## **区块链**
 - **[区块链技术](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%8C%BA%E5%9D%97%E9%93%BE/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF.md)**
 - **[Web3.0和元宇宙](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%8C%BA%E5%9D%97%E9%93%BE/Web3.0%E5%92%8C%E5%85%83%E5%AE%87%E5%AE%99.md)**
 ## **技术案例**
