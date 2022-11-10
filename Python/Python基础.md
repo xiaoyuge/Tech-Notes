@@ -248,11 +248,11 @@ def check(param1, param2, ...) # 检查用户设备类型，版本号等等
 如何判断一个对象是否可迭代？这里有段代码用来演示如何判断：[判断是否可迭代](https://github.com/xiaoyuge/kingfish-python/blob/master/basic/iterable.py)
 
 ### **Python常用的库**：
-- 爬虫开发：requests（http请求）、BeautifulSoup（html/xml解析） （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/crawler)）
-- WEB开发：flask/Django （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/flask_app)）
-- 数据处理：Pandas（[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/pandas_case)）
-- Excel办公：xlwings （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/excel)）
-- 科学计算：Numpy （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/numpy_case)）
-- 数据可视化：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/data_visual)）
+- **爬虫开发**：requests（http请求）、BeautifulSoup（html/xml解析） （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/crawler)）
+- **WEB开发**：flask/Django （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/flask_app)）
+- **数据处理**：Pandas（[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/pandas_case)）
+- **Excel办公**：xlwings （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/excel)）
+- **科学计算**：Numpy （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/numpy_case)）
+- **数据可视化**：pyecharts （[代码示例](https://github.com/xiaoyuge/kingfish-python/tree/master/data_visual)）
 
 
