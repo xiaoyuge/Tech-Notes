@@ -175,7 +175,7 @@ React 提供了包括 JSX 语法在内的声明组件 API，在运行时，开�
 
 如下图所示，左半边展示了 React 面向开发者的 API，右半边则是 React 内部实现对 DOM API 的封装，渲染面向用户的页面:
 
-![virtual-dom]()
+![virtual-dom](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/virtual_dom.png)
 
 虚拟 DOM 最重要的作用，是作为 React 面向开发者的 API 与 React 内部实现对接的桥梁。**React API 整体都是声明式的，而 DOM API 是命令式的**。我们知道，No Magic（没有魔法），开发者用 API 声明的 React 组件，最终成为页面上的动态 DOM 元素，必然在 React 框架内部有着一系列命令式的实现，负责最终调用浏览器 DOM API
 
@@ -219,7 +219,7 @@ eact 框架后续的版本中在不断优化 Diffing 算法。近四年算法细
 
 FiberNode 依靠对元素到子元素的双向链表、子元素到子元素的单向链表实现了一棵树，这棵树可以随时暂停并恢复渲染，触发组件生命周期等副作用（Side-effect），并将中间结果分散保存在每一个节点上，不会 block 浏览器中的其他工作
 
-![fiber-node]()
+![fiber-node](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%89%8D%E7%AB%AF/resources/fiber_node.jpg)
 
 
 
