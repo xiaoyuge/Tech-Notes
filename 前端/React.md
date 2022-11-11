@@ -28,6 +28,8 @@ React 是一套声明式的、组件化的前端框架，声明（动词）组�
 
 在 Web 领域，**类 HTML 语法**天生就更受欢迎。JSX 提供的类 HTML/XML 的语法会让声明代码更加直观，在 IDE 的支持下，语法高亮更醒目，比起纯 JS 也更容易维护。相比 JSX 带来的开发效率的提升，编译 JSX 的成本基本可以忽略不计
 
+相比Struts2 用 XML 定义了一套名为标签库的 DS（Domain-Specific Language，领域特定语言），JSX 则直接利用了 JS 语句。很明显，JS 表达式能做的，JSX 都能做，不需要开发者再去学习一套新的 DSL
+
 因为 JSX 作为语法糖足够“甜”，我们才能得到这样的结论：JSX 是前端视图领域“最 JS”的声明式语法，它为 React 的推广和流行起了至关重要的作用
 
 #### **声明式 vs 命令式**
@@ -67,6 +69,34 @@ React.createElement(type, props, ...children)
 <!-- ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^
    type  props-key props-value   children -->
 ```
+#### **JSX命名规则**
+1. 定义 React 组件时，组件本身采用的变量名或者函数名，需要以大写字母开头
+```
+function MyApp() {
+//_______^
+  return (<div></div>);
+}
+const KanbanCard = () => (
+//____^
+  <div></div>
+);
+```
+
+2. 在 JSX 中编写标签时，HTML 元素名称均为小写字母，自定义组件首字母务必大写
+```
+   <h1>我的看板</h1>
+<!-- ^________全小写 -->
+    <img src={logo} className="App-logo" alt="logo" />
+<!-- ^^^______全小写 -->
+    <button onClick={handleAdd} disabled={showAdd}>添加新卡片</button>
+<!-- ^^^^^^___全小写 -->
+
+
+    <KanbanCard />
+<!-- ^_____首字母大写 -->
+```
+
+3.  props 属性名称，在 React 中使用驼峰命名（camelCase），且区分大小写，比如在 ```<FileCard filename="文件名" fileName="另一个文件名" /> ```中，你可以同时传两个字母相同但大小写不同的属性 ，这与传统的 HTML 属性不同
 
 #### **JSX元素类型**
 JSX 产生的每个节点都称作 React 元素，它是 React 应用的最小单元。React 元素有三种基本类型：
