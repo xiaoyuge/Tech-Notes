@@ -164,6 +164,66 @@ React 组件层次结构从一个根部组件开始，一层层加入子组件�
 3. 一次且仅一次（DRY, Don’t Repeat Yourself）原则；
 4. 简约（KISS，Keep It Simple & Stupid）原则;
 
+#### **React组件的渲染机制**
+
+#### **虚拟DOM**
+虚拟 DOM（Virtual DOM）是相对于 HTML DOM（Document Object Model，文档对象模型）更轻量的 JS 模型。在 React、Vue.js、Elm 这样的声明式前端框架中，都包含了虚拟 DOM
+
+React 提供了包括 JSX 语法在内的声明组件 API，在运行时，开发者声明的组件会渲染成虚拟 DOM，虚拟 DOM 再由 React 框架渲染成真实的 DOM；虚拟 DOM 的变动，最终会自动体现在真实 DOM 上；真实 DOM 上的交互，也会由 React 框架抽象成虚拟 DOM 上的副作用（Side-effect），与开发者编写的交互逻辑关联起来
+
+理想状态下，开发者在开发 React 应用时，可以完全不去接触真实 DOM（但现实世界中这种情况很少见），一定程度上隐藏了 Web 原生技术的细节，有助于提高开发效率
+
+如下图所示，左半边展示了 React 面向开发者的 API，右半边则是 React 内部实现对 DOM API 的封装，渲染面向用户的页面:
+
+![virtual-dom]()
+
+虚拟 DOM 最重要的作用，是作为 React 面向开发者的 API 与 React 内部实现对接的桥梁。**React API 整体都是声明式的，而 DOM API 是命令式的**。我们知道，No Magic（没有魔法），开发者用 API 声明的 React 组件，最终成为页面上的动态 DOM 元素，必然在 React 框架内部有着一系列命令式的实现，负责最终调用浏览器 DOM API
+
+如果没有虚拟 DOM 这个中间模型，那么 React API 就需要直接对接 DOM API，耦合程度提高，React 概念和 API 设计也会受制于浏览器，React Native 这样对接多端的愿景也无从实现了
+
+### **真实DOM有何问题**
+React 的设计哲学 UI=f(state) ，理论上来说，对于给定的 f() 和状态数据，一定可以重现一模一样的 UI；这也意味着，只要状态数据有变化，f()就需要重新执行，整个 UI 需要重新渲染
+
+操作真实 DOM 是比较耗费资源的，无脑地大量调用 DOM API 绘制页面，页面很容易就卡了，对于浏览器网页中的应用，假如达到60FPS，意味着 1000ms ÷ 60 ≈ 16ms 之内至少需要执行完一次 f() ，否则会掉帧，显示和交互都会卡顿
+
+这时就需要 React 提供一系列算法和过程，过滤掉没有必要的 DOM API 调用，最终把f() 的成本降下来。虚拟 DOM 就是这些算法过程的中间模型，它远比 DOM API 轻量，跟最终的 DOM API 分摊成本后，可以保证 React 组件的渲染效率
+
+协调
+
+React 组件会渲染出一棵元素树。因为开发者使用的是 React 的声明式 API，在此基础上，每次有 props、state 等数据变动时，组件会渲染出新的元素树，React 框架会与之前的树做 Diffing 对比，将元素的变动最终体现在浏览器页面的 DOM 中。这一过程就称为协调（Reconciliation）
+
+### **Diffing 算法**
+
+eact 框架后续的版本中在不断优化 Diffing 算法。近四年算法细节变了不少，但基本逻辑还是能归纳出以下几点：
+1. 从根元素开始，React 将递归对比两棵树的根元素和子元素；
+2. 对比不同类型的元素，如对比 HTML 元素和 React 组件元素，React 会直接清理旧的元素和它的子树，然后建立新的树；
+3. 对比同为 HTML 元素，但 Tag 不同的元素，如从```<a>``` 变成```<div>```，React 会直接清理旧的元素和子树，然后建立新的树；
+4. 对比同为 React 组件元素，但组件类或组件函数不同的元素，如从 KanbanNewCard 变成 KanbanCard ，React 会卸载旧的元素和子树，然后挂载新的元素树；
+5. 对比 Tag 相同的 HTML 元素，如```<input type="text" value="old" />```和 ```<input type="text" value="new" />```，React 将会保留该元素，并记录有改变的属性，在这个例子里就是 value 的值从 "old" 变成了 "new" ；
+6. 对比组件类或组件函数相同的组件元素，如```<KanbanCard title="老卡片" />``` 和 ```<KanbanCard title="新卡片" />```React 会保留组件实例，更新 props，并触发组件的生命周期方法或者 Hooks;
+
+### **什么情况下触发协调？**
+
+只要props、state和context这三种数据之一发生了变化，React 就会对当前组件触发协调过程，最终按照 Diffing 结果更改页面，注意以下几个知识点：
+- 一个组件的 props 应该由父组件传进来，props 数据的变动也应该由父组件负责
+- state 则是活跃在组件内部
+- 至于 context ，在组件外面的 Context.Provider 提供数据，组件内部则可以消费 context 数据
+-props 和 state 都是不可变的（Immutable）
+
+### **Fiber 协调引擎**
+在 React 中最贴近虚拟 DOM 的，是在 Fiber 协调引擎中的核心模型 FiberNode
+
+在 React 的早期版本，协调是一个同步过程，这意味着当虚拟 DOM 足够复杂，或者元素渲染时产生的各种计算足够重，协调过程本身就可能超过 16ms，严重的会导致页面卡顿
+
+从 React v16 开始，协调从之前的同步改成了异步过程，这主要得益于新的 Fiber 协调引擎
+
+FiberNode 依靠对元素到子元素的双向链表、子元素到子元素的单向链表实现了一棵树，这棵树可以随时暂停并恢复渲染，触发组件生命周期等副作用（Side-effect），并将中间结果分散保存在每一个节点上，不会 block 浏览器中的其他工作
+
+![fiber-node]()
+
+
+
+
 
 
 
