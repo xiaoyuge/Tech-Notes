@@ -91,6 +91,18 @@ app.quit()
 ......
 ```
 
+说到这里插一句，大家还记得我前面提到的那个各种拆分和合并单元格的复杂格式吗，这种格式在Pandas里又叫多层索引（MultiIndex）,这种结构下数据的查询和操作，比普通的表格要复杂，大概处理代码类似下面：
+```vb
+#用元组的方式来定位某一列
+ds_total_capabity1 = ds_df.loc[k,('Total','Capabity.1')]
+#
+#获取多层索引某一层数据的方法
+ds_month = ds_df.columns.get_level_values(0)[k]
+ds_datatime = ds_df.columns.get_level_values(1)[k]
+......
+```
+因为这个话题跟本文章无关，这里就不展开了，有兴趣大家自己去学习了解。
+
 这一版写完后，信心满满地执行脚本，但是立马被现实浇了一盆冷水，执行时间竟然要555秒，也就是9分多钟，并没有比vba快多少，如下图：
 
 ![ds_format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_py%E2%80%94for.png)
