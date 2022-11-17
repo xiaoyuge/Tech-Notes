@@ -57,6 +57,7 @@ fpath = "datas/joyce/DS_format_bak.xlsm"
 #把CP和DS两个sheet的数据分别读入pandas的dataframe
 cp_df = pd.read_excel(fpath,sheet_name="CP",header=[0])
 ds_df = pd.read_excel(fpath,sheet_name="DS",header=[0,1])
+......
 ```
 
 标准遍历方法
@@ -72,7 +73,7 @@ for j in range(len(cp_df)):
             #如果cp和ds的item_group值相同
             if cp_item_group == ds_df.loc[i,('Total','Capabity')]:
             
-            ......
+......
                 
 ```
 
@@ -87,10 +88,85 @@ ds_format_workbook.sheets["DS"].range("A3").expand().options(index=False).value 
 ds_format_workbook.save()
 ds_format_workbook.close()
 app.quit()
+......
 ```
 
 这一版写完后，信心满满地执行脚本，但是立马被现实浇了一盆冷水，执行时间竟然要555秒，也就是9分多钟，并没有比vba快多少，如下图：
 
 ![ds_format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_py%E2%80%94for.png)
 
-为什么会这样！Python不是号称数据处理利器吗。
+为什么会这样！Python不是号称数据处理利器吗。遇事不决问度娘，通过一番搜索，终于让我找到一个官方解释，原来DataFrame(数据帧)是具有行和列的Pandas对象(objects)，如果使用循环，则将遍历整个对象，Python无法利用任何内置函数，而且速度非常慢，建议用Pandas内置函数：iterrows()，iterrows()为每行返回一个Series，因此将DataFrame迭代为一对索引，将感兴趣的列作为Series进行迭代，这使其比标准循环更快。
+
+既然官方这么说，那我们还怀疑什么，那就试试呗。
+
+### **第二版优化**
+有了解决方案，那就好办了，无非就是把代码里所有用到标准循环的地方，改成用iterrows()，改动的地方代码如下：
+```vb
+#根据CP和DS表的Item_group值做lookup，计算DS表的Delta值
+for index_i,cp_row in cp_df.iterrows():
+    
+    #获取CP表的Item_group和siteid值
+    cp_item_group = cp_row['Item Group']
+    siteid = cp_row['SITEID']
+    key = cp_item_group + "-" + siteid  
+        
+    for index_j,ds_row in ds_df.iterrows():
+        
+        #获取DS表的Item_group值
+        ds_item_group = ds_row[('Total','Capabity')]
+        
+        if ds_item_group != "" and cp_item_group == ds_item_group :
+           
+            iner_iter_df = ds_df.loc[index_j:index_j+5]
+        ......
+```
+改完后执行，果然，效率提升了一些，见下图：
+
+![ds_format_iterrow_py](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_iterrow_py.png)
+
+整体耗时337秒，也就是5分多钟，比前一版提升40%，看起来还不错。但是，作为一名优秀的IT人，不能满足于既有的成绩，要不断追求极致。于是，就有了第三版优化。
+
+### **第三版优化**
+其实第三版优化的思路，还是追求更快地遍历效率，Pandas除了iterrows()之外，据说还有一个更快的apply()方法，能够对DataFrame的每一行逐行应用自定义函数，且遍历性能更好。于是，第三版的核心代码如下：
+```vb
+def Cal_Delta_Loi_Iter_In_Cp(data):
+    global cal_delta_loi_cp_row
+    cal_delta_loi_cp_row = data
+    #获取CP表的Item_group和siteid值
+    global cp_item_group
+    cp_item_group = cal_delta_loi_cp_row['Item Group']
+    siteid = cal_delta_loi_cp_row['SITEID']
+    global key 
+    key = cp_item_group + "-" + siteid
+    ds_df.apply(Cal_Delta_Loi_Iter_In_Ds,axis=1)
+    
+#开始计算Delta和LOI值
+cp_df.apply(Cal_Delta_Loi_Iter_In_Cp,axis=1)
+......
+```
+按apply()改完代码再次执行，这次执行效率果然又上了一个台阶，如下图：
+
+![ds_format_apply_py](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_apply_py.png)
+
+整体耗时147秒，也即2分多钟，相比上一版再次提升56%，Very Done!
+
+### **小小总结一下**
+优化到这里，我们可以看到，使用Python同的Pandas类库，并且使用较高性能的函数，能够很大程度提升数据处理的性能。但是，我们从前面打印出的日志也能看到，Python提供的xlwings库，在读写excel方面的性能缺很难说优秀，相比vba来说更是差了一大截。
+
+VBA虽然数据结构少，数据计算速度慢，但访问自己Excel的Sheet，Range，Cell等对象却速度飞快，这就是一体化产品的优势。VBA读取Excel的Range，Cell等操作是通过底层的API直接读取数据的，而不是通过微软统一的外部开发接口。所以Python的各种开源和商用的Excel处理类库如果和VBA来比较读写Excel格子里面的数据，都是处于劣势的（至少是不占优势的）。
+
+因此，Python处理Excel的时候，就要把Excel一次性地读取数据到Python的数据结构中，而不是大量调用Excel里的对象，不要说频繁地写入Excel，就是频繁地读取Excel里面的某些单元格也是效率较低的。
+
+### **写在最后**
+再次声明，程序性能的优化是没有止境的，永远追求极致也是每一个优秀IT人的共同追求。上面的代码，其实还是继续有优化空间的，比如其中一个思路，就是使用并发编程的方式来优化，Python里提供了多线程、多进程和协程等多种并发编程方式，我们是不是可以用来继续优化呢？笔者先卖个关子，可以关注后续我的优化系统二。
+
+附：![完整代码地址](https://github.com/xiaoyuge/kingfish-python/tree/master/excel)
+
+
+
+
+
+
+
+
+
