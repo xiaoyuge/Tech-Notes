@@ -6,7 +6,7 @@
 话说现在的年轻人，听说过这个编程语言的应该不多了。VB是一种由微软公司开发的包含协助开发环境的事件驱动编程语言。从任何标准来说，VB都是世界上使用人数最多的语言，它源自于BASIC编程语言，也属于高级语言的一种了。只是现在各大应用场景以及被Java、Go、Python等编程语言瓜分一空，VB基本很少人知道了。
 
 ### **什么是VBA**
-而VBA和V和又有点差别，Visual Basic for Applications(VBA)是Visual Basic的一种宏语言，是微软开发出来在其桌面应用程序中执行通用的自动化(OLE)任务的编程语言。主要能用来扩展Windows的应用程式功能，特别是Microsoft Office软件，比如excel、powerpoint、word等。
+而VBA和VB又有点差别，Visual Basic for Applications(VBA)是Visual Basic的一种宏语言，是微软开发出来在其桌面应用程序中执行通用的自动化(OLE)任务的编程语言。主要能用来扩展Windows的应用程式功能，特别是Microsoft Office软件，比如excel、powerpoint、word等。
 
 ### **故事的开端**
 而本次故事的场景，就是在excel中编写vba宏脚本，而这个场景的需求，则来源于笔者的媳妇。笔者的媳妇平时的工作大部分时间都是跟excel打交道，也就是很多人口中的“表姐”，因此excel的各种高级操作比如vlookup、数据透视等，也算是应用的炉火纯青了。
