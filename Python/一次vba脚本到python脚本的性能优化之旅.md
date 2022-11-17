@@ -57,7 +57,7 @@ fpath = "datas/joyce/DS_format_bak.xlsm"
 #把CP和DS两个sheet的数据分别读入pandas的dataframe
 cp_df = pd.read_excel(fpath,sheet_name="CP",header=[0])
 ds_df = pd.read_excel(fpath,sheet_name="DS",header=[0,1])
-
+```
 
 标准遍历方法
 ```vb
@@ -89,7 +89,7 @@ ds_format_workbook.close()
 app.quit()
 ```
 
-这一版写完后，信心满满地执行脚本，但是立马被现实浇了一盆冷水，执行时间竟然要xxx秒，并没有比vba快多少，如下图：
+这一版写完后，信心满满地执行脚本，但是立马被现实浇了一盆冷水，执行时间竟然要555秒，也就是9分多钟，并没有比vba快多少，如下图：
 
 ![ds_format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_py%E2%80%94for.png)
 
