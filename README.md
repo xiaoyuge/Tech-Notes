@@ -17,6 +17,7 @@
   - **[IO](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/IO.md)**
 - ### **Python**
   - **[Python基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/Python%E5%9F%BA%E7%A1%80.md)**
+    - **[一次VBA脚本到Python脚本的性能优化之旅](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/%E4%B8%80%E6%AC%A1vba%E8%84%9A%E6%9C%AC%E5%88%B0python%E8%84%9A%E6%9C%AC%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E6%97%85.md)**
   - **[Python示例代码](https://github.com/xiaoyuge/kingfish-python)**
 - ### **Go**
   - **[Go基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E5%9F%BA%E7%A1%80.md)**
