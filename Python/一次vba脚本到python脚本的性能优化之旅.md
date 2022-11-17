@@ -15,11 +15,11 @@
 
 于是大概从几年前，我开始陆陆续续用vba写宏，帮助媳妇处理类似复杂的数据计算问题，说到这里，我翻了翻我的朋友圈，竟然有据可查：2017年就开始了！有图为证：
 
-![vba-wechat]()
+![vba-wechat](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/vba_wechat.jpeg)
 
 也就是从那个时候开始，媳妇搞不定的复杂数据处理问题，就扔给我用vba来搞。要知道，对于一个写惯Java语言的人来说，对vba这种语言真的是一百种不习惯，尤其是那个土得掉渣的开发环境，话不多说，上图：
 
-![Microsoft_Visual_Basic_IDE]()
+![Microsoft_Visual_Basic_IDE](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/Microsoft_Visual_Basic_IDE.png)
 
 有没有一种年代复古风的感觉！这还是最新版本的，老版本的连调试功能都没有，任何问题都得默念加各种打日志排查，更不用说高级点IDE都具备的自动补全、提示、重构等功能了，所以，用这个玩意写代码的效率那真是一言难尽。
 
@@ -27,11 +27,11 @@
 
 详细的需求就不说了，大概就是对一个excel的两个sheet进行计算，其中一个sheet将近1万行，两外一个sheet数据量倒不多300多行，但是格式比较复杂，各种合并和拆分单元格（见下图），而要计算的需求复杂度相比之前也上升了一个台阶。
 
-![complex-cell]()
+![complex-cell](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/complex-cell.png)
 
 拿到需求后，我还是按照惯例用vba来写，大概耗费了一个周末的时间搞定了，虽然交了差。但是面对未来可能越来越复杂的需求，我的心里打了鼓，vba的开发效率和复杂数据处理需求的矛盾越来越突出，而且这次写的脚本，性能上也问题很大，整个处理过程耗时10分钟之巨，如下图所示：
 
-![vba-time]()
+![vba-exec-time](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/vba_exec_time.png)
 
 作为一个自认优秀且有良心的搞IT的，怎么能够忍受这种开发效率和运行效率，二话不说，我要优化它！
 
