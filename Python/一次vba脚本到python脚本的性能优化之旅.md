@@ -39,5 +39,58 @@
 
 ## **Python优化过程**
 
+大概的优化思路是这样的：用Python的Xlwings库来处理excel数据的读写，但数据的计算就不用它直接搞了，效率会比较低，而是用Pandas库在内存中进行数据的复杂计算，然后将计算后的结果写回excel
+
+思路其实很简单，但实操的过程却不是完全一帆风顺，接下来就是整个优化的过程
+
+### **第一版优化**
+因为用Pandas把数据读到内存后，是一个DataFrame，我们可以很容易的拿到这个DataFrame的行数和列数，类似一个数组一样可以方便的遍历，因此第一版的实现，使用的是标准的遍历的方法来实现，核心代码如下：
+
+读取excel
+```vb
+import pandas as pd
+import xlwings as xw
+
+#要处理的文件路径
+fpath = "datas/joyce/DS_format_bak.xlsm"
+
+#把CP和DS两个sheet的数据分别读入pandas的dataframe
+cp_df = pd.read_excel(fpath,sheet_name="CP",header=[0])
+ds_df = pd.read_excel(fpath,sheet_name="DS",header=[0,1])
 
 
+标准遍历方法
+```vb
+for j in range(len(cp_df)):
+    
+    cp_measure = cp_df.loc[j,'Measure']
+    cp_item_group = cp_df.loc[j,'Item Group']
+    
+    if cp_measure == "Total Publish Demand":
+        
+        for i in range(len(ds_df)):
+            #如果cp和ds的item_group值相同
+            if cp_item_group == ds_df.loc[i,('Total','Capabity')]:
+            
+            ......
+                
+```
+
+写入excel
+```vb
+#保存结果到excel       
+app = xw.App(visible=False,add_book=False)
+
+ds_format_workbook = app.books.open(fpath)
+ds_format_workbook.sheets["DS"].range("A3").expand().options(index=False).value = ds_df 
+
+ds_format_workbook.save()
+ds_format_workbook.close()
+app.quit()
+```
+
+这一版写完后，信心满满地执行脚本，但是立马被现实浇了一盆冷水，执行时间竟然要xxx秒，并没有比vba快多少，如下图：
+
+![ds_format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/ds_format_py%E2%80%94for.png)
+
+为什么会这样！Python不是号称数据处理利器吗。
