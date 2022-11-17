@@ -47,7 +47,7 @@
 因为用Pandas把数据读到内存后，是一个DataFrame，我们可以很容易的拿到这个DataFrame的行数和列数，类似一个数组一样可以方便的遍历，因此第一版的实现，使用的是标准的遍历的方法来实现，核心代码如下：
 
 读取excel
-```vb
+```python
 import pandas as pd
 import xlwings as xw
 
@@ -61,7 +61,7 @@ ds_df = pd.read_excel(fpath,sheet_name="DS",header=[0,1])
 ```
 
 标准遍历方法
-```vb
+```python
 for j in range(len(cp_df)):
     
     cp_measure = cp_df.loc[j,'Measure']
@@ -78,7 +78,7 @@ for j in range(len(cp_df)):
 ```
 
 写入excel
-```vb
+```python
 #保存结果到excel       
 app = xw.App(visible=False,add_book=False)
 
@@ -92,7 +92,7 @@ app.quit()
 ```
 
 说到这里插一句，大家还记得我前面提到的那个各种拆分和合并单元格的复杂格式吗，这种格式在Pandas里又叫多层索引（MultiIndex）,这种结构下数据的查询和操作，比普通的表格要复杂，大概处理代码类似下面：
-```vb
+```python
 #用元组的方式来定位某一列
 ds_total_capabity1 = ds_df.loc[k,('Total','Capabity.1')]
 #
@@ -115,7 +115,7 @@ ds_datatime = ds_df.columns.get_level_values(1)[k]
 
 ### **第二版优化**
 有了解决方案，那就好办了，无非就是把代码里所有用到标准循环的地方，改成用iterrows()，改动的地方代码如下：
-```vb
+```python
 #根据CP和DS表的Item_group值做lookup，计算DS表的Delta值
 for index_i,cp_row in cp_df.iterrows():
     
@@ -142,7 +142,7 @@ for index_i,cp_row in cp_df.iterrows():
 
 ### **第三版优化**
 其实第三版优化的思路，还是追求更快地遍历效率，Pandas除了iterrows()之外，据说还有一个更快的apply()方法，能够对DataFrame的每一行逐行应用自定义函数，且遍历性能更好。于是，第三版的核心代码如下：
-```vb
+```python
 def Cal_Delta_Loi_Iter_In_Cp(data):
     global cal_delta_loi_cp_row
     cal_delta_loi_cp_row = data
