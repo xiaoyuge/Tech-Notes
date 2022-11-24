@@ -165,6 +165,32 @@ r = requests.get(url=craw_url,headers=headers,proxies=proxy,timeout=10)
             time.sleep(3)
 ```
 
+大家看这段代码的时候，会看到一个叫crawlerUrlManager的类，这个类主要用来对要爬取的url进行管理的，记录哪些url已经被爬取，哪些url还没有被爬取，因为在爬取的过程中可能会碰到各种问题，尤其是网络访问相关的问题，所以有这么一个manager，可以在出现问题的时候告诉我们哪些url爬取成功了，还剩余哪些url待爬取，方便后续跟进处理，这部分的核心代码如下：
+```Python
+#新增一个待爬取Url
+    def add_new_url(self,url):
+        if url is None or len(url) == 0:
+            return
+        if url in self.new_urls or url in self.old_urls:
+            return
+        self.new_urls.add(url)
+        return True
+
+ #获取一个要爬取的url
+    def get_url(self):
+        if self.has_new_url():
+            url = self.new_urls.pop()
+            self.old_urls.add(url)
+            return url
+        else:
+            return None
+
+#判断是否有待爬取的url
+    def has_new_url(self):
+        return len(self.new_urls) > 0
+......
+```
+
 ### **4. 解析网页数据获取自己想要的结果**
 步骤四是对请求到的url数据，进行解析
 
