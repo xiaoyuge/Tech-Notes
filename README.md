@@ -21,7 +21,7 @@
   - **[从Python并发编程优化实践中获得的认知](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/%E4%BB%8EPython%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%E4%B8%AD%E8%8E%B7%E5%BE%97%E7%9A%84%E8%AE%A4%E7%9F%A5.md)**
   - **[Python爬虫开发-爬取某房产网站数据](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/Python%E7%88%AC%E8%99%AB%E5%BC%80%E5%8F%91-%E7%88%AC%E5%8F%96%E6%9F%90%E6%88%BF%E4%BA%A7%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE.md)**
   - **[用Python做一份好看又好用的数据分析报告](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/%E7%94%A8Python%E5%81%9A%E4%B8%80%E4%BB%BD%E5%A5%BD%E7%9C%8B%E5%8F%88%E5%A5%BD%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.md)**
-  - **[Python示例代码](https://github.com/xiaoyuge/kingfish-python)**
+  - **[Python项目代码](https://github.com/xiaoyuge/kingfish-python)**
 - ### **Go**
   - **[Go基础](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E5%9F%BA%E7%A1%80.md)**
   - **[Go为什么这么快](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/Go%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB.md)**
