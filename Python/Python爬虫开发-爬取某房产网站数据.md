@@ -33,4 +33,26 @@ pattern = r'^http://www.crazyant.net/page/\d+$'
 
 但不是所有网站都是如此简单的，我们再来看一下另外一个博客网站[博客园](https://www.cnblogs.com/)，大家可以自己访问看一下。假如我同样希望爬取这个博客网站所有的文章列表数据，那如何获取到每个文章列表页面的url呢？
 
-如果大家实际点过每个文章就会发现，
+如果大家实际点过翻页就会发现，点完后浏览器地址栏的地址是这样的：
+
+![cnblogs-page]()
+
+也即浏览器地址是长这样子的：
+```Python
+#文章列表页的正则
+pattern = r'^https://www.cnblogs.com/#p\d+$
+```
+
+我们会看到地址里面有一个#号，如果我们直接访问这个url，能获取到我们想要的文章列表数据吗？大家可以用下面的代码自己试一下：
+```Python
+import requests
+
+r = requests.get('https://www.cnblogs.com/#p5',timeout=3)
+if r.status_code == 200:
+    resp = r.text
+print(resp)
+```
+可以看到，直接访问浏览器地址的url是拿不到我们希望的文章列表页的返回数据的。因为这个网站是一个所谓的SPA应用（Single Page Application），地址栏的#号是一个Hash，改变Hash 不会重新加载页面。SPA应用的典型特征是，首次访问会加载整个页面框架，然后通过Ajax/Fetch异步获取数据更新页面内容。
+
+所以，在这种情况下，我们只能借助于抓包工具比如chrome的开发者工具，来探索和获取真实的Ajax/Fetch的url，如下图所示：
+![cnblogs-chrome-dev-tools]()
