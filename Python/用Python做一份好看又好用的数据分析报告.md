@@ -199,4 +199,4 @@ pie = Pie(init_opts=opts.InitOpts(width='800px', height='600px', bg_color='white
 
 我们最后生成的饼图如下所示：
 
-![pie-build_year]()
+![pie-build_year](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/pie-build-year.png)
