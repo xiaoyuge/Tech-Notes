@@ -195,7 +195,7 @@ pie = Pie(init_opts=opts.InitOpts(width='800px', height='600px', bg_color='white
             legend_opts=opts.LegendOpts(is_show=False))
 ```
 
-这部分代码额外提一下的就是，pie需要的数据格式，是元组数组的形式，因此在上面的代码中，我们使用zip（）这个函数，来将两个Series对应的元素拼接成元组。
+这部分代码额外提一下的就是，pie需要的数据格式，是元组数组的形式，因此在上面的代码中，我们使用zip()这个函数，来将两个Series对应的元素拼接成元组。
 
 我们最后生成的饼图如下所示：
 
