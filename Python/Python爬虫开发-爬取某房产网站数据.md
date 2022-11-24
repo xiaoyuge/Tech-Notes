@@ -92,7 +92,7 @@ https://www.cnblogs.com/AggSite/AggSitePostList
 
 用户伪装的方法，就是获取到我们要爬取的url请求的request headers数据，然后在发送我们的request的时候，把该请求头带上，最重要的是cookies、User-Agent等字段，如下图所示：
 
-![anjuke-request-headers]()
+![anjuke-request-headers](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/anjuke-request-headers.png)
 
 具体在python脚本中的代码则是如下所示：
 ```Python
