@@ -35,7 +35,7 @@ pattern = r'^http://www.crazyant.net/page/\d+$'
 
 如果大家实际点过翻页就会发现，点完后浏览器地址栏的地址是这样的：
 
-![cnblogs-page]()
+![cnblogs-page](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/cnblogs-page.png)
 
 也即浏览器地址是长这样子的：
 ```Python
@@ -55,4 +55,6 @@ print(resp)
 可以看到，直接访问浏览器地址的url是拿不到我们希望的文章列表页的返回数据的。因为这个网站是一个所谓的SPA应用（Single Page Application），地址栏的#号是一个Hash，改变Hash 不会重新加载页面。SPA应用的典型特征是，首次访问会加载整个页面框架，然后通过Ajax/Fetch异步获取数据更新页面内容。
 
 所以，在这种情况下，我们只能借助于抓包工具比如chrome的开发者工具，来探索和获取真实的Ajax/Fetch的url，如下图所示：
-![cnblogs-chrome-dev-tools]()
+![cnblogs-chrome-dev-tools](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/cnblogs-page-chrome-dev-tools.png)
+
+
