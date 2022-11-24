@@ -145,5 +145,5 @@ top10_color_function = """
 ```
 完成上述两个步骤后，我们的横向柱状图就生成了，如下图所示：
 
-![](bar-top10)
+![bar-top10](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/bar_top10.png)
 
