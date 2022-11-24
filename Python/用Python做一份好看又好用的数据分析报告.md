@@ -147,3 +147,56 @@ top10_color_function = """
 
 ![bar-top10](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/bar_top10.png)
 
+从上图可以看到，当我们把鼠标移到某个柱子上的时候，会出现相应的浮层，展示当前柱子代表的category的数值。也即，就如我们之前提到的，Pyecharts的图表是动态可交互的图表。
+
+- Pie（饼图）
+饼图一般用来分析不同种类数量的占比。在这次的数据报告中，因为是对二手房的分析，所以我们想看一下待售卖的二手房中，不同建筑年份的房子数量占比情况，据此可以看看哪些年份的老房子是卖的比较多的。
+
+基于上诉这个分析需求，我们还是分为数据计算处理和数据可视化处理两个步骤来进行。
+
+数据计算处理步骤：
+1. 因为原数据表中没有待售房屋数这一列，因此我们先增加一列，用于后续计算；
+2. 对建筑年份列进行group by；
+3. 对每个分组进行统计计数，结果写入新增加的待售房屋数列；
+
+代码实现如下：
+
+```Python
+def add_sale_estate_col(row):
+    return 0
+
+def sale_estate_analysis_by_year(df,isembed):
+    #增加一列待售房屋数，初始值均为0
+    df.loc[:,'待售房屋数'] = df.apply(add_sale_estate_col,axis=1)
+    #获取要用作数据分析的两列：建筑年份和待售房屋数
+    analysis_df = df.loc[:,['建筑年份','待售房屋数']]
+    #因为建筑年份列有空值，先预处理一下
+    analysis_df.dropna(inplace=True)
+    #按照建筑年份进行分组
+    group = analysis_df.groupby('建筑年份',as_index=False)
+    #对每个分组进行统计计数
+    group_df = group.count()
+    group_df.loc[:,'待售房屋数'] = group_df.loc[:,'待售房屋数'].astype('int')
+    ......
+```
+接下来就是饼图的数据可视化图表生成部分了，这部分代码如下：
+
+```Python
+pie = Pie(init_opts=opts.InitOpts(width='800px', height='600px', bg_color='white'))
+    pie.add("pie",[list(z) for z in zip(group_df['建筑年份'].tolist(),group_df['待售房屋数'].tolist())]
+        ,radius=['40%', '60%']
+        ,center=['50%', '50%']
+        ,label_opts=opts.LabelOpts(
+            position="outside",
+            formatter="{b}:{c}:{d}%",)
+        ).set_global_opts(
+            title_opts=opts.TitleOpts(title='苏州二手房不同建筑年份的待售数量', pos_left='300', pos_top='20',
+            title_textstyle_opts=opts.TextStyleOpts(color='black', font_size=16)),
+            legend_opts=opts.LegendOpts(is_show=False))
+```
+
+这部分代码额外提一下的就是，pie需要的数据格式，是元组数组的形式，因此在上面的代码中，我们使用zip（）这个函数，来将两个Series对应的元素拼接成元组。
+
+我们最后生成的饼图如下所示：
+
+![pie-build_year]()
