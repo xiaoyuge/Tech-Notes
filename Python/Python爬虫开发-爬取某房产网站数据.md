@@ -170,6 +170,8 @@ Python提供了一些对html/xml格式内容进行解析的库，我使用的是
 
 比如获取刚才我们提到的房源标题信息的代码如下：
 ```Python
+from bs4 import BeautifulSoup
+
         #如果正常返回结果，开始解析    
         if r.status_code == 200:
             content = r.text
