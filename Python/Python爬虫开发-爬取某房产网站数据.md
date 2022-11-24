@@ -77,7 +77,13 @@ https://www.cnblogs.com/AggSite/AggSitePostList
 
 对页面元素进行探查分析的工作，还是会用到我们之前提到的Chrome开发者工具，而要探查什么内容，则取决于我们要爬取的数据是什么。比如这次我们的需求是要爬取某房产网站的二手房房源新消息，那我们的探查就会类似下图所示：
 
-![page-element-explore]()
+![page-element-explore](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/page-element-explore.png)
+
+从图中可以看到，假如我们想获取房源的信息，那我们可以在房源标题上右键，然后选择检查，这时就会打开Chrome开发者工具的Element面板，直接定位到对应的元素节点，从图中我们可以看到对应的节点是一个h3标签节点，同时我们也相应能够很清晰地看到节点的属性有哪些，哪些属性能够准确唯一地定位这个节点。比如这个h3节点有一个class属性值为“property-content-title-name”，这个属性可能不能唯一定位一个节点，但如果我们通过定位他的父节点，然后通过父节点寻找其下所有"class='property-content-title-name'"的子节点，则能够帮我们准确的定位。
+
+好了，用如上同样的方法，我们可以逐步对我们要获取的数据对应的网页元素进行一一探查，这些探查的结果，将帮助我们后续开发页面解析的脚本代码。
+
+
 
 
 
