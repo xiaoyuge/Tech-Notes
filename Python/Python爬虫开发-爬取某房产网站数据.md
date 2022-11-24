@@ -143,10 +143,55 @@ r = requests.get(url=craw_url,headers=headers,proxies=proxy,timeout=10)
 
 好了，通过真实用户伪装和使用代理IP服务，我们就可以用我们的脚本来自动批量的访问url获取我们要爬取的url数据了。
 
+通过代理IP服务商的API拿到IP Pool之后，我们可以启动多个线程进行数据的爬取，代码如下：
+```Python
+        while crawlerUrlManager.has_new_url():
+            crawler_threads = []
+            for i in range(len(proxy_list)):
+                proxy = proxy_list[i]
+                crawler_thread = threading.Thread(target=craw_anjuke_suzhou,args=(crawlerUrlManager.get_url(),proxy))
+                crawler_threads.append(crawler_thread)
+                    
+            #启动线程开始爬取
+            for crawler_thread in crawler_threads:
+                crawler_thread.start()
+                                
+            for crawler_thread in crawler_threads:
+                crawler_thread.join()
+
+            #谨慎起见，一批线程爬取结束后，间隔一段时间，再启动下一批爬取，这里默认设置为3秒，可调整
+            time.sleep(3)
+```
+
 ### **4. 解析网页数据获取自己想要的结果**
+步骤四是对请求到的url数据，进行解析
 
+Python提供了一些对html/xml格式内容进行解析的库，我使用的是bs4这个库。这个步骤就依赖于我们之前提到的第2步对网页元素的分析和探索了，我们需要根据我们对网页元素分析的结果，来决定这部分的代码我们怎么写。另外需要说明的是，因为网站可能会不定期进行升级，升级的过程中可能会改变网页的元素结构，因此，如果网站发生了升级，那我们原先写好的网页解析的代码很可能会不work了，可能需要根据升级后的网站元素结构重新开发。
 
+比如获取刚才我们提到的房源标题信息的代码如下：
+```Python
+        #如果正常返回结果，开始解析    
+        if r.status_code == 200:
+            content = r.text
+            soup = BeautifulSoup(content,'html.parser') 
+            content_div_nodes = soup.find_all('div',class_='property-content')
+            for content_div_node in content_div_nodes:
+                #获取房产标题内容
+                content_title_name = content_div_node.find('h3',class_='property-content-title-name')
+                title_name = content_title_name.get_text()
+        ......
+```
 
+获取其他信息的代码就不一一列举了，大同小异。
+
+### **5. 将结果数据保存到本地文件**
+通过对页面元素的解析，我们拿到了我们想要的数据，为了便于后续的数据分析，我们需要把数据保存到本地，在这里我将结果保存到了一个csv文件，用‘;’做分割符：
+```Python
+with open('crawler/anjuke/data/suzhouSecondHouse.csv','a') as fout:
+    fout.write("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n"%(title_name,datas_shi,datas_ting,datas_wei,square_num,square_unit,orientations,floor_level,build_year,housing_estate,district,town,road,tagstr,total_price,total_price_unit,avarage_price_num,avarage_price_unit))
+```
+
+## **总结**
 
 
 
