@@ -14,7 +14,7 @@
 
 所以，接下来，我就分如上5个步骤分别讲解一下这个Pytho爬虫脚本如何开发。
 
-### **待爬取页面的访问url探索和获取**
+### **1. 待爬取页面的访问url探索和获取**
 步骤一是对待爬取页面访问url的探索和获取
 
 有人说，获取要爬取页面的访问url还不简单，网站上点一下链接看一下浏览器地址栏的链接地址不就行了。大家可以去试试，有的网站可能确实如此简单，但有的网站靠这样的方式是获取不到的。
@@ -72,17 +72,78 @@ https://www.cnblogs.com/AggSite/AggSitePostList
 
 好了，利用上述的思路，我也对我们这次真正要爬取的某房产网站页面进行了一次探查，获取到了我要爬取的url，这次要爬取的网站的url获取还是比较简单的，属于第一种情况，在这里就不详述过程了。
 
-### **待爬取页面的页面元素的探查和分析**
+### **2. 待爬取页面的页面元素的探查和分析**
 步骤二是对待爬取页面的页面元素进行探查和分析
 
 对页面元素进行探查分析的工作，还是会用到我们之前提到的Chrome开发者工具，而要探查什么内容，则取决于我们要爬取的数据是什么。比如这次我们的需求是要爬取某房产网站的二手房房源新消息，那我们的探查就会类似下图所示：
 
 ![page-element-explore](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/page-element-explore.png)
 
-从图中可以看到，假如我们想获取房源的信息，那我们可以在房源标题上右键，然后选择检查，这时就会打开Chrome开发者工具的Element面板，直接定位到对应的元素节点，从图中我们可以看到对应的节点是一个h3标签节点，同时我们也相应能够很清晰地看到节点的属性有哪些，哪些属性能够准确唯一地定位这个节点。比如这个h3节点有一个class属性值为“property-content-title-name”，这个属性可能不能唯一定位一个节点，但如果我们通过定位他的父节点，然后通过父节点寻找其下所有"class='property-content-title-name'"的子节点，则能够帮我们准确的定位。
+从图中可以看到，假如我们想获取房源的信息，那我们可以在房源标题上右键，然后选择检查，这时就会打开Chrome开发者工具的Elements面板，直接定位到对应的元素节点，从图中我们可以看到对应的节点是一个h3标签节点，同时我们也相应能够很清晰地看到节点的属性有哪些，哪些属性能够准确唯一地定位这个节点。比如这个h3节点有一个class属性值为“property-content-title-name”，这个属性可能不能唯一定位一个节点，但如果我们通过定位他的父节点，然后通过父节点寻找其下所有"class='property-content-title-name'"的子节点，则能够帮我们准确的定位。
 
 好了，用如上同样的方法，我们可以逐步对我们要获取的数据对应的网页元素进行一一探查，这些探查的结果，将帮助我们后续开发页面解析的脚本代码。
 
+### **3. 访问url获取网页数据**
+步骤三是访问待爬取的url获取网页数据
+
+如果我们只是简单的手工获取一页的数据，那是很简单的，但如果我们用脚本自动地高频地访问url获取数据，则需要考虑如何绕过网站的反爬的机制了。简单的说，如果某个ip地址在某段时间内高频地访问网站，则可能触发网站的反爬机制，ip可能会被封禁。
+
+另外，还要考虑一个问题是，网站一般会对来访者进行一些安全的校验，来识别来访者是真实的用户还是类似我们爬虫这样的robot，所以，我们需要把我们的爬虫脚本伪装成一个真实的用户来访问。
+
+用户伪装的方法，就是获取到我们要爬取的url请求的request headers数据，然后在发送我们的request的时候，把该请求头带上，最重要的是cookies、User-Agent等字段，如下图所示：
+
+![anjuke-request-headers]()
+
+具体在python脚本中的代码则是如下所示：
+```Python
+import requests
+
+#构造url的request headers，伪装成正常用户
+    headers = {
+        'accept':'',
+        'accept-encoding': '',
+        'accept-language': '',
+        'cookie': '',
+        ......
+        'user-agent': ''
+    }
+    r = requests.get(url=craw_url,headers=headers,timeout=3)
+```
+上面的代码我略去了部分header字段以及具体的header字段值，大家从Chrome开发者工具拷贝出来然后填进去就行。
+
+而关于如何避免同一个IP高频的访问同一个网站，我采取的是使用代理IP服务的方式。原理简单的说，就是我通过一个代理IP的API服务，批量获取一个IP Pool，然后同一时间多个不同的线程拿不同的代理IP去访问不同的页面，这样就避免了同一个时间同一IP高频访问的问题。
+
+这样的代理IP服务商市面上应该有很多，大家自己找一下就好，为避免打广告嫌疑，我就不直接说我用的是哪家了，直接上使用代理IP API服务的代码大家自行观摩吧：
+```Python
+def get_proxies():
+    proxy_list = []
+    #这里是我使用的代理IP服务商的API接口，敏感的参数值信息我用xxx代替了
+    proxy_url = 'http://api.tianqiip.com/getip?secret=xxx&num=1&type=json&port=1&time=3&mr=1&sign=xxx'
+    try:    
+        datas = requests.get(proxy_url).json()
+        #如果代理ip获取成功
+        if datas['code'] == 1000: 
+            data_array = datas['data']   
+            for i in range(len(data_array)):
+                proxy_ip = data_array[i]['ip']
+                proxy_port = str(data_array[i]['port'])
+                proxy = proxy_ip + ":" + proxy_port
+                proxy_list.append({'http':'http://'+proxy,'https':'http://'+proxy})
+        else:
+            code = datas['code'] 
+            print(f'获取代理失败，状态码={code}')
+        return proxy_list
+    except Exception as e:
+        print('调用天启API获取代理IP异常:'+ e)
+        return proxy_list
+
+#在使用代理的情况下，需要在请求url数据的时候传入proxies参数值为我们获取的proxy
+r = requests.get(url=craw_url,headers=headers,proxies=proxy,timeout=10)
+```
+
+好了，通过真实用户伪装和使用代理IP服务，我们就可以用我们的脚本来自动批量的访问url获取我们要爬取的url数据了。
+
+### **4. 解析网页数据获取自己想要的结果**
 
 
 
