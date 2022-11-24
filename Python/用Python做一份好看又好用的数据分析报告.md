@@ -61,7 +61,7 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
 好了，选择好了我们的工具之后，我们就要正式开始我们的数据可视化分析之旅了。我们先来看一下我们要分析的这一份数据，如下图所示：
 
-![anjuke-data]()
+![anjuke-data](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/anjuke_data.png)
 
 
 
