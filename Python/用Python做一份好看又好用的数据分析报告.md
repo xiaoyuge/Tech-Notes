@@ -348,4 +348,39 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     从地图上可以很直观的看到，虎丘区的平均房价是最高的。这里需要说明一下的是，因为Pyecharts的map组件的地理位置数据相对比较老了，所以没有体现出苏州最新的行政区域划分，比如我们原始数据中的工业园区、高新区等数据没法体现出来，时间原因，我没有尝试其他的map组件，大家有兴趣可以自行试试。
 
+    - **WordCloud（词云图）**
+
+    在我们爬取到的苏州二手房数据中，有两列纯文本类型的字段，一个是待售房屋，一个是标签，这两列的文本描述了待售房源的一些特征信息，我们可以提前其中一些高频特征，来看看购房者最关注的房屋关键词有哪些
+
+    在这个分析场景中，我们会用到一个新的第三方库jieba，这个库可以对我们要分析的文本进行分词，然后自动分析每个分词出现的频率并给出相应的权重，权重越高代表词频越高。
+
+    我们首先要进行一步数据处理，即把待售房屋字段和标签字段的文本合并到一起，然后把合并之后的文本交给jieba进行处理，最后把jieba分词计算处理的结果交给WordCloud图表组件进行渲染，整个代码实现如下所示：
+
+    ```Python
+    txt = ''
+    for index,row in df.iterrows():
+        txt = txt+ str(row['待售房屋']) + ';'+ str(row['标签']) + '\n'
+     
+    word_weights = jieba.analyse.extract_tags(txt,topK=100,withWeight=True)
+     
+    word_cloud=(
+        WordCloud()
+        .add(series_name='高频词语',data_pair=word_weights,word_size_range=[10,100])
+        .set_global_opts(
+            title_opts=opts.TitleOpts(
+            title='苏州二手房销售热度词',
+            title_textstyle_opts=opts.TextStyleOpts(font_size=23),
+            pos_left='center'
+            )
+        )
+    )
+    ```
+    其中extract_tags()函数的topk参数表示要提取权重排序前多少名的结果
+
+    最终我们对苏州二手房数据生成的词云图如下所示：
+
+    ![]()
+
     
+
+
