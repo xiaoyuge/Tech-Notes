@@ -383,8 +383,108 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     从上图我们可以看到，交通、朝向是购房者第一位关注的房子信息，其次是是否有车位、是否满五（二）唯一、是否精装修等。
 
+## **生成动态可交互的Web数据分析报告**
 
+好了，通过上面的步骤，我们已经把要分析的数据可视化图表都生成了，但我朋友总不能把这些图表一个个的发给她老板看，除非她真的想看看新的机会了。我们需要把这些图表放到一个web页面上，生成一份完整的数据分析报告后，再递呈老板审阅。所以，最后一步，我们来完成一个web页面来完整地呈现这份数据分析报告。
 
+这个步骤的实现主要包括如下三个部分组成：
+- 用flask库实现的app.py脚本，这个脚本主要干如下几件事：
+    1. 启动一个web服务；
+    2. 读取我们要分析的原始数据；
+    3. 实现一个函数负责将读取的数据传给不同的数据图表生成函数，拿到生成的数据图表对象，然后调用模版进行渲染；
+    4. 绑定一个url路由关系，映射到步骤三的函数；
+- 用来渲染生成最终数据分析报告的HTML文件，这个文件主要干如下几件事：
+    1. 对每个数据图表定义一个div；
+    2. 使用ECharts组件对div进行初始化；
+    3. 通过变量拿到flask返回的数据图表数据，对ECharts组件进行设置；
+- HTML渲染和计算所依赖的静态资源文件，主要有如下三个：
+    1. echarts-wordcloud.min.js，主要用于词云图生成;
+    2. jiang1_su1_su1_zhou1.js，主要用于苏州地图生成；
+    3. echarts.min.js，是所有数据图表依赖的基础js；
+
+如上三个部分需要按照如下的代码目录结构来组织：
+
+![]()
+
+flask的app.py脚本的核心代码如下：
+```Python
+from flask import Flask,render_template
+import drawChart as dbc
+import pandas as pd
+
+app = Flask(__name__)
+
+#读取要分析的数据
+fpath = 'path/filename.xlsx'
+df = pd.read_excel(fpath,sheet_name="Sheet1",header=[0],engine='openpyxl')
+
+#绑定url映射关系
+@app.route("/show_all_analysis_chart")
+def show_all_analysis_chart():
     
+    #获取按面积区间的单价分析数据
+    unit_price_analysis_by_square = dbc.unit_price_analysis_by_square(df,False)
+    #获取按室区分的单价分析数据
+    unit_price_analysis_by_layout = dbc.unit_price_analysis_by_layout(df,False)
+    #获取苏州各小区二手房房价TOP10
+    unit_price_analysis_by_estate = dbc.unit_price_analysis_by_estate(df,False)
+    #获取不同建筑年份的待售房屋数
+    sale_estate_analysis_by_year = dbc.sale_estate_analysis_by_year(df,False)
+    #苏州二手房房价-单价分布-直方图
+    unit_price_analysis_by_histogram = dbc.unit_price_analysis_by_histogram(df,False)
+    #苏州二手房房价-总价分布-直方图
+    total_price_analysis_by_histogram = dbc.total_price_analysis_by_histogram(df,False)
+    #苏州二手房面积-单价关系图
+    unit_price_analysis_by_scatter = dbc.unit_price_analysis_by_scatter(df,False)
+    #苏州二手房销售热度词
+    hot_word_analysis_by_wordcloud = dbc.hot_word_analysis_by_wordcloud(df,False)
+    #苏州各区域二手房房价
+    unit_price_analysis_by_map = dbc.unit_price_analysis_by_map(df,False)
+     
+    return render_template("show_analysis_chart.html",
+                            unit_price_analysis_by_square_option = unit_price_analysis_by_square.dump_options(),
+                            unit_price_analysis_by_layout_option = unit_price_analysis_by_layout.dump_options(),
+                            unit_price_analysis_by_estate_option = unit_price_analysis_by_estate.dump_options(),
+                            sale_estate_analysis_by_year_option = sale_estate_analysis_by_year.dump_options(),
+                            unit_price_analysis_by_histogram_option = unit_price_analysis_by_histogram.dump_options(),
+                            total_price_analysis_by_histogram_option = total_price_analysis_by_histogram.dump_options(),
+                            unit_price_analysis_by_scatter_option = unit_price_analysis_by_scatter.dump_options(),
+                            hot_word_analysis_by_wordcloud_option = hot_word_analysis_by_wordcloud.dump_options(),
+                            unit_price_analysis_by_map_option = unit_price_analysis_by_map.dump_options()
+                           )
+
+#启动web应用
+if __name__ == "__main__":
+    app.run()
+```
+
+Html的核心代码如下：
+```HTML
+<head>
+    <meta charset="UTF-8">
+    <title>苏州二手房数据分析报告</title>
+    <script type="text/javascript" src="/static/echarts.min.js"></script>
+    <script type="text/javascript" src="/static/echarts-wordcloud.min.js"></script>
+    <script type="text/javascript" src="/static/jiang1_su1_su1_zhou1.js"></script>
+</head>
+<body>
+    <h1 align="center">苏州二手房数据分析报告</h1>
+    <h2>1.苏州二手房按面积区间的房屋单价</h2>
+    <div id="unit_price_analysis_by_square" style="width:900px; height:500px;"> </div>
+    <script type="text/javascript">
+        var unit_price_analysis_by_square_chart = echarts.init(document.getElementById('unit_price_analysis_by_square'));
+        var option = {{ unit_price_analysis_by_square_option | safe }};
+        unit_price_analysis_by_square_chart.setOption(option);
+    </script>
+    ......
+```
+
+经过如上步骤后，我们终于生成了我们心心念了好久的好看又好用的数据分析报告，如下图所示：
+
+![report](https://github.com/xiaoyuge/kingfish-python/blob/master/crawler/anjuke/data/%E8%8B%8F%E5%B7%9E%E4%BA%8C%E6%89%8B%E6%88%BF%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A.png)
+
+## **总结**
+
+
 
 
