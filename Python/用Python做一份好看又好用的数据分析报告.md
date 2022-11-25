@@ -247,4 +247,4 @@ def unit_price_analysis_by_histogram(df,isembed):
 
 这样我们画出来的直方图如下所示（以二手房单价直方图为例）：
 
-![histogram-unit-price]()
+![histogram-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/histogram_unit_price.png)
