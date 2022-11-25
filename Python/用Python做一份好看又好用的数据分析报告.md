@@ -283,4 +283,6 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     ![scatter-square-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/scatter-square-unit-price.png)
 
+从上图我们可以看出，苏州二手房的单价跟房子面积并不是呈线性相关的关系，也即不是面积越大，单价越高，房子单价的高点出现在100-200平方这个区间，然后随着面积逐渐增大单价呈逐渐下降趋势，因此是一个曲线相关的关系，而且这个曲线类似一个正态分布曲线。
+
 - **Map（地图）**
