@@ -251,33 +251,36 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
 
 - **Scatter（散点图）**
-散点图一般用在回归分析中，是一种数据点在直角坐标系平面上的分布图，用两组数据构成多个坐标点，考察坐标点的分布，判断两变量之间是否存在某种关联的分布模式
 
-对于我们要分析的苏州二手房数据，我们可能会关心，哪些因素是跟二手房的房价有关系的，以及是什么关系，比如如果我们想知道房子面积跟房子单价之间是什么关系？那我们可以画一个面积-单价的散点图来看看。
+    散点图一般用在回归分析中，是一种数据点在直角坐标系平面上的分布图，用两组数据构成多个坐标点，考察坐标点的分布，判断两变量之间是否存在某种关联的分布模式
 
-因为我们的原始数据中已经有面积和均价两个字段，因此不需要我们做更多的数据计算处理，我们直接来看这部分的实现代码：
-```Python
-df.sort_values('面积',ascending=True, inplace=True)
-     
-    square = df['面积'].to_list()
-    unit_price = df['均价'].to_list()
-     
-    scatter = (
-         Scatter()
-         .add_xaxis(xaxis_data=square)
-         .add_yaxis(
-             series_name='',
-             y_axis=unit_price,
-             symbol_size=4,
-             label_opts=opts.LabelOpts(is_show=False)
-         )
-         .set_global_opts(
-             xaxis_opts=opts.AxisOpts(type_='value'),
-             yaxis_opts=opts.AxisOpts(type_='value'),
-             title_opts=opts.TitleOpts(title='苏州二手房面积-单价关系图',pos_left='center')
-         )
-     )
-```
-我们画出来的散点图如下所示：
+    对于我们要分析的苏州二手房数据，我们可能会关心，哪些因素是跟二手房的房价有关系的，以及是什么关系，比如如果我们想知道房子面积跟房子单价之间是什么关系？那我们可以画一个面积-单价的散点图来看看。
 
-![scatter-square-unit-price]()
+    因为我们的原始数据中已经有面积和均价两个字段，因此不需要我们做更多的数据计算处理，我们直接来看这部分的实现代码：
+    ```Python
+    df.sort_values('面积',ascending=True, inplace=True)
+        
+        square = df['面积'].to_list()
+        unit_price = df['均价'].to_list()
+        
+        scatter = (
+            Scatter()
+            .add_xaxis(xaxis_data=square)
+            .add_yaxis(
+                series_name='',
+                y_axis=unit_price,
+                symbol_size=4,
+                label_opts=opts.LabelOpts(is_show=False)
+            )
+            .set_global_opts(
+                xaxis_opts=opts.AxisOpts(type_='value'),
+                yaxis_opts=opts.AxisOpts(type_='value'),
+                title_opts=opts.TitleOpts(title='苏州二手房面积-单价关系图',pos_left='center')
+            )
+        )
+    ```
+    我们画出来的散点图如下所示：
+
+    ![scatter-square-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/scatter-square-unit-price.png)
+
+- **Map（地图）**
