@@ -379,7 +379,11 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     最终我们对苏州二手房数据生成的词云图如下所示：
 
-    ![]()
+    ![word-cloud-suzhou](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/word-cloud-suzhou.png)
+
+    从上图我们可以看到，交通、朝向是购房者第一位关注的房子信息，其次是是否有车位、是否满五（二）唯一、是否精装修等。
+
+
 
     
 
