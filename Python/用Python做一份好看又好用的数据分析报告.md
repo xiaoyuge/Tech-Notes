@@ -345,3 +345,7 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
     最终我们可以看到苏州二手房根据地图展示的各区房价如下：
 
     ![map-district-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/map-district-unit-price.png)
+
+    从地图上可以很直观的看到，虎丘区的平均房价是最高的。这里需要说明一下的是，因为Pyecharts的map组件的地理位置数据相对比较老了，所以没有体现出苏州最新的行政区域划分，比如我们原始数据中的工业园区、高新区等数据没法体现出来，时间原因，我没有尝试其他的map组件，大家有兴趣可以自行试试。
+
+    
