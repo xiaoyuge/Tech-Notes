@@ -344,4 +344,4 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     最终我们可以看到苏州二手房根据地图展示的各区房价如下：
 
-    ![]()
+    ![map-district-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/map-district-unit-price.png)
