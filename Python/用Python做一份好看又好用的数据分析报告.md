@@ -214,37 +214,38 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
 - **Histogram（直方图）**
 
-直方图又称质量分布图，是一种统计报告图，由一系列高度不等的纵向条纹或线段表示数据分布的情况。 一般用横轴表示数据类型，纵轴表示分布情况。为了构建直方图，第一步是将值的范围分段，即将整个值的范围分成一系列间隔，然后计算每个间隔中有多少值。
+    直方图又称质量分布图，是一种统计报告图，由一系列高度不等的纵向条纹或线段表示数据分布的情况。 一般用横轴表示数据类型，纵轴表示分布情况。为了构建直方图，第一步是将值的范围分段，即将整个值的范围分成一系列间隔，然后计算每个间隔中有多少值。
 
-关于我们要分析的二手房数据，我们最关心的还是房价的分布情况，比如单价和总价在不同价格区间的分布数量情况。
+    关于我们要分析的二手房数据，我们最关心的还是房价的分布情况，比如单价和总价在不同价格区间的分布数量情况。
 
-因此，我们用直方图来分析苏州二手房单价和总价的分布。
+    因此，我们用直方图来分析苏州二手房单价和总价的分布。
 
-数据计算处理步骤：
-1. 将要分析的数据字段进行分段；
-2. 对每个分段，计算该分段里的分布数量；
+    数据计算处理步骤：
+    1. 将要分析的数据字段进行分段；
+    2. 对每个分段，计算该分段里的分布数量；
 
-上面两个计算步骤，在Python的Numpy库里，提供了一个叫histogram()的函数，能够直接帮我们来实现，见下面代码所示：
+    上面两个计算步骤，在Python的Numpy库里，提供了一个叫histogram()的函数，能够直接帮我们来实现，见下面代码所示：
 
-```Python
-import numpy as np
+    ```Python
+    import numpy as np
 
-def unit_price_analysis_by_histogram(df,isembed):
-    hist,bin_edges = np.histogram(df['均价'],bins=100)
-    
-    bar = (
-        Bar()
-        .add_xaxis([str(x) for x in bin_edges[:-1]])
-        .add_yaxis('价格分布',[float(x) for x in hist],category_gap=0)
-        .set_global_opts(
-            title_opts=opts.TitleOpts(title='苏州二手房房价-单价分布-直方图',pos_left='center'),
-            legend_opts=opts.LegendOpts(is_show=False)
+    def unit_price_analysis_by_histogram(df,isembed):
+        hist,bin_edges = np.histogram(df['均价'],bins=100)
+        
+        bar = (
+            Bar()
+            .add_xaxis([str(x) for x in bin_edges[:-1]])
+            .add_yaxis('价格分布',[float(x) for x in hist],category_gap=0)
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title='苏州二手房房价-单价分布-直方图',pos_left='center'),
+                legend_opts=opts.LegendOpts(is_show=False)
+            )
         )
-    )
-    ......
-```
-从上面代码里我们可以看到，我们把均价字段分成了100个间隔区间，bin_edges就是划分出来的100个区间，然后我们计算每个区间里的分布数量，hist就是分布数量的计算结果
+        ......
+    ```
+    从上面代码里我们可以看到，我们把均价字段分成了100个间隔区间，bin_edges就是划分出来的100个区间，然后我们计算每个区间里的分布数量，hist就是分布数量的计算结果
 
-这样我们画出来的直方图如下所示（以二手房单价直方图为例）：
+    这样我们画出来的直方图如下所示（以二手房单价直方图为例）：
 
-![histogram-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/histogram_unit_price.png)
+    ![histogram-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/histogram_unit_price.png)
+
