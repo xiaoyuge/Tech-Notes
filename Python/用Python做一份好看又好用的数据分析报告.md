@@ -157,6 +157,8 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     从上图可以看到，当我们把鼠标移到某个柱子上的时候，会出现相应的浮层，展示当前柱子代表的category的数值。也即，就如我们之前提到的，Pyecharts的图表是动态可交互的图表。
 
+    另外，从图中我们可以看到，苏州玲珑湾花园小区是苏州二手房房价最贵的小区，尤其是七区和八区，至于为什么，大家可以自行上百度搜索看看。
+
 - **Pie（饼图）**
 
     饼图一般用来分析不同类型的数量的占比。在这次的数据报告中，因为是对二手房的分析，所以我们想看一下待售卖的二手房中，不同建筑年份的房子数量占比情况，据此可以看看哪些年份的老房子是卖的比较多的。
@@ -212,6 +214,8 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     ![pie-build_year](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/pie-build-year.png)
 
+    从上图我们可以看到，苏州待售的数量较多的二手房，大多是2015-2019年期间建成的，也即距今的房龄不超过10年。2021年及后的房子明显少了很多，应该是跟满二的政策有关系。
+
 - **Histogram（直方图）**
 
     直方图又称质量分布图，是一种统计报告图，由一系列高度不等的纵向条纹或线段表示数据分布的情况。 一般用横轴表示数据类型，纵轴表示分布情况。为了构建直方图，第一步是将值的范围分段，即将整个值的范围分成一系列间隔，然后计算每个间隔中有多少值。
@@ -249,6 +253,7 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     ![histogram-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/histogram_unit_price.png)
 
+    从上图我们可以看到，苏州二手房的单价，大部分集中在17000-21000这个价格区间，单价低于10000或高于30000的房子相对就比较少了。
 
 - **Scatter（散点图）**
 
@@ -283,6 +288,60 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
     ![scatter-square-unit-price](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/scatter-square-unit-price.png)
 
-从上图我们可以看出，苏州二手房的单价跟房子面积并不是呈线性相关的关系，也即不是面积越大，单价越高，房子单价的高点出现在100-200平方这个区间，然后随着面积逐渐增大单价呈逐渐下降趋势，因此是一个曲线相关的关系，而且这个曲线类似一个正态分布曲线。
+    从上图我们可以看出，苏州二手房的单价跟房子面积并不是呈线性相关的关系，也即不是面积越大，单价越高，房子单价的高点出现在100-200平方这个区间，然后随着面积逐渐增大单价呈逐渐下降趋势，因此是一个曲线相关的关系，而且这个曲线类似一个正态分布曲线。
 
 - **Map（地图）**
+
+    在我们爬取到的苏州二手房数据中，有小区所在的区-镇-街道的地理位置信息，因此，我们可以结合地图，直观的来看一下苏州不同区的二手房房价信息。
+
+    在做地图展示之前，我们先要做一下如下数据计算处理：
+    1. 获取数据源中的区和均价两个字段；
+    2. 对区字段进行group by；
+    3. 对分组后的数据求平均值；
+    4. 为适配地图组件的行政区划名称，对区字段进行一下转换处理；
+    5. 将数据转换成地图组件需要的二维数组的格式；
+
+
+    ```python
+
+    def transform_name(row):
+        district_name = row['区'].strip()
+        if district_name == '吴中' or district_name == '相城' or district_name == '吴江' or district_name == '虎丘' or district_name == '姑苏' or district_name == '工业园':
+            district_name = district_name + '区'
+        if district_name == '常熟' or district_name == '张家港' or district_name == '太仓':
+            district_name = district_name + '市'
+        return district_name
+
+    data = []
+    #获取要分析的数据列
+    analysis_df = df.loc[:,['区','均价']]
+    #按区列分组
+    group_df = analysis_df.groupby('区',as_index=False)
+    #根据分组对均价列求平均值
+    group_df = group_df.mean('均价')
+    #print(group_df)
+    #将区的名字做一下转换，为下面的地图匹配做准备
+    group_df['区'] = group_df.apply(transform_name,axis=1)
+    group_df.loc[:,'均价'] = group_df.loc[:,'均价'].astype('int')
+    #将数据转换成map需要的数据格式
+    for index,row in group_df.iterrows():
+        district_array = [row['区'],row['均价']]
+        data.append(district_array)
+    ```
+
+    数据处理完成后，我们就可以用地图组件进行可视化渲染了：
+    ```Python
+    map = (
+        Map()
+        .add('苏州各区域二手房房价',data,'苏州')
+        .set_global_opts(
+            title_opts=opts.TitleOpts(title='苏州各区域二手房房价地图',pos_left='center'),
+            visualmap_opts=opts.VisualMapOpts(max_=26000),
+            legend_opts=opts.LegendOpts(is_show=False)
+        )
+    )
+    ```
+
+    最终我们可以看到苏州二手房根据地图展示的各区房价如下：
+
+    ![]()
