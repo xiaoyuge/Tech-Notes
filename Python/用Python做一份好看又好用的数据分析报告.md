@@ -404,7 +404,7 @@ Django是用 Python 开发的一个免费开源的 Web 框架，提供了许多�
 
 如上三个部分需要按照如下的代码目录结构来组织：
 
-![]()
+![lask-code-struct](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/flask-code-struct.png)
 
 flask的app.py脚本的核心代码如下：
 ```Python
