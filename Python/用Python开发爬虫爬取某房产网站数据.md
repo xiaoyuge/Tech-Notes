@@ -42,7 +42,7 @@ pattern = r'^http://www.crazyant.net/page/\d+$'
 也即浏览器地址是长这样子的：
 ```Python
 #文章列表页的正则
-pattern = r'^https://www.cnblogs.com/#p\d+$
+pattern = r'^https://www.cnblogs.com/#p\d+$'
 ```
 
 我们会看到地址里面有一个#号，如果我们直接访问这个url，能获取到我们想要的文章列表数据吗？大家可以用下面的代码自己试一下：
@@ -75,7 +75,7 @@ https://www.cnblogs.com/AggSite/AggSitePostList
 ### **2. 待爬取页面的页面元素的探查和分析**
 步骤二是对待爬取页面的页面元素进行探查和分析
 
-对页面元素进行探查分析的工作，还是会用到我们之前提到的Chrome开发者工具，而要探查什么内容，则取决于我们要爬取的数据是什么。比如这次我们的需求是要爬取某房产网站的二手房房源新消息，那我们的探查就会类似下图所示：
+对页面元素进行探查分析的工作，还是会用到我们之前提到的Chrome开发者工具，而要探查什么内容，则取决于我们要爬取的数据是什么。比如这次我们的需求是要爬取某房产网站的二手房房源信息，那我们的探查就会类似下图所示：
 
 ![page-element-explore](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/page-element-explore.png)
 
