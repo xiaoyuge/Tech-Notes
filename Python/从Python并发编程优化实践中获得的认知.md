@@ -160,7 +160,9 @@ async def read_excel():
     print(f"读取excel文件 time cost is :{read_excel_end - read_excel_start} seconds")
 ```
 
-![asyncio-ds-format]()
+![asyncio-ds-format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/conpra-ds-format-apply-asyncio.png)
+
+如上图所示，当我们新建两个asyncio任务分别读取excel文件的两个sheet，这两个asyncio任务的读取时间分别为6.57s和0.32s，最关键的是整体excel读取时间是这两个时间之和6.89s，也即等同于同步执行，并没有起到异步IO的效果。出现这个现象的原因，就是因为上面提到的pandas的read_excel方法是同步阻塞IO。
 
 ## **总结**
 
