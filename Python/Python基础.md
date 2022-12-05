@@ -105,6 +105,12 @@ else if cpu_bound:
 - 如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了；
 - 如果是 CPU bound，则需要使用多进程来提高程序运行效率；
 
+名词解释：
+
+- CPU bound(CPU密集型)：CPU密集型也叫计算密集型，是指I/O在很短的时间内就可以完成，但CPU需要大量的计算和处理，特点是CPU占用率相当高，比如压缩解压缩、加密解密、正则表达式搜索等；
+
+- I/O bound（I/O密集型）:I/O密集型是指系统运行过程中大部分的时间是CPU在等IO（硬盘/内存）的读写操作，CPU占用率较低，比如文件处理、网络爬虫、读写数据库等；
+
 这里有两个例子演示如何使用协程来爬取网站：
 
 - [示例1](https://github.com/xiaoyuge/kingfish-python/blob/master/concurrent/async_spider_blog.py)

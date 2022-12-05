@@ -3,6 +3,7 @@
 本文主要介绍了 Go 程序为了实现极高的并发性能，其内部调度器的实现架构（G-P-M 模型），以及为了最大限度利用计算资源，Go 调度器是如何处理线程阻塞的场景。
 
 ### **怎么让我们的系统更快**
+
 随着信息技术的迅速发展，单台服务器处理能力越来越强，迫使编程模式由从前的串行模式升级到并发模型
 。
 并发模型包含 IO 多路复用、多进程以及多线程，这几种模型都各有优劣，现代复杂的高并发架构大多是几种模型协同使用，不同场景应用不同模型，扬长避短，发挥服务器的最大性能
@@ -10,6 +11,7 @@
 而多线程，因为其轻量和易用，成为并发编程中使用频率最高的并发模型，包括后衍生的协程等其他子产品，也都基于它
 
 ### **并发 ≠ 并行**
+
 并发 (concurrency) 和 并行 ( parallelism) 是不同的
 
 在单个CPU核上，线程通过时间片或者让出控制权来实现任务切换，达到  "同时" 运行多个任务的目的，这就是所谓的并发。但实际上任何时刻都只有一个任务被执行，其他任务通过某种算法来排队
@@ -17,11 +19,13 @@
 多核CPU可以让同一进程内的  "多个线程"  做到真正意义上的同时运行，这才是并行
 
 ### **进程、线程、协程**
+
 - **进程**：进程是系统进行资源分配的基本单位，有独立的内存空间；
 - **线程**：线程是CPU调度和分派的基本单位，线程依附于进程存在，每个线程会共享父进程的资源
 - **协程**：协程是一种用户态的轻量级线程，协程的调度完全由用户控制，协程间切换只需要保存任务的上下文，没有内核的开销。
 
 ### **线程上下文切换**
+
 由于中断处理，多任务处理，用户态切换等原因会导致 CPU 从一个线程切换到另一个线程，**切换过程需要保存当前线程的状态并恢复另一个线程的状态**
 
 上下文切换的代价是高昂的，因为在核心上交换线程会花费很多时间。上下文切换的延迟取决于不同的因素，大概在在  50  到  100  纳秒之间。考虑到硬件平均在每个核心上每纳秒执行  12  条指令，那么一次上下文切换可能会花费  600  到  1200  条指令的延迟时间。实际上，上下文切换占用了大量程序执行指令的时间
@@ -29,17 +33,21 @@
 如果存在跨核上下文切换（Cross-Core Context Switch），可能会导致 CPU 缓存失效（CPU 从缓存访问数据的成本大约  3  到  40  个时钟周期，从主存访问数据的成本大约  100  到  300  个时钟周期），这种场景的切换成本会更加昂贵
 
 ### **Golang 为并发而生**
+
 Golang 从 2009 年正式发布以来，依靠其极高运行速度和高效的开发效率，迅速占据市场份额。Golang 从语言级别支持并发，通过轻量级协程 Goroutine 来实现程序并发运行
 
 Goroutine 非常轻量，主要体现在以下两个方面：
+
 - **上下文切换代价小**： Goroutine 上下文切换只涉及到三个寄存器（PC / SP / DX）的值修改；而对比线程的上下文切换则需要涉及模式切换（从用户态切换到内核态）、以及 16 个寄存器、PC、SP…等寄存器的刷新；
 - **内存占用少**：线程栈空间通常是 2M，Goroutine 栈空间最小 2K。
 Golang 程序中可以轻松支持10w 级别的 Goroutine 运行，而线程数量达到 1k 时，内存占用就已经达到 2G；
 
 ### **Go调度器实现机制**
+
 Go 程序通过调度器来调度Goroutine 在内核线程上执行，但是 Goroutine 并不直接绑定 OS 线程 M - Machine运行，而是由 Goroutine Scheduler 中的  P - Processor （逻辑处理器）来作获取内核线程资源的『中介』
 
 Go 调度器模型我们通常叫做G-P-M 模型，他包括 4 个重要结构，分别是G、P、M、Sched：
+
 - G:Goroutine，每个 Goroutine 对应一个 G 结构体，G 存储 Goroutine 的运行堆栈、状态以及任务函数，可重用。G 并非执行体，每个 G 需要绑定到 P 才能被调度执行。
 - P: Processor，表示逻辑处理器，对 G 来说，P 相当于 CPU 核，G 只有绑定到 P 才能被调度。对 M 来说，P 提供了相关的执行环境(Context)，如内存分配状态(mcache)，任务队列(G)等。
 P 的数量决定了系统内最大可并行的 G 的数量（前提：物理 CPU 核数  >= P 的数量）。
@@ -55,6 +63,7 @@ M 并不保留 G 状态，这是 G 可以跨 M 调度的基础。
 
 地鼠(Gopher)的工作任务是：工地上有若干砖头，地鼠借助小车把砖头运送到火种上去烧制。M 就可以看作图中的地鼠，P 就是小车，G 就是小车里装的砖。
 弄清楚了它们三者的关系，下面我们就开始重点聊地鼠是如何在搬运砖块的。
+
 - Processor（P）：
 根据用户设置的  GoMAXPROCS 值来创建一批小车(P)。
 - Goroutine(G)：
@@ -77,6 +86,7 @@ Go 调度器中有两个不同的运行队列：全局运行队列(GRQ)和本地
 从上图可以看出，G 的数量可以远远大于 M 的数量，换句话说，Go 程序可以利用少量的内核级线程来支撑大量 Goroutine 的并发。多个 Goroutine 通过用户级别的上下文切换来共享内核线程 M 的计算资源，但对于操作系统来说并没有线程上下文切换产生的性能损耗。
 
 为了更加充分利用线程的计算资源，Go 调度器采取了以下几种调度策略：
+
 - 任务窃取（work-stealing）
 我们知道，现实情况有的 Goroutine 运行的快，有的慢，那么势必肯定会带来的问题就是，忙的忙死，闲的闲死，Go 肯定不允许摸鱼的 P 存在，势必要充分利用好计算资源。
 为了提高 Go 并行处理能力，调高整体处理效率，当每个 P 之间的 G 任务不均衡时，调度器允许从 GRQ，或者其他 P 的 LRQ 中获取 G 执行。
@@ -112,7 +122,6 @@ Go 调度器中有两个不同的运行队列：全局运行队列(GRQ)和本地
 
     ![gpm-model5](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model5.png)
 
-
     调度器介入后：识别出 G1 已导致 M1 阻塞，此时，调度器将 M1 与 P 分离，同时也将 G1 带走。然后调度器引入新的 M2 来服务 P。此时，可以从 LRQ 中选择 G2 并在 M2 上进行上下文切换。
 
     ![gpm-model6](https://github.com/xiaoyuge/Tech-Notes/blob/main/Go/Go/resources/gpm-model6.png)
@@ -126,23 +135,24 @@ Go 调度器中有两个不同的运行队列：全局运行队列(GRQ)和本地
     只要下次这个 Goroutine 进行函数调用，那么就会被强占，同时也会保护现场，然后重新放入 P 的本地队列里面等待下次执行。
 
 ### **小结**
+
 本文主要从 Go 调度器架构层面上介绍了 G-P-M 模型，通过该模型怎样实现少量内核线程支撑大量 Goroutine 的并发运行。以及通过 NetPoller、sysmon 等帮助 Go 程序减少线程阻塞，充分利用已有的计算资源，从而最大限度提高 Go 程序的运行效率。
 
 参考文档：
-- https://www.ardanlabs.com/blog/2018/08/-scheduling-in-go-part1.html
-- https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html
-- https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html
-- https://segmentfault.com/a/1190000016038785
-- https://segmentfault.com/a/1190000016611742
-- https://segmentfault.com/a/1190000017333717
-- https://segmentfault.com/a/1190000015352983
-- https://segmentfault.com/a/1190000015464889
-- https://www.cnblogs.com/lxmhhy/p/6041001.html
-- https://www.cnblogs.com/mokafamily/p/9975980.html
-- https://studyGolang.com/articles/9211
-- https://www.zhihu.com/question/20862617
-- https://codeburst.io/why-Goroutines-are-not-lightweight-threads-7c460c1f155f
-- https://blog.csdn.net/tiandyoin/article/details/76556702
-- https://www.jianshu.com/p/cc3c0fefee43
-- https://www.jianshu.com/p/a315224886d2
 
+- <https://www.ardanlabs.com/blog/2018/08/-scheduling-in-go-part1.html>
+- <https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html>
+- <https://www.ardanlabs.com/blog/2018/12/scheduling-in-go-part3.html>
+- <https://segmentfault.com/a/1190000016038785>
+- <https://segmentfault.com/a/1190000016611742>
+- <https://segmentfault.com/a/1190000017333717>
+- <https://segmentfault.com/a/1190000015352983>
+- <https://segmentfault.com/a/1190000015464889>
+- <https://www.cnblogs.com/lxmhhy/p/6041001.html>
+- <https://www.cnblogs.com/mokafamily/p/9975980.html>
+- <https://studyGolang.com/articles/9211>
+- <https://www.zhihu.com/question/20862617>
+- <https://codeburst.io/why-Goroutines-are-not-lightweight-threads-7c460c1f155f>
+- <https://blog.csdn.net/tiandyoin/article/details/76556702>
+- <https://www.jianshu.com/p/cc3c0fefee43>
+- <https://www.jianshu.com/p/a315224886d2>
