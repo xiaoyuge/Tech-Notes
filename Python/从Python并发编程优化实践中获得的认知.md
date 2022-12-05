@@ -70,21 +70,99 @@ else if cpu_bound:
 
 接下来，基于我们以上对Python多线程、多进程和协程的介绍，我们来看看对于我们的脚本应该如何选择来进行优化。
 
-## **从单线程到多线程的优化**
+## **多线程IO**
 
 首先说明一下，在上一篇文章的优化手段之后，为了测试多进程，我更换了一台笔记本，原先我的Mac本是一台比较老旧的Macbook pro（双核CPU），我换成了计算性能更高的Lenovo Thinkpad（4核CPU），同时在代码层面又做了进一步的优化，在这些的基础上，我们原先单线程的脚本的计算性能有进一步得到极大的提升，如下图所示：
 
-![](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/conpra-ds-format-apply-single-thread2.png)
+![conpra-ds-format-apply-single-thread](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/conpra-ds-format-apply-single-thread.png)
 
-从上图我们可以看到，在整体的耗时中，excel保存的耗时是最多的（9.58s），其次是excel的读取（4.86s），最后才是内存计算（3.74s）。
+从上图我们可以看到，在整体的耗时中，excel保存的耗时是最多的（12.3s），其次是excel的读取（7.04s），最后才是内存计算（3.83s）。
 
-根据我们之前说到性能优化的二八准则，也即通过数据分析发现瓶颈，即占用80%耗时的地方，然后有针对性地优化该瓶颈。我们首先要优化的应该是excel保存，但很遗憾的是，我们的excel保存是写入一个而不是多个文件，而且是写入文件的一个sheet，所以没法通过并发的方式进行优化。
+根据我们之前说到性能优化的二八准则，也即通过数据分析发现瓶颈，即占用80%耗时的地方，然后有针对性地优化该瓶颈。我们首先要优化的应该是excel保存，但很遗憾的是，我们的excel保存是写入一个而不是多个文件，而且是写入文件的同一个sheet，所以没法通过并发的方式进行优化。
 
-所以，我们的优化目标只能转而求其次聚焦在excel的读取上。因为我们读取的是excel的两个不同的sheet，所以，我们可以考虑采取并发读取的方式来进行优化。
+所以，我们的优化目标只能转而求其次聚焦在excel的读取上。因为我们读取的是excel的两个不同的sheet，所以，我们可以考虑采取并发读取的方式来进行优化。而根据我们之前对Python多线程、多进程和协程的介绍，我们要优化的场景属于IO密集型场景，所以我们考虑用多线程或协程的方案进行优化。我们先来看一下用多线程来优化，代码如下：
+```Python
+#要处理的文件路径
+fpath = "datas/joyce/DS_format_bak.xlsm"
 
-## **从多线程到多进程的优化**
+def t_read_cp_df():
+    read_cp_df_start = time.time()
+    global cp_df
+    cp_df = pd.read_excel(fpath,sheet_name="CP",header=[0])
+    read_cp_df_end = time.time()
+    print(f"{threading.current_thread().getName()}读取excel文件cp sheet time cost is :{read_cp_df_end - read_cp_df_start} seconds")
+
+
+def t_read_ds_df():
+    t_read_ds_df_start = time.time()
+    global ds_df 
+    ds_df = pd.read_excel(fpath,sheet_name="DS",header=[0,1])
+    t_read_ds_df_end = time.time()
+    print(f"{threading.current_thread().getName()}读取excel文件ds sheet time cost is :{t_read_ds_df_end - t_read_ds_df_start} seconds")
+
+def read_excel():
+    read_excel_start = time.time()
+    #把CP和DS两个sheet的数据分别读入pandas的dataframe
+    #启动两个线程并行读取excel的数据
+    read_cp_df_thread = Thread(target=t_read_cp_df,args=())
+    read_cp_df_thread.start()
+    read_ds_df_thread = Thread(target=t_read_ds_df,args=())
+    read_ds_df_thread.start()
+
+    read_cp_df_thread.join()
+    read_ds_df_thread.join()
+    read_excel_end = time.time()
+    print(f"读取excel文件 time cost is :{read_excel_end - read_excel_start} seconds")
+```
+
+运行优化后的代码，我们的执行效果如下图所示：
+
+![conpra-ds-format-multi-thread-io](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/conpra-ds-format-multi-thread-io.png)
+
+从上图可以看出，我们读取excel的耗时减少到了5.1s，而且我们分别细看一下两个线程的读取excel时间可以看到，整体的excel读取时间是小于两个线程分别读取excel的时间之和的，这说明两个线程对excel文件的读取性能是优于单线程串行读取的。
+
+## **多进程计算**
+
+
 
 ## **协程的限制**
+
+我们在之前介绍IO密集型应用的时候，提到多线程或协程都可以用来优化IO密集型应用，那我们这个脚本的场景可以用协程来优化吗？可惜理想是美好的，但现实是残酷的。大家是否还记得，我们在介绍协程的时候，提到了使用Python协程的一个限制，即必须有支持的库才行，也即需要有相应场景下支持异步IO的库，比如aiohttp、aiofiles。但我们使用pandas的read_excel()没有异步库的支持，所以即使我们使用了asyncio，实际还是同步阻塞IO，我们可以来验证一下，见下面代码和执行效果：
+
+```Python
+async def read_cp_df():
+    print('read_cp_df start')
+    read_cp_df_start = time.time()
+    global cp_df
+    cp_df = pd.read_excel(fpath,sheet_name='CP',header=[0])
+    read_cp_df_end = time.time()
+    print(f"读取excel文件cp sheet time cost is {read_cp_df_end - read_cp_df_start}: seconds")
+    
+
+async def read_ds_df():
+    print('read_ds_df start')
+    read_ds_df_start = time.time()
+    global ds_df
+    ds_df = pd.read_excel(fpath,sheet_name='DS',header=[0,1])
+    read_ds_df_end = time.time()
+    print(f"读取excel文件ds sheet time cost is {read_ds_df_end - read_ds_df_start}: seconds")
+    
+async def read_excel():
+    read_excel_start = time.time()
+    #把CP和DS两个sheet的数据分别读入pandas的dataframe
+    #启动两个协程读取excel的数据
+    cp_df_task = asyncio.create_task(read_cp_df())
+    ds_df_task = asyncio.create_task(read_ds_df())
+    print('befoe await cp_df_task')
+    await cp_df_task
+    print('after await cp_df_task')
+    await ds_df_task
+    print('after await ds_df_task')
+    read_excel_end = time.time()
+    print(f"读取excel文件 time cost is :{read_excel_end - read_excel_start} seconds")
+```
+
+![asyncio-ds-format]()
 
 ## **总结**
 
