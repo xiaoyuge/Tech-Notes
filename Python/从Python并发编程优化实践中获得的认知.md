@@ -122,7 +122,7 @@ def read_excel():
 ![conpra-ds-format-multi-thread-io](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/conpra-ds-format-multi-thread-io.png)
 
 从上图可以看出，我们读取excel的耗时减少到了5.1s，而且我们分别细看一下两个线程的读取excel时间可以看到，整体的excel读取时间是小于两个线程分别读取excel的时间之和的，这说明两个线程对excel文件的读取性能是优于单线程串行读取的。
-
+     
 ## **协程异步IO**
 
 我们在之前介绍IO密集型应用的时候，提到多线程或协程都可以用来优化IO密集型应用，那我们这个脚本的场景可以用协程来优化吗？可惜理想是美好的，但现实是残酷的。大家是否还记得，我们在介绍协程的时候，提到了使用Python协程的一个限制，即必须有支持的库才行，也即需要有相应场景下支持异步IO的库，比如aiohttp、aiofiles。但我们使用pandas的read_excel()没有异步库的支持，所以即使我们使用了asyncio，实际还是同步阻塞IO，我们可以来验证一下，见下面代码和执行效果：
