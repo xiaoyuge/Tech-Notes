@@ -10,7 +10,7 @@
 
 这次要处理的excel有两个sheet，要根据其中一个sheet的数据来计算另外一个sheet的值。造成问题的点在于，要计算值的sheet里不仅仅有数值，还有公式。我们来看一下：
 
-![ds_format]()
+![ds_format](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/DS_format.png)
 
 如上图所示，这个excel一共有两个sheet:CP和DS，我们要按照一定的业务规则，根据CP中的数据计算DS对应单元格的数据。图中蓝色方框框出来的是带公式的，而其他区域是数值。
 
@@ -97,7 +97,7 @@ ds_df =  pd.DataFrame(ds_wooksheet.values)
 但我对dataframe的计算会依赖多级索引，因此openpyxl的这种处理方式导致我后面的计算无法处理。
 
 openpyxl不行，再看看xlwings呢？通过对xlwings API文档的一通寻找，还真给我找到了，如下所示：
-![xlwings-api-formula]()
+![xlwings-api-formula](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/resources/xlwings-api-formula)
 
 Range类提供了一个Property叫formula，可以获取和设置formula。
 

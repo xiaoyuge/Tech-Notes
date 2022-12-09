@@ -28,6 +28,7 @@
   - **[Python并发编程实践](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E8%B7%B5.md)**
   - **[用Python开发爬虫爬取某房产网站数据](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/%E7%94%A8Python%E5%BC%80%E5%8F%91%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E6%9F%90%E6%88%BF%E4%BA%A7%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE.md)**
   - **[用Python实现大数据动态可视化Web服务](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/%E7%94%A8Python%E5%AE%9E%E7%8E%B0%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%8A%A8%E6%80%81%E5%8F%AF%E8%A7%86%E5%8C%96Web%E6%9C%8D%E5%8A%A1.md)**
+  - **[Python解决Excel公式问题](https://github.com/xiaoyuge/Tech-Notes/blob/main/Python/Python%E8%A7%A3%E5%86%B3Excel%E5%85%AC%E5%BC%8F%E9%97%AE%E9%A2%98.md)**
   - **[Python项目代码](https://github.com/xiaoyuge/kingfish-python)**
 
 - ### **Go**
