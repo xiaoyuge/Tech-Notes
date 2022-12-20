@@ -47,7 +47,7 @@ make
 
 执行的结果如下：
 
-![try-wrk]()
+![try-wrk](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/try-wrk.png)
 
 参数说明：
 
@@ -158,7 +158,7 @@ public ColumnDetailV2 queryColumnDetailV2FromCache(Long qipuId) {
 
 引入完了后，笔者用 org.perf4j.StopWatch 的方式在程序代码中添加性能监测代码。 然后在本地（IDEA debug模式）运行程序，调用几次后 per4j 输出的统计数据如下：
 
-![per4j-log]()
+![per4j-log](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/per4j-log.png)
 
 上图中的 Tag 列是笔者添加性能监测代码时，给每段代码起的名字，这里解释它们的意义：
 
@@ -179,7 +179,7 @@ public ColumnDetailV2 queryColumnDetailV2FromCache(Long qipuId) {
 
 我们先了解一下在无压力的情况程序性能表现如何，如果发现哪段代码耗时较长，就排查这段代码好了。不压测，只访问接口一次，查看性能统计数据如下：
 
-![ptest-0]()
+![ptest-0](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-0.png)
 
 可以看出来，没有压力时，整个接口的总时长就 3 ms，也就是说，程序没有哪段代码有明显的性能损耗，只有压力上上去了才有。
 
@@ -237,13 +237,13 @@ public ColumnDetailV2 queryColumnDetailV2FromCache(Long qipuId) {
 
 结果如下：
 
-![ptest-log-1-1]()
+![ptest-log-1-1](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-log-1-1.png)
 
 QPS 只有 1400 左右。
 
 然后我们将所有日志级别都调成 ERROR 级别，再压测：
 
-![ptest-log-1-2]()
+![ptest-log-1-2](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-log-1-2.png)
 
 发现 QPS 从 1400 提升到 2400，因此确认了日志输出对程序性能有较大损耗。
 
@@ -298,7 +298,7 @@ QPS 只有 1400 左右。
 
 改后再进行压测，结果如下：
 
-![ptest-log-2]()
+![ptest-log-2](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-log-2.png)
 
 优化日志配置后，QPS提升 到 2300 ，虽不如完全关闭日志后的 2400 ，但也相差不多了。
 
@@ -311,22 +311,22 @@ QPS 到 2300 就是极限了么？ 笔者觉得应该还远没到程序的最佳
 - 用 ps -ef | grep java 查看 java 程序的进程id(这步开发者应该都会吧，这里就省略截图了)；
 - 用 pidstat -p [进程id] [打印的间隔时间] [打印次数] 命令来打印出 java 进程的 CPU 使用情况：
 
-![ptest-cpu-1]()
+![ptest-cpu-1](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-1.png)
 
 笔者发现，一旦压测开始， CPU 直接涨到 100% （上图红框所示）。（这里显示的 CPU 为每个核的平均值，而不是加和值，因此虽然是 4 核，100% 指 CPU 已打满了）。
 
 - 为了知道是具体哪个线程占 CPU 高，用 top -Hp [进程id] 来查看线程的 CPU 占用情况：
 
-![ptest-cpu-2]()
+![ptest-cpu-2](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-2.png)
 
 发现是 id 为 63099 的线程占 CPU 最高，为 46% 。
 
 - 用 printf "%x\n" [进程id] 打印出此线程 id 的十六进制值： f67b 。
 - 用 jstack [进程id] |grep -B 1 -C 20 [线程id十六进制值] 打印出此线程的堆栈信息（建议多打印几次），如下：
 
-![ptest-cpu-3]()
+![ptest-cpu-3](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-3.png)
 
-![ptest-cpu-4]()
+![ptest-cpu-4](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-4.png)
 
 通过以上堆栈信息，发现是下面这个日志输出的 Appender 线程占用了大量的 CPU 资源：
 
@@ -341,7 +341,7 @@ QPS 到 2300 就是极限了么？ 笔者觉得应该还远没到程序的最佳
 
 对第 1 个问题，网上查了下，logback 的低版本在创建 ArrayBlockingQueue 时，用的是公平锁，的确会有性能问题 （它在高版本作了优化，将这个地方改成使用非公平锁），由于在我们项目中升级 logback jar 的版本会牵扯比较大， 笔者简单起见直接 hack 改它的源码，将类 AsyncAppenderBase 的源码单独拷贝出来：
 
-![ptest-cpu-5]()
+![ptest-cpu-5](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-5.png)
 
 然后进行修改：
 
@@ -393,7 +393,7 @@ public class AsyncAppenderBase<E> extends UnsynchronizedAppenderBase<E> implemen
 所以把 %method 去掉。
 改了这两个地方后，部署代码再压测：
 
-![ptest-cpu-6]()
+![ptest-cpu-6](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cpu-6.png)
 
 发现 QPS 提升到 2500，虽然不是很明显，但也算前进了一步。
 
@@ -424,7 +424,7 @@ public class AsyncAppenderBase<E> extends UnsynchronizedAppenderBase<E> implemen
 
 - 排名第 2 ~ 5 位的线程，每个占 CPU 12%（4个加起来就是 48%），经排查它们都是 GC 线程（用于 YGC）：
 
-![ptest-jvm-1]()
+![ptest-jvm-1](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-jvm-1.png)
 
 - 排名第 6 位及以后线程，平均每个占比 7~8%，经排查大多都是 Web 容器的线程，阻塞在等待 CB 调用的返回上;
 
@@ -434,7 +434,7 @@ public class AsyncAppenderBase<E> extends UnsynchronizedAppenderBase<E> implemen
 
 我们用 jstat -gcutil [进程id] [打印的间隔时间（毫秒）] [打印的次数] 命令来查一下 GC 的情况：
 
-![ptest-jvm-3]()
+![ptest-jvm-3](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-jvm-3.png)
 
 每列解释如下：
 
@@ -452,7 +452,7 @@ public class AsyncAppenderBase<E> extends UnsynchronizedAppenderBase<E> implemen
 上图的红框部分，是压测开始时的 GC 信息，从图上 S0 区、S1 区在压测开始后就不停的捣腾， 并且 YGC （代表年轻代垃圾回收的累积次数）这列数字增加得很快，说明 YGC 比较严重。
  那 YGC 到底有多严重，以及 YGC 的具体情况是怎样的， 我们用 jstat -gcnewcapacity [进程id] [打印的间隔时间（毫秒）] [打印的次数] 命令输出 JVM 新生代的具体信息：
 
-![ptest-jvm-4]()
+![ptest-jvm-4](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-jvm-4.png)
 
 每列解释如下：
 
@@ -477,11 +477,11 @@ public class AsyncAppenderBase<E> extends UnsynchronizedAppenderBase<E> implemen
 
 设置好 JVM 参数后，我们再压测：
 
-![ptest-jvm-5]()
+![ptest-jvm-5](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-jvm-5.png)
 
 发现 QPS 提升到 2680（接近 2700）。 同时查看 GC 情况（如下图），发现 GC 线程的 CPU 占用率降下来了；而YGC 的次数，也由 1 秒 6 次，变成了 2 秒 1 次。
 
-![ptest-jvm-6]()
+![ptest-jvm-6](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-jvm-6.png)
 
 ### **第 5 轮： 将 Web 容器从 Tomcat 改为 Undertow**
 
@@ -534,7 +534,7 @@ server:
 
 再压测:
 
-![ptest-undertow-1]()
+![ptest-undertow-1](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-undertow-1.png)
 
 发现 QPS 提升到 3800，果然 Undertow 的性能比 Tomcat 好不少。
 
@@ -600,7 +600,7 @@ io 线程数改为 4 （因为被测机器的 CPU 只有 4 核）， worker 线�
 
 将修改的代码部署到压测环境，再压测：
 
-![ptest-cache-1]()
+![ptest-cache-1](https://github.com/xiaoyuge/Tech-Notes/blob/main/Java/resources/ptest-cache-1.png)
 
 QPS 进一步提升到 5000，说明在“恰当”的场景下，在分布式缓存的基础上再加上内存缓存，能更进一步提升性能。
 
