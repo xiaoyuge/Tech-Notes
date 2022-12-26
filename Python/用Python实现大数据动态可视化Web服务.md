@@ -1,5 +1,5 @@
 
-# **<center>用Python实现大数据动态可视化Web服务</center>**
+# **用Python实现大数据动态可视化Web服务**
 
 ## **背景**
 
