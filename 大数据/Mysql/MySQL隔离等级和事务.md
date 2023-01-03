@@ -1,21 +1,26 @@
 ## **事务**
+
 ### **事务的 ACID 特性：**
+
 - Atomic（原子性）
 - Consistency（一致性）
 - Isolation（隔离性）
 - Duration（持久性）
 
 ### **事务的隔离等级：**
+
 1. 未提交读（Read Uncommited）：一个事务在执行过程中可以看到其他事务没有提交的新记录，而且能看到其他事务没有提交的对已有记录的更新和删除；——有脏读问题
 2. 提交读（Read Commited）：一个事务在执行过程中可以看到其他事务已经提交的新插入记录，而且能看到其他事务已经提及的对已有记录的更新和删除；——解决脏读的问题，但有不可重复读和幻读问题
 3. 可重复读（Read Reaptedable）：一个事务在执行过程中可以看到其他事务已经提交的新插入的记录（幻读），但是不能看到其他事务已经提交的对已有记录的更新和删除——解决不可重复读的问题，但未解决幻读问题；
 4. 串行化（Serializable）：一个事务在执行过程中完全看不到其他事务对数据库所做的更新(事务执行的时候不允许别的事务并发执行，事务串行化执行，事务只能一个接一个的执行,而不能并发执行)；——解决脏读、不可重复度和幻读问题
 
 ### **不可重复度和幻读的区别：**
+
 - 不可重复度：当某个事务的两次查询语句之间，有其他事务对查询结果数据进行了更新并提交（或删除并提交），则两次查询可能会得到不同的查询结果；——重点在于update和delete
 - 幻读：当某个事务在读取某个范围内的记录时，另外一个事务又在该范围内插入了新的记录，当之前的事务再次读取该范围的记录时，会看到新插入的记录（幻行）；——重点在于insert
 
 ### **Mysql四种隔离级别实现：**
+
 1) Read Uncommited
 
     读不加锁，写加排它锁，在事务结束后释放锁，会导致脏读，基本不会采取这种隔离级别
@@ -30,7 +35,6 @@
 
 3）RR（Read Reaptedable）：MySQL中InnoDB默认的隔离级别
 
-
     快照读不加锁，基于MVCC实现，每次都读undo log中某个指定的版本，解决不可重复读和幻读问题，但可能读的不是最新的数据
 
     当前读通过next-key锁（行锁+gap锁）解决不可重复读和幻读问题
@@ -38,21 +42,26 @@
     出于性能考虑，Mysql的Innodb引擎使用了以乐观锁为理论基础的多版本并发控制（MVCC）解决了快照读的不可重复度和幻读问题（默认隔离级别是RR，即Repeated Read）
 
 ### **Mysql InnoDB引擎的MVCC实现**
+
 在Mysql中MVCC是在Innodb存储引擎中得到支持的，Innodb为每行记录都实现了三个隐藏字段： 6字节的事务ID（DB_TRX_ID）、7字节的回滚指针（DB_ROLL_PTR）、隐藏的ID，6字节的事物ID用来标识该行所述的事务
 
 MVCC实现的依赖项：undo log 与 read view
+
 1. undo log: undo log中记录的是数据表记录行的多个版本，也就是事务执行过程中的回滚段，其实就是MVCC中的一行原始数据的多个版本镜像数据；
 2. read view: 主要用来判断当前版本数据的可见性；
 
 #### **undo log（回滚日志）**
+
 undo log是为回滚而用，具体内容就是copy事务前的数据库内容（行）到undo buffer，在适合的时间把undo buffer中的内容刷新到磁盘。undo buffer与redo buffer一样，也是环形缓冲，但当缓冲满的时候，undo buffer中的内容会也会被刷新到磁盘；与redo log不同的是，磁盘上不存在单独的undo log文件，所有的undo log均存放在主ibd数据文件中（表空间），即使客户端设置了每表一个数据文件也是如此
 
 #### **read view**
+
 read view用来判断当前版本数据项是否可见
 
 在innodb中，创建一个新事务的时候，innodb会将当前系统中的活跃事务列表（trx_sys->trx_list）创建一个副本（read view），副本中保存的是当前不应该被本事务看到的其他事务id列表。当用户在这个事务中要读取该行记录的时候，innodb会将该行当前的版本号与该read view进行比较。
 
 具体的算法如下:
+
 1. 设该行的当前事务id为trx_id_cur，read view中最早的事务id为trx_id_min, 最迟的事务id为trx_id_max。
 2. 如果trx_id_cur< trx_id_min的话，那么表明该行记录所在的事务已经在本次新事务创建之前就提交了，所以该行记录的当前值是可见的。跳到步骤6.
 3. 如果trx_id_cur>trx_id_max的话，那么表明该行记录所在的事务在本次新事务创建之后才开启，所以该行记录的当前值不可见.跳到步骤5。
@@ -62,12 +71,14 @@ read view用来判断当前版本数据项是否可见
 需要注意的是，新建事务(当前事务)与正在内存中commit的事务不在活跃事务列表中
 
 不同隔离级别下read view的生成原则：
+
 1. If the transaction isolation level is REPEATABLE READ (the default level), all consistent reads within the same transaction read the snapshot established by the first such read in that transaction.
 2. With READ COMMITTED isolation level, each consistent read within a transaction sets and reads its own fresh snapshot；
 
-innodb的read view确定一条记录能否看到,有两条法则 
-1. 看不到read view创建时刻以后启动的事务 
-2. 看不到read view创建时活跃的事务 
+innodb的read view确定一条记录能否看到,有两条法则
+
+1. 看不到read view创建时刻以后启动的事务
+2. 看不到read view创建时活跃的事务
 
 简单来说，Read View记录一致性读开始时所有的活跃事务，这些事务所做的修改对于Read View是不可见的。除此之外，所有在创建Read View之前提交的事务记录是可见的
 
@@ -79,11 +90,13 @@ innodb的read view确定一条记录能否看到,有两条法则
 - MVCC：Multi-Version Concurrency Control，基于多版本的并发控制协议。纯粹基于锁的并发机制并发量低，MVCC是在基于锁的并发控制上的改进，主要是在读操作上提高了并发量；
 
 读操作可以分成两类：
+
 1. 快照读 (snapshot read OR consistent read)：读取的是记录的可见版本 (有可能是历史版本)，不加锁（基于MVCC，共享读锁s锁也不加，所以不会阻塞其他事务的写）；
 2. 当前读 (current read)：读取的是记录的最新版本，并且，当前读返回的记录，都会加上锁，保证其他事务不会再并发修改这条记录。
 
 而读取数据库当前版本数据的方式，叫当前读 (current read)：特殊的读操作，插入/更新/删除操作，属于当前读，处理的都是当前的数据，需要加锁
 比如：
+
 ```
 1. select * from table where ? lock in share mode;
 2. select * from table where ? for update;
@@ -100,6 +113,7 @@ GAP锁简单说，就是不仅用行锁，锁住了相应的数据行；同时�
 从MVCC并发控制退化为基于锁的并发控制。不区分快照读与当前读，所有的读操作均为当前读，读加读锁 (S锁)，写加写锁 (X锁)，并发度急剧下降，在MySQL/InnoDB下不建议使用
 
 ### **乐观锁vs悲观锁**
+
 1. 乐观锁：大多是基于数据版本（ Version ）记录机制实现。何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据。
 2. 悲观锁：指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度，因此，在整个数据处理过程中，将数据处于锁定状态。悲观锁的实现，往往依靠数据库提供的锁机制（也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机制，也无法保证外部系统不会修改数据）
 
@@ -107,6 +121,7 @@ InnoDB存储引擎的数据组织方式，是聚簇索引（或叫聚集索引�
 
 简单给定一个sql语句，而不说明当前的事务隔离等级以及查询条件是否主键以及索引等条件，是无法确定加什么锁的。
 比如：
+
 ```
 SQL1：select * from t1 where id = 10;
 SQL2：delete from t1 where id = 10;
@@ -141,6 +156,7 @@ PS：跟组合四类似，这个情况下，MySQL也做了一些优化，就是�
 传统RDBMS加锁的一个原则，就是2PL (二阶段锁)：Two-Phase Locking。说的是锁操作分为两个阶段：加锁阶段与解锁阶段，并且保证加锁阶段与解锁阶段不相交，加锁阶段：只加锁，不释放锁。解锁阶段：只释放锁，不加锁。
 
 ### **锁的种类**
+
 - 表锁：锁住整个表的数据记录；
 - 行锁（Record Lock）：锁住满足条件的数据行记录；
 - 间隙锁（Gap Lock）:锁住一个范围，不包括记录本身；
