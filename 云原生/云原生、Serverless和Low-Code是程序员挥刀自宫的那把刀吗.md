@@ -68,7 +68,7 @@ Service Mesh主要是为了解决服务间网络通信的问题，本质上是�
 
 基于以上问题，k8s希望在基础设施层面来提供语言无关的分布式服务基础设施，可以看一下k8s和spring cloud的解决方案对比，如下图：
 
-![k8s-vs-springcloud]()
+![k8s-vs-springcloud](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/k8s-vs-springcloud.png)
 
 好了，企业开发者甚至不用做分布式服务相关的技术选型了，更不用担心不同的编程语言问题了。
 

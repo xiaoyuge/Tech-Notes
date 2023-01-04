@@ -84,6 +84,7 @@
 - **[容器&k8s](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/%E5%AE%B9%E5%99%A8%E5%92%8Ck8s.md)**
 - **[k8s实现分布式服务基础设施](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/k8s%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD.md)**
 - **[DevOps](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/DevOps.md)**
+- **[云原生、Serverless和Low-Code是程序员挥刀自宫的那把刀吗](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/%E4%BA%91%E5%8E%9F%E7%94%9F%E3%80%81Serverless%E5%92%8CLow-Code%E6%98%AF%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8C%A5%E5%88%80%E8%87%AA%E5%AE%AB%E7%9A%84%E9%82%A3%E6%8A%8A%E5%88%80%E5%90%97.md)**
 
 ---
 
