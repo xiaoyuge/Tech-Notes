@@ -70,6 +70,7 @@
 - **[分布式缓存](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98.md)**
 - **[Redis LFU 实现](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/Redis%E7%9A%84LFU%E5%AE%9E%E7%8E%B0.md)**
 - **[Redis LRU 实现](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/Redis%E7%9A%84LRU%E5%AE%9E%E7%8E%B0.md)**
+- **[redis为什么高性能]()**
 - **[memcached并发模型](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/memcached%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.md)**
 - **[缓存知识总结](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E7%BC%93%E5%AD%98%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93.md)**
 - **[分布式全局ID](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%A8%E5%B1%80ID.md)**
