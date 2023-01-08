@@ -299,7 +299,7 @@ const Component = ({ a, b }) => {
 
 作为例子，我们在上面的“纯函数组件”代码中加入 Hooks。useState 这一 Hook 会读取或存储组件的 state，加入它，让函数组件具有了操作 state 的能力：
 
-```
+```react
 const Component = ({ a, b }) => {
   const [m, setM] = useState(a); // 一个Hook
   const [n, setN] = useState(b); // 另一个Hook
