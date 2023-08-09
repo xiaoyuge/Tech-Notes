@@ -102,7 +102,7 @@ Namespace技术实际上修改了应用进程看待整个计算机“视图”�
 
 所以，虚拟机与容器技术的对比图里，不应该把 Docker Engine 或者任何容器管理工具放在跟 Hypervisor 相同的位置，因为它们并不像 Hypervisor 那样对应用进程的隔离环境负责，也不会创建任何实体的“容器”，真正对隔离环境负责的是宿主机操作系统本身
 
-![虚拟机vsDocker]()
+![虚拟机vsDocker](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/VM-VS-Docker.jpg)
 
 在这个对比图里，我们应该把 Docker 画在跟应用同级别并且靠边的位置。这意味着，用户运行在容器里的应用进程，跟宿主机上的其他进程一样，都由宿主机操作系统统一管理，只不过这些被隔离的进程拥有额外设置过的 Namespace 参数。而 Docker 项目在这里扮演的角色，更多的是旁路式的辅助和管理工作。
 或者说，docker engine 可以虚线标识，表示他只是一种启动时用，运行时并不需要，真实进程是直接run在host os上。容器并不直接运行在 Docker 上，Docker 只是辅助建立隔离环境，让容器基于 Linux 操作系统运行。
