@@ -122,15 +122,15 @@ Namespace技术实际上修改了应用进程看待整个计算机“视图”�
 **容器化弊端**
 
 1. **隔离性差**：基于 Linux Namespace 的隔离机制相比于虚拟化技术也有很多不足之处，其中最主要的问题就是：**隔离得不彻底**。尽管你可以在容器里通过 Mount Namespace 单独挂载其他不同版本的操作系统文件，比如 CentOS 或者 Ubuntu，但这并不能改变**共享宿主机内核**的事实。这意味着，**如果你要在 Windows 宿主机上运行 Linux 容器，或者在低版本的 Linux 宿主机上运行高版本的 Linux 容器，都是行不通的**。在 Linux 内核中，有很多资源和对象是不能被 Namespace 化的，最典型的例子就是：**时间**。这就意味着，如果你的容器中的程序使用 settimeofday(2) 系统调用修改了时间，整个宿主机的时间都会被随之修改，这显然不符合用户的预期。相比于在虚拟机里面可以随便折腾的自由度，在容器里部署应用的时候，“什么能做，什么不能做”，就是用户必须考虑的一个问题；
-2. **安全性差**：基于共享宿主机内核的事实，容器给应用暴露出来的攻击面是相当大的，应用“越狱”的难度自然也比虚拟机低得多。所以，在生产环境中，没有人敢把运行在物理机上的 Linux 容器直接暴露到公网上；
+2. **安全性差**：基于**共享宿主机内核**的事实，容器给应用暴露出来的攻击面是相当大的，应用“越狱”的难度自然也比虚拟机低得多。所以，在生产环境中，没有人敢把运行在物理机上的 Linux 容器直接暴露到公网上；
 
-![vm-vs-docker-table]()
+![vm-vs-docker-table](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/vm-vs-docker-table.pg)
 
 **关于容器共享宿主机内核**
 
 操作系统本身由bootfs和rootfs组成的。 容器技术中共享内核可以认为是共享bootfs，实现不同操作系统的功能其实就是用了不同的rootfs。**各个版本的Linux系统本身的bootfs是一样的，但是他们的区别是rootfs的区别**
 
-![bootfs-rootfs]()
+![bootfs-rootfs](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/bootfs-roogfs.jpg)
 
 bootfs包含了bootloader和linux内核。用户是不能对这层作任何修改的。在内核启动之后，bootfs实际上会unmount掉。
 
@@ -138,7 +138,7 @@ rootfs则包含了一般系统上的常见目录结构，类似于/dev, /proc, /
 
 docker可以同时运行多个rootfs
 
-![docker-multi-rootfs]()
+![docker-multi-rootfs](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/docker-multi-rootfs.jpg)
 
 **Linux Cgroups（Linux Control Group）**
 
@@ -241,7 +241,7 @@ Mount Namespace 正是基于对 chroot 的不断改良才被发明出来的，�
 
 **Docker容器全景图**
 
-![docker-overview]()
+![docker-overview](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/docker-overview.jpg)
 
 1. 这个容器进程“python app.py”，运行在由 Linux Namespace 和 Cgroups 构成的隔离环境里；
 2. 而它运行所需要的各种文件，比如 python，app.py，以及整个操作系统文件，则由多个联合挂载在一起的 rootfs 层提供；
@@ -276,7 +276,7 @@ $ docker image inspect ubuntu:latest
 
 从这个结构可以看出来，这个容器的 rootfs 由如下图所示的三部分组成：
 
-![rootfs-multi-layer]()
+![rootfs-multi-layer](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/rootfs-multi-layer.jpg)
 
 - **只读层**：它是这个容器的 rootfs 最下面的五层，对应的正是 ubuntu:latest 镜像的五层。可以看到，它们的挂载方式都是只读的（ro+wh），这些层，都以增量的方式分别包含了 Ubuntu 操作系统的一部分；
 
@@ -297,7 +297,7 @@ $ docker image inspect ubuntu:latest
 
 ### **Docker 的官方架构图**
 
-![docker-auth-arch]()
+![docker-auth-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%91%E5%8E%9F%E7%94%9F/resources/docker-auth-arch.jpg)
 
 ## **K8S**
 
