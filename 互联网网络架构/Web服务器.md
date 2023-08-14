@@ -1,6 +1,6 @@
-## **（1）Tomcat**
+# **（1）Tomcat**
 
-### **Tomcat类加载**
+## **Tomcat类加载**
 
 Tomcat 是通过 Context 组件来加载管理 Web 应用的，我们先看一下JVM 的类加载机制，接着再谈谈 Tomcat 的类加载器如何打破 Java 的双亲委托机制
 
@@ -170,9 +170,9 @@ Nio2Endpoint 跟 NioEndpoint 的一个明显不同点是，Nio2Endpoint 中没�
 
 ## **（2）Openresty**
 
-OpenResty 是一个兼具开发效率和性能的web服务开发平台，它的核心是基于 NGINX 的一个 C 模块（**lua-nginx-module**），该模块将 LuaJIT 嵌入到 NGINX 服务器中，并对外提供一套完整的 Lua API，透明地支持非阻塞 I/O，提供了轻量级线程、定时器等高级抽象。同时，围绕这个模块，OpenResty 构建了一套完备的测试框架、调试技术以及由 Lua 实现的周边功能库。你可以用 Lua 语言来进行字符串和数值运算、查询数据库、发送 HTTP 请求、执行定时任务、调用外部命令等，还可以用 FFI 的方式调用外部 C 函数。这基本上可以满足服务端开发需要的所有功能。
+OpenResty 是一个兼具开发效率和性能的**web服务开发平台**，它的核心是基于 NGINX 的一个 C 模块（**lua-nginx-module**），该模块将 **LuaJIT** 嵌入到 NGINX 服务器中，并**对外提供一套完整的 Lua API**，透明地支持非阻塞 I/O，提供了轻量级线程、定时器等高级抽象。同时，围绕这个模块，OpenResty 构建了一套完备的**测试框架、调试技术以及由 Lua 实现的周边功能库**。你可以用 Lua 语言来进行字符串和数值运算、查询数据库、发送 HTTP 请求、执行定时任务、调用外部命令等，还可以用 FFI 的方式调用外部 C 函数。这基本上可以满足服务端开发需要的所有功能。
 
-Openresty将 Nginx 扩展成了一个动态web服务器，Nginx是模块化设计的反向代理软件和HTTP Server，C语言开发。OpenResty是以Nginx为核心的Web开发平台，可以解析执行Lua脚本（OpenResty与Lua的关系，类似于Jvm与Java，不过Java可以做的事情太多了，OpenResty主要用来做Web、API等）
+**Openresty将 Nginx 扩展成了一个动态web服务器**，Nginx是模块化设计的反向代理软件和HTTP Server，C语言开发。OpenResty是以Nginx为核心的Web开发平台，可以**解析执行Lua脚本**（OpenResty与Lua的关系，类似于Jvm与Java，不过Java可以做的事情太多了，OpenResty主要用来做Web、API等）
 
 ### **OpenResty 为什么要基于 Nginx?**
 
@@ -184,7 +184,7 @@ Openresty将 Nginx 扩展成了一个动态web服务器，Nginx是模块化设�
 
 解决了Nginx的什么问题
 
-1) **缺乏动态性**：动态指的是程序可以在运行时、在不重新加载的情况下，去修改参数、配置，乃至修改自身的代码。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新；
+1) **缺乏动态性**：动态指的是程序可以在运行时、在不重新加载的情况下，去**修改参数、配置，乃至修改自身的代码**。具体到 Nginx 和 OpenResty 领域，你去修改上游、SSL 证书、限流限速阈值，而不用重启服务，就属于实现了动态。开源版本的 Nginx 并不支持动态特性，所以，你要对上游、SSL 证书做变更，就必须通过修改配置文件、重启服务的方式才能生效。而商业版本的 Nginx Plus 提供了部分动态的能力，你可以用 REST API 来完成更新；
 
 2) **二次开发成本较高**：Nginx 采用 C 语言开发，二次开发门槛较高。市场应用广泛，更多是基于 nginx.conf 预留配置参数，如：反向代理、负载均衡、静态 web 服务器等，如果想让 Nginx 访问 MySQL ，定制化开发一些业务逻辑，难度很高;
 
@@ -196,7 +196,7 @@ Lua 是最快的、动态脚本语言，接近 C 语言运行速度。LuaJIT 将
 
  lua-nginx-module这个 NGINX 的 C 模块确实是 OpenResty 的核心，但它并不等价于 OpenResty，除此之外，OpenResty还包括如下这些：
 
-* **NGINX C 模块**：OpenResty 的项目命名都是有规范的，以 *-nginx-module命名的就是 NGINX 的 C 模块。**OpenResty 中一共包含了 20 多个 C 模块**，其中，最核心的就是 lua-nginx-module 和 stream-lua-nginx-module，前者用来处理七层流量，后者用来处理四层流量。这些 C 模块中，有些是需要特别注意的，虽然默认编译进入了 OpenResty，但并不推荐使用。 比如 redis2-nginx-module、redis-nginx-module 和 memc-nginx-module，它们是用来和 redis 以及 memcached 交互使用的。这些 C 库是 OpenResty 早期推荐使用的，但在 cosocket 功能加入之后，它们都已经被 lua-resty-redis 和 lua-resty-memcached 替代，处于疏于维护的状态。OpenResty 后面也不会开发更多的 NGINX C 库，而是专注在基于 cosocket 的 Lua 库上，后者才是未来；
+* **NGINX C 模块**：OpenResty 的项目命名都是有规范的，以 *-nginx-module命名的就是 NGINX 的 C 模块。**OpenResty 中一共包含了 20 多个 C 模块**，其中，最核心的就是 lua-nginx-module 和 stream-lua-nginx-module，前者用来处理七层流量，后者用来处理四层流量。这些 C 模块中，有些是需要特别注意的，虽然默认编译进入了 OpenResty，但并不推荐使用。 比如 redis2-nginx-module、redis-nginx-module 和 memc-nginx-module，它们是**用来和 redis 以及 memcached 交互使用的**。这些 C 库是 OpenResty 早期推荐使用的，但在 cosocket 功能加入之后，它们都已经被 lua-resty-redis 和 lua-resty-memcached 替代，处于疏于维护的状态。OpenResty 后面也不会开发更多的 NGINX C 库，而是专注在**基于 cosocket 的 Lua 库**上，后者才是未来；
 
 * **lua-resty- 周边库**：OpenResty 官方仓库中包含 18 个 lua-resty-* 库，涵盖 Redis、MySQL、memcached、websocket、dns、流量控制、字符串处理、进程内缓存等常用库。除了官方自带的之外，还有更多的第三方库；
 
@@ -220,9 +220,9 @@ Lua 是最快的、动态脚本语言，接近 C 语言运行速度。LuaJIT 将
 
 ### **OpenResty应用场景**
 
-OpenResty 是一个被广泛使用的技术，但它并不能算得上是热门技术。说它应用广，是因为 OpenResty 现在是全球排名第五的 Web 服务器。我们经常用到的 12306 的余票查询功能，或者是京东的商品详情页，这些高流量的背后，其实都是 OpenResty 在默默地提供服务。说它并不热门，那是因为使用 OpenResty 来构建业务系统的比例并不高，使用者大都用 OpenResty 来处理入口流量，并没有深入到业务里面去，自然，对于 OpenResty 的使用也是浅尝辄止，满足当前的需求就可以了。这当然也与 OpenResty 没有像 Java、Python 那样有成熟的 Web 框架和生态有关。接近一半的 OpenResty 使用者，都把 OpenResty 用在 API 网关的开发上，Kong 和 orange 则是 OpenResty 领域中最流行的两个开源网关项目
+OpenResty 是一个被广泛使用的技术，但它并不能算得上是热门技术。说它应用广，是因为 OpenResty 现在是全球排名第五的 Web 服务器。我们经常用到的 12306 的余票查询功能，或者是京东的商品详情页，这些高流量的背后，其实都是 OpenResty 在默默地提供服务。说它并不热门，那是因为使用 OpenResty 来构建业务系统的比例并不高，使用者大都**用 OpenResty 来处理入口流量，并没有深入到业务里面去**，自然，对于 OpenResty 的使用也是浅尝辄止，满足当前的需求就可以了。这当然也与 OpenResty 没有像 Java、Python 那样有成熟的 Web 框架和生态有关。接近一半的 OpenResty 使用者，都把 OpenResty 用在 API 网关的开发上，Kong 和 orange 则是 OpenResty 领域中最流行的两个开源网关项目
 
-其他应用场景还包括Faas（利用其动态特性）、边缘计算（利用 Nginx 和 LuaJIT 良好的多平台支持特性）等
+其他应用场景还包括**Faas（利用其动态特性）**、**边缘计算**（利用 Nginx 和 LuaJIT 良好的多平台支持特性）等
 
 ### **OpenResty 整体架构（以及LuaJIT在架构中的位置）**
 
@@ -242,4 +242,4 @@ OpenResty 的 worker 进程都是 fork master 进程而得到的， 其实， ma
 
 而 LuaJIT 的运行时环境，除了一个汇编实现的 Lua 解释器外，还有一个可以直接生成机器代码的 JIT 编译器。开始的时候，LuaJIT 和标准 Lua 一样，Lua 代码被编译为字节码，字节码被 LuaJIT 的解释器解释执行。但不同的是，LuaJIT 的解释器会在执行字节码的同时，记录一些运行时的统计信息，比如每个 Lua 函数调用入口的实际运行次数，还有每个 Lua 循环的实际执行次数。当这些次数超过某个随机的阈值时，便认为对应的 Lua 函数入口或者对应的 Lua 循环足够热，这时便会触发 JIT 编译器开始工作。
 
-JIT 编译器会从热函数的入口或者热循环的某个位置开始，尝试编译对应的 Lua 代码路径。编译的过程，是把 LuaJIT 字节码先转换成 LuaJIT 自己定义的中间码（IR），然后再生成针对目标体系结构的机器码。所以，所谓 LuaJIT 的性能优化，本质上就是让尽可能多的 Lua 代码可以被 JIT 编译器生成机器码，而不是回退到 Lua 解释器的解释执行模式
+JIT 编译器会从热函数的入口或者热循环的某个位置开始，尝试编译对应的 Lua 代码路径。编译的过程，是把 LuaJIT 字节码先转换成 LuaJIT 自己定义的中间码（IR），然后再生成针对目标体系结构的机器码。所以，**所谓 LuaJIT 的性能优化，本质上就是让尽可能多的 Lua 代码可以被 JIT 编译器生成机器码**，而不是回退到 Lua 解释器的解释执行模式
