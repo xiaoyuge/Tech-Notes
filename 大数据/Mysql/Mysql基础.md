@@ -1,4 +1,4 @@
-## **mysql的逻辑架构**
+# **mysql的逻辑架构**
 
 ![mysql-logic-arch](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E5%A4%A7%E6%95%B0%E6%8D%AE/resources/mysql-logic-arch.png)
 
@@ -83,7 +83,8 @@ mysql的主从同步是基于Binlog的，Binlog用于记录数据库执行的写
 
 ### **主从同步延迟问题的解决**
 
-Mysql的主从同步是单线程的，即使一个数据库实例有多个逻辑数据库，也是单个线程写 binlog ，每个从库单个线程拉取写 relay log 并处理
+Mysql的主从同步是单线程的，**即使一个数据库实例有多个逻辑数据库，也是单个线程写 binlog** ，每个从库单个线程拉取写 relay log 并处理
+
 所以解决思路是变单线程为多线程
 
 1) 每个逻辑库一个线程；
