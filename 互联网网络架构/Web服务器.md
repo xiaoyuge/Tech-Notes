@@ -79,19 +79,19 @@ Tomcat类加载器的层次结构
 
 各种 I/O 模型的区别就是：它们实现这两个步骤的方式是不一样的。
 
-* 同步阻塞 I/O：用户线程**发起 read 调用后就阻塞了**，让出 CPU。内核等待网卡数据到来，把数据从网卡拷贝到内核空间，接着把数据拷贝到用户空间，再把用户线程叫醒。
+* **同步阻塞 I/O**：用户线程**发起 read 调用后就阻塞了**，让出 CPU。内核等待网卡数据到来，把**数据从网卡拷贝到内核空间，接着把数据拷贝到用户空间**，再把用户线程叫醒
 
 ![sync-block-io](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/sync-block-io.jpg)
 
-* 同步非阻塞 I/O：用户线程不断的发起 read 调用，数据没到内核空间时，每次都返回失败，直到数据到了内核空间，这一次 read 调用后，在等待数据从内核空间拷贝到用户空间这段时间里，线程还是阻塞的，等数据到了用户空间再把线程叫醒。
+* **同步非阻塞 I/O**：用户线程不断的发起 read 调用，数据没到内核空间时，每次都返回失败，直到数据到了内核空间，这一次 read 调用后，**在等待数据从内核空间拷贝到用户空间这段时间里，线程还是阻塞的**，等数据到了用户空间再把线程叫醒
 
 ![sync-non-block-io](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/sync-non-block-io.jpg)
 
-I/O 多路复用：用户线程的读取操作分成两步了，线程先发起 select 调用，目的是问内核数据准备好了吗？等内核把数据准备好了，用户线程再发起 read 调用。在等待数据从内核空间拷贝到用户空间这段时间里，线程还是阻塞的。那为什么叫 I/O 多路复用呢？因为一次 select 调用可以向内核查多个数据通道（Channel）的状态，所以叫多路复用。
+* **I/O 多路复用**：用户线程的读取操作分成两步了，线程先发起 select 调用，目的是问内核数据准备好了吗？等内核把数据准备好了，用户线程再发起 read 调用。**在等待数据从内核空间拷贝到用户空间这段时间里，线程还是阻塞的**。那为什么叫 I/O 多路复用呢？因为一次 select 调用可以向内核查多个数据通道（Channel）的状态，所以叫多路复用
 
 ![IO-multi-channel](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/IO-multi-channel.jpg)
 
-异步 I/O：用户线程发起 read 调用的同时注册一个回调函数，read 立即返回，等内核将数据准备好后，再调用指定的回调函数完成处理。在这个过程中，用户线程一直没有阻塞。
+* **异步 I/O**：用户线程**发起 read 调用的同时注册一个回调函数**，read 立即返回，等内核将数据准备好后，再调用指定的回调函数完成处理。在这个过程中，用户线程一直没有阻塞。
 
 ![aio](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/aio.jpg)
 
@@ -101,7 +101,7 @@ I/O 多路复用：用户线程的读取操作分成两步了，线程先发起 
 
 Tomcat 的 NioEndpoint 组件实现了 I/O 多路复用模型，Tomcat 的 NioEndpoint 组件虽然实现比较复杂，但基本原理就是上面两步。我们先来看看它有哪些组件，它一共包含 LimitLatch、Acceptor、Poller、SocketProcessor 和 Executor 共 5 个组件，它们的工作过程如下图所示：
 
-![](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/tomcat-non-block-io.jpg)
+![Tomcat-NIO-model](https://github.com/xiaoyuge/Tech-Notes/blob/main/%E4%BA%92%E8%81%94%E7%BD%91%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/resources/tomcat-non-block-io.jpg)
 
 LimitLatch 是连接控制器，它负责控制最大连接数，NIO 模式下默认是 10000，达到这个阈值后，连接请求被拒绝。LimitLatch 用来控制连接个数，当连接数到达最大时阻塞线程，直到后续组件处理完一个连接后将连接数减 1。请你注意到达最大连接数后操作系统底层还是会接收客户端连接，但用户层已经不再接收
 
@@ -112,6 +112,7 @@ Poller 的本质是一个 Selector，也跑在单独线程里（通过线程组�
 Executor 就是线程池，负责运行 SocketProcessor 任务类，SocketProcessor 的 run 方法会调用 Http11Processor 来读取和解析请求数据。Http11Processor 是应用层协议的封装，Http11Processor 读取 Channel 的数据来生成 ServletRequest 对象，它还会调用容器获得响应，再把响应通过 Channel 写出
 
 如上过程是如何实现高并发的？
+
 高并发就是能快速地处理大量的请求，需要合理设计线程模型让 CPU 忙起来，尽量不要让线程阻塞，因为一阻塞，CPU 就闲下来了。另外就是有多少任务，就用相应规模的线程数去处理。我们注意到 NioEndpoint 要完成三件事情：
 
 1) 接收连接；
@@ -165,7 +166,7 @@ Nio2Endpoint 跟 NioEndpoint 的一个明显不同点是，Nio2Endpoint 中没�
 
 概述一下就是，Servlet3.0 之前，Tomcat 线程在执行自定义 Servlet 时，如果过程中发生了 IO，那么 Tomcat 线程只能在那等着结果，这时线程是被挂起的，如果被挂起的多了，自然会影响对其他请求的处理。
 
-所以在 Servlet3.0 之后，支持在这种情况下将这种等待的任务交给一个自定义的业务线程池去做，这样 Tomcat 线程可以很快地回到线程池，处理其他请求。而业务线程在执行完业务逻辑以后，通过调用指定的方法，告诉 Tomcat 线程池接下来可以将业务线程执行的结果返回给调用方，这样就实现了同步转异步的效果
+所以**在 Servlet3.0 之后，支持在这种情况下将这种等待的任务交给一个自定义的业务线程池去做**，这样 Tomcat 线程可以很快地回到线程池，处理其他请求。而业务线程在执行完业务逻辑以后，通过调用指定的方法，告诉 Tomcat 线程池接下来可以将业务线程执行的结果返回给调用方，这样就实现了同步转异步的效果
 
 这样做的好处，可能对提高系统的吞吐量有一定帮助，但从 JVM 层面来说，并没有减少工作量。业务线程在执行任务遇到 IO 时，依然会阻塞，现在只是由业务线程池代替了 Tomcat 线程池做了最耗时的那部分工作，这样也许可以将原来的 200 个 Tomcat 线程，拆分成 20 个 Tomcat 线程、180 个业务线程来配合工作
 
